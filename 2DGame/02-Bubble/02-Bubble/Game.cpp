@@ -8,19 +8,66 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
+	State state= MENU;
 }
 
 bool Game::update(int deltaTime)
 {
 	scene.update(deltaTime);
-	
+	switch (state) {
+	case MENU:
+		if (getSpecialKey(GLUT_KEY_INSERT)) state = GAME;
+		break;
+
+	case GAME:
+		scene.render();
+		break;
+
+	case INFO:
+
+		break;
+
+	case CREDITS:
+
+		break;
+
+	default:
+		break;
+
+	}
+
 	return bPlay;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+
+	switch (state) {
+		case MENU:
+
+			break;
+
+		case GAME:
+			 scene.render();
+			break;
+
+		case INFO:
+
+			break;
+
+		case CREDITS:
+
+			break;
+
+		default :
+			break;
+
+	}
+
+
+
+	
 }
 
 void Game::keyPressed(int key)

@@ -17,6 +17,9 @@ class Game
 
 private:
 	Game() {}
+
+	enum State {MENU,GAME,INFO,CREDITS};
+	State state;
 	
 public:
 	static Game &instance()
