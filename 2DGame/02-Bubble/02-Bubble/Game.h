@@ -3,7 +3,7 @@
 
 
 #include "Scene.h"
-
+#include "State.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -17,8 +17,6 @@ class Game
 
 private:
 	Game() {}
-
-	enum State {MENU,GAME,INFO,CREDITS};
 	State state;
 	
 public:

@@ -8,7 +8,7 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
-	State state= MENU;
+	state.goMENU();
 }
 
 bool Game::update(int deltaTime)
@@ -23,20 +23,20 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	switch (state) {
-		case MENU:
+	switch (state.getState()) {
+	case State::State_enum::MENU:
 
 			break;
 
-		case GAME:
+		case State::State_enum::GAME:
 			 scene.render();
 			break;
 
-		case INFO:
+		case State::State_enum::CREDITS:
 
 			break;
 
-		case CREDITS:
+		case State::State_enum::INFO:
 
 			break;
 
@@ -58,25 +58,26 @@ void Game::keyPressed(int key)
 	}
 	
 
-	switch (state) {
-	case MENU:
-		if (key == 32) state = GAME;
-		break;
+	switch (state.getState()) {
 
-	case GAME:
-		scene.render();
-		break;
+		case State::State_enum::MENU:
+			if (key == 32) state.goGAME();
+			break;
 
-	case INFO:
+		case State::State_enum::GAME:
+			scene.render();
+			break;
 
-		break;
+		case State::State_enum::CREDITS:
 
-	case CREDITS:
+			break;
 
-		break;
+		case State::State_enum::INFO:
 
-	default:
-		break;
+			break;
+
+		default:
+			break;
 
 	}
 	keys[key] = true;
