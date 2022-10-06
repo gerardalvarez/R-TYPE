@@ -30,8 +30,8 @@ private:
 	void initShaders();
 
 private:
-	TileMap *map;
-	Player *player;
+	TileMap* map;
+	Player* player;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	ShaderProgram texProgram;
