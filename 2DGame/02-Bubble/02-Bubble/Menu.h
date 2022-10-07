@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include "State.h"
+#include "Sprite.h"
 
 
 class Menu {
@@ -12,7 +13,9 @@ public:
 
 private:
     void initShaders();
+    Sprite* controls;
+    Texture sceneMenu;
 
-private:
+    
     
 };

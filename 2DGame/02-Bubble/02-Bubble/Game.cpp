@@ -25,7 +25,7 @@ void Game::render()
 
 	switch (state.getState()) {
 	case State::State_enum::MENU:
-
+		menu.render();
 			break;
 
 		case State::State_enum::GAME:

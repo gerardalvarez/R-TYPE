@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "State.h"
+#include "Menu.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -48,6 +49,7 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
+	Menu menu;
 
 };
 
