@@ -6,6 +6,10 @@
 *.exe
 *.o
 *.so
+*.ilk
+*.obj
+*.idb
+*.pdb
 
 # Packages #
 ############
@@ -19,9 +23,11 @@
 *.rar
 *.tar
 *.zip
+*.ipch
 
 # Logs and databases #
 ######################
+*.tlog
 *.log
 *.sql
 *.sqlite
