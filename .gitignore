@@ -41,3 +41,10 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+*.vsidx
+2DGame/02-Bubble/02-Bubble/Debug/_IsIncrementalBuild
+2DGame/02-Bubble/02-Bubble/Debug/02-Bubble.vcxproj.FileListAbsolute.txt
+2DGame/02-Bubble/.vs/02-Bubble/v17/Browse.VC.db-wal
+2DGame/02-Bubble/.vs/02-Bubble/v17/Browse.VC.opendb
+2DGame/02-Bubble/.vs/02-Bubble/v17/Browse.VC.db-shm
+2DGame/02-Bubble/.vs/02-Bubble/v17/Browse.VC.db.db
