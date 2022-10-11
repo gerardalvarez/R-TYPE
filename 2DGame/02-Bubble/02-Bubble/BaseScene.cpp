@@ -3,16 +3,14 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
-#include <GL/glew.h>
-#include <GL/glut.h>
 
+#include "Scene.h"
+#include "Game.h"
 
 
 void BaseScene::init() {
 	initShaders();
 	currentTime = 0.0f;
-	currentTurnTime = 0.0f;
-
 }
 
 void BaseScene::update(int deltaTime) {

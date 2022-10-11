@@ -1,9 +1,6 @@
-#ifndef _SCENE_INCLUDE
-#define _SCENE_INCLUDE
+#pragma once
+#include "BaseScene.h"
 
-
-#include <glm/glm.hpp>
-#include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
 #include "TexturedQuad.h"
@@ -12,10 +9,7 @@
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
-#define CAMERA_WIDTH 640
-#define CAMERA_HEIGHT 480
-
-class Scene
+class Scene : public BaseScene
 {
 
 public:
@@ -27,19 +21,12 @@ public:
 	void render();
 
 private:
-	void initShaders();
+	//void initShaders();
 
 private:
 	TileMap* map;
 	Player* player;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
-	ShaderProgram texProgram;
-	float currentTime;
-	glm::mat4 projection;
-
 };
-
-
-#endif // _SCENE_INCLUDE
 

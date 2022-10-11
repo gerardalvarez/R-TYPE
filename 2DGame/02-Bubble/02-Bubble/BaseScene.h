@@ -1,10 +1,15 @@
+#pragma once
+#ifndef _SCENE_INCLUDE
+#define _SCENE_INCLUDE
+
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "Sprite.h"
 
+// Scene contains all the entities of our game.
+// It is responsible for updating and render them.
 
-
-#define TURN_TIME 200
+#define CAMERA_WIDTH 640
+#define CAMERA_HEIGHT 480
 
 class BaseScene
 {
@@ -21,9 +26,8 @@ protected:
 
 protected:
 	ShaderProgram texProgram;
-	glm::mat4 projection;
-
 	float currentTime;
-	float currentTurnTime;
-
+	glm::mat4 projection;
 };
+
+#endif // _SCENE_INCLUDE

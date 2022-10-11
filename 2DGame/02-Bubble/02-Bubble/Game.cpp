@@ -7,20 +7,20 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init();
+	mapScene.init();
 	State state= MENU;
 }
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	mapScene.update(deltaTime);
 	switch (state) {
 	case MENU:
 		if (getSpecialKey(GLUT_KEY_INSERT)) state = GAME;
 		break;
 
 	case GAME:
-		scene.render();
+		mapScene.render();
 		break;
 
 	case INFO:
@@ -49,7 +49,7 @@ void Game::render()
 			break;
 
 		case GAME:
-			 scene.render();
+			 mapScene.render();
 			break;
 
 		case INFO:
