@@ -45,9 +45,9 @@ void MapScene::initlevel(int level)
 	player->setTileMap(map);
 
 
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(CAMERA_WIDTH, 192) };				//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(512, 192) };				//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
-	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(512/3072.f, 1.f);			//dins de la imatge, agafa un quadrat definit pels punts de texCoords
+	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(512/3072.f, 1.f);			
 	// fer divisions de 2^x, no decimals
 	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);				//guarda el quadrat
 
