@@ -9,14 +9,15 @@
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
-class Scene : public BaseScene
+class MapScene : public BaseScene
 {
 
 public:
-	Scene();
-	~Scene();
+	MapScene();
+	~MapScene();
 
 	void init();
+	void initlevel(int level);
 	void update(int deltaTime);
 	void render();
 
@@ -29,4 +30,3 @@ private:
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 };
-

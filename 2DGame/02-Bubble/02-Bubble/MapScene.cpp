@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Scene.h"
+#include "MapScene.h"
 #include "Game.h"
 
 
@@ -12,13 +12,13 @@
 #define INIT_PLAYER_Y_TILES 25
 
 
-Scene::Scene()
+MapScene::MapScene()
 {
 	map = NULL;
 	player = NULL;
 }
 
-Scene::~Scene()
+MapScene::~MapScene()
 {
 	if (map != NULL)
 		delete map;
@@ -29,34 +29,41 @@ Scene::~Scene()
 			delete texQuad[i];
 }
 
+void MapScene::init()
+{
+	initlevel(4);
+}
 
-void Scene::init()
+void MapScene::initlevel(int level)
 {
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
+	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(CAMERA_WIDTH*8, CAMERA_HEIGHT) };	//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
-	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
 
-	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(1.f, 1.f);					//dins de la imatge, agafa un quadrat definit pels punts de texCoords
-	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);			//guarda el quadrat
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT) };			//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
+	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };							//COORDENADES DE LA TEXTURA
+	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(0.15f, 1.f);							//dins de la imatge, agafa un quadrat definit pels punts de texCoords
+	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);					//guarda el quadrat
 
-	texs[0].loadFromFile("images/level01.png", TEXTURE_PIXEL_FORMAT_RGB);			//carrega la imatge
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	string lvl = "images/level0" + to_string(level) + ".png";
+
+	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGB);					//carrega la imatge
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH-1), float(SCREEN_HEIGHT-1), 0.f);
 	currentTime = 0.0f;
 }
 
-void Scene::update(int deltaTime)
+void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
 }
 
-void Scene::render()
+void MapScene::render()
 {
 	glm::mat4 modelview;
 
@@ -74,6 +81,3 @@ void Scene::render()
 	//}
 	player->render();
 }
-
-
-
