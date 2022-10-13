@@ -35,7 +35,6 @@ bool Game::update(int deltaTime)
 		break;
 
 	}
-
 	return bPlay;
 }
 
@@ -72,8 +71,33 @@ void Game::render()
 
 void Game::keyPressed(int key)
 {
-	if(key == 27) // Escape code
+	if (key == 27) { // Escape code
 		bPlay = false;
+		return;
+	}
+	
+
+	switch (state) {
+	case MENU:
+		if (key == 32) state = GAME;
+		break;
+
+	case GAME:
+		scene.render();
+		break;
+
+	case INFO:
+
+		break;
+
+	case CREDITS:
+
+		break;
+
+	default:
+		break;
+
+	}
 	keys[key] = true;
 }
 
