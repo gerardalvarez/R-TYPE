@@ -6,7 +6,8 @@
 #include "MapScene.h"
 
 
-#define SCREEN_WIDTH 640
+//this are the original screen sizes of the game
+#define SCREEN_WIDTH 256 
 #define SCREEN_HEIGHT 192
 
 
