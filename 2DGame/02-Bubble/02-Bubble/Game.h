@@ -3,7 +3,10 @@
 
 
 #include "Scene.h"
+#include "Menu.h"
 #include "MapScene.h"
+#include "State.h"
+
 
 
 #define SCREEN_WIDTH 640
@@ -18,8 +21,6 @@ class Game
 
 private:
 	Game() {}
-
-	enum State {MENU,GAME,INFO,CREDITS};
 	State state;
 	
 public:
@@ -51,7 +52,7 @@ private:
 	Scene scene;						// Scene to render
 	MapScene mapScene;					// Scene to render
 	bool keys[256], specialKeys[256];	// Store key states so that 
-										// we can have access at any time
+	Menu Menuscene;
 
 };
 
