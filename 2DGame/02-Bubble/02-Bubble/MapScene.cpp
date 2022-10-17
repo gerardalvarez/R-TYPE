@@ -45,15 +45,15 @@ void MapScene::initlevel(int level)
 	player->setTileMap(map);
 
 
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(512, 192) };				//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(512, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
 	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(512/3072.f, 1.f);			
-	// fer divisions de 2^x, no decimals
+																							// fer divisions de 2^x, no decimals
 	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);				//guarda el quadrat
 
 	string lvl = "images/level0" + to_string(level) + ".png";
 
-	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGB);					//les imatges son profunditat 8bits menys una que es 32bits
+	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGBA);									//les imatges son profunditat 32bits
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH-1), float(SCREEN_HEIGHT-1), 0.f);
 	currentTime = 0.0f;
 }
