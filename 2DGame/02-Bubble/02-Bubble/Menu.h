@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Music.h"
+
 class Menu : public BaseScene
 {
 public:

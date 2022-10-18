@@ -31,7 +31,6 @@ void MenuScene::init(int level) {
 
 	loadSprites();
 
-	this->option = level;
 
 }
 
