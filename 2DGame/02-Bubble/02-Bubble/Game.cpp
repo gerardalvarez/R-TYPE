@@ -10,6 +10,7 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
 	state.goMENU();
+	Menuscene.init(0);
 
 }
 
@@ -26,7 +27,7 @@ void Game::render()
 
 	switch (state.getState()) {
 	case State::State_enum::MENU:
-		Menuscene.init(0);
+		
 		Menuscene.render();
 		break;
 
@@ -76,6 +77,7 @@ void Game::keyPressed(int key)
 	case State::State_enum::GAME:
         if (key == 27) {
             state.goMENU();
+			Menuscene.init(0);
            Music::instance().efectoMenuAtras();
         }
 
@@ -84,6 +86,7 @@ void Game::keyPressed(int key)
 	case State::State_enum::CREDITS:
         if (key == 27) {
             state.goMENU();
+			Menuscene.init(0);
             Music::instance().efectoMenuAtras();
         }
 		break;
@@ -91,6 +94,7 @@ void Game::keyPressed(int key)
 	case State::State_enum::INFO:
         if (key == 27) {
             state.goMENU();
+			Menuscene.init(0);
            Music::instance().efectoMenuAtras();
         }
 		break;
