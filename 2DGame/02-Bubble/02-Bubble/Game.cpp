@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
-using namespace std;
+
 #include <iostream>
 
 void Game::init()
@@ -10,7 +10,7 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
 	state.goMENU();
-	Menuscene.init(1);
+
 }
 
 bool Game::update(int deltaTime)
