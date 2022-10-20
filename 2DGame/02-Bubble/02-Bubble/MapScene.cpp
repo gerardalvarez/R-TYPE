@@ -5,11 +5,11 @@
 #include "Game.h"
 
 
-#define SCREEN_X 32
-#define SCREEN_Y 16
+#define SCREEN_X 0
+#define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_X_TILES 2
+#define INIT_PLAYER_Y_TILES 0
 
 
 MapScene::MapScene()
@@ -31,13 +31,13 @@ MapScene::~MapScene()
 
 void MapScene::init()
 {
-	initlevel(4);
+	initlevel(1);
 }
 
 void MapScene::initlevel(int level)
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
+	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
 	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -45,14 +45,15 @@ void MapScene::initlevel(int level)
 	player->setTileMap(map);
 
 
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT) };			//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
-	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };							//COORDENADES DE LA TEXTURA
-	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(0.15f, 1.f);							//dins de la imatge, agafa un quadrat definit pels punts de texCoords
-	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);					//guarda el quadrat
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(512, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
+	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
+	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(512/3072.f, 1.f);			
+																							// fer divisions de 2^x, no decimals
+	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);				//guarda el quadrat
 
 	string lvl = "images/level0" + to_string(level) + ".png";
 
-	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGB);					//carrega la imatge
+	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGBA);									//les imatges son profunditat 32bits
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH-1), float(SCREEN_HEIGHT-1), 0.f);
 	currentTime = 0.0f;
 }
@@ -73,11 +74,10 @@ void MapScene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	//map->render();
-	//for (int i = 0; i < CAMERA_WIDTH; i = i + 128) {
+	
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
-	//}
+	
 	player->render();
 }

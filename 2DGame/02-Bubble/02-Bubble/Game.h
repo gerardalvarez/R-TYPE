@@ -8,8 +8,8 @@
 #include "State.h"
 
 
-
-#define SCREEN_WIDTH 256
+//this are the original screen sizes of the game
+#define SCREEN_WIDTH 256 
 #define SCREEN_HEIGHT 192
 
 
