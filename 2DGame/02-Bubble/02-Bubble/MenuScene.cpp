@@ -13,7 +13,7 @@ void MenuScene::init(int level) {
 
 	switch (level) {
 	case (0): //MENU
-		spritesheet.loadFromFile("images/r-menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
+		spritesheet.loadFromFile("images/r-menu.png", TEXTURE_PIXEL_FORMAT_RGB);
 		break;
 	case(1): //CREDITS
 		spritesheet.loadFromFile("images/r-creditos.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -24,7 +24,7 @@ void MenuScene::init(int level) {
 
 	}
 	//spritesheet.loadFromFile("images/Menu_extra.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	background = Sprite::createSprite(glm::ivec2(640, 480), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
+	background = Sprite::createSprite(glm::ivec2(256, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
 	background->setPosition(glm::vec2(0.f, 0.f));
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
