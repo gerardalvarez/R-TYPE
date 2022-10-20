@@ -19,6 +19,4 @@ public:
 
 private:
 	Texture scene;
-	int option; //opcion seleccionada
-
 };

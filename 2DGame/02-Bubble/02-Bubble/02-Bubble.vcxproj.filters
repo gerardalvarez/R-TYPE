@@ -57,6 +57,9 @@
     <ClInclude Include="State.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -99,6 +102,9 @@
       <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="State.cpp">
+      <Filter>Archivos de c�digo fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
       <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
   </ItemGroup>

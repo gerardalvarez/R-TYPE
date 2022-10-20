@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "Music.h"
 
-#include <iostream>
 
 void Game::init()
 {
@@ -10,6 +10,7 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
 	state.goMENU();
+	Menuscene.init(0);
 
 }
 
@@ -26,7 +27,7 @@ void Game::render()
 
 	switch (state.getState()) {
 	case State::State_enum::MENU:
-		Menuscene.init(0);
+		
 		Menuscene.render();
 		break;
 
@@ -37,6 +38,7 @@ void Game::render()
 	case State::State_enum::CREDITS:
 		Menuscene.init(1);
 		Menuscene.render();
+        
 		break;
 
 	case State::State_enum::INFO:
@@ -65,22 +67,36 @@ void Game::keyPressed(int key)
 		if (key == 32) state.goGAME();
 		if (key == 99) state.goCREDITS();
 		if (key == 105) state.goINFO();
+        if (key == 105 || key == 99 || key == 32) Music::instance().efectoMenuDelante();
 		if (key == 27) { // Escape code
 			bPlay = false;
 			return;
-		}
+        }
 		break;
 
 	case State::State_enum::GAME:
-		if (key == 27) state.goMENU();
+        if (key == 27) {
+            state.goMENU();
+			Menuscene.init(0);
+           Music::instance().efectoMenuAtras();
+        }
+
 		break;
 
 	case State::State_enum::CREDITS:
-		if (key == 27) state.goMENU();
+        if (key == 27) {
+            state.goMENU();
+			Menuscene.init(0);
+            Music::instance().efectoMenuAtras();
+        }
 		break;
 
 	case State::State_enum::INFO:
-		if (key == 27) state.goMENU();
+        if (key == 27) {
+            state.goMENU();
+			Menuscene.init(0);
+           Music::instance().efectoMenuAtras();
+        }
 		break;
 
 	default:
