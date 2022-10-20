@@ -45,7 +45,7 @@ void Scene::init()
 	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(1.f, 1.f);					//dins de la imatge, agafa un quadrat definit pels punts de texCoords
 	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);			//guarda el quadrat
 
-	texs[0].loadFromFile("images/level01.png", TEXTURE_PIXEL_FORMAT_RGB);			//carrega la imatge
+	texs[0].loadFromFile("images/level04.png", TEXTURE_PIXEL_FORMAT_RGB);			//carrega la imatge
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }

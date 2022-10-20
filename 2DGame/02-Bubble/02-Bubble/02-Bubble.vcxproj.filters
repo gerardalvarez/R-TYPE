@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de código fuente">
+    <Filter Include="Archivos de c�digo fuente">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
@@ -51,43 +51,61 @@
     <ClInclude Include="MapScene.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="TexturedQuad.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="BaseScene.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
     <ClCompile Include="MapScene.cpp">
-      <Filter>Archivos de código fuente</Filter>
+      <Filter>Archivos de c�digo fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Archivos de c�digo fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Archivos de c�digo fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

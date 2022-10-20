@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
+
 	glutInitWindowSize(3*SCREEN_WIDTH, 3*SCREEN_HEIGHT); //aqui es on es fan les escales
 	//mantenir les pantalles del joc
 

@@ -1,40 +1,23 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "Music.h"
 
 
 void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	mapScene.init();
-	State state= MENU;
+	scene.init();
+	state.goMENU();
+	Menuscene.init(0);
+
 }
 
 bool Game::update(int deltaTime)
 {
-	mapScene.update(deltaTime);
-	switch (state) {
-	case MENU:
-		if (getSpecialKey(GLUT_KEY_INSERT)) state = GAME;
-		break;
+	scene.update(deltaTime);
 
-	case GAME:
-		mapScene.render();
-		break;
-
-	case INFO:
-
-		break;
-
-	case CREDITS:
-
-		break;
-
-	default:
-		break;
-
-	}
 	return bPlay;
 }
 
@@ -42,56 +25,78 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	switch (state) {
-		case MENU:
+	switch (state.getState()) {
+	case State::State_enum::MENU:
+		
+		Menuscene.render();
+		break;
 
-			break;
+	case State::State_enum::GAME:
+		scene.render();
+		break;
 
-		case GAME:
-			 mapScene.render();
-			break;
+	case State::State_enum::CREDITS:
+		Menuscene.init(1);
+		Menuscene.render();
+        
+		break;
 
-		case INFO:
+	case State::State_enum::INFO:
+		Menuscene.init(2);
+		Menuscene.render();
+		break;
 
-			break;
-
-		case CREDITS:
-
-			break;
-
-		default :
-			break;
+	default:
+		break;
 
 	}
 
 
 
-	
+
 }
 
 void Game::keyPressed(int key)
 {
-	if (key == 27) { // Escape code
-		bPlay = false;
-		return;
-	}
 	
 
-	switch (state) {
-	case MENU:
-		if (key == 32) state = GAME;
+
+	switch (state.getState()) {
+
+	case State::State_enum::MENU:
+		if (key == 32) state.goGAME();
+		if (key == 99) state.goCREDITS();
+		if (key == 105) state.goINFO();
+        if (key == 105 || key == 99 || key == 32) Music::instance().efectoMenuDelante();
+		if (key == 27) { // Escape code
+			bPlay = false;
+			return;
+        }
 		break;
 
-	case GAME:
-		scene.render();
+	case State::State_enum::GAME:
+        if (key == 27) {
+            state.goMENU();
+			Menuscene.init(0);
+           Music::instance().efectoMenuAtras();
+        }
+
 		break;
 
-	case INFO:
-
+	case State::State_enum::CREDITS:
+        if (key == 27) {
+            state.goMENU();
+			Menuscene.init(0);
+            Music::instance().efectoMenuAtras();
+        }
 		break;
 
-	case CREDITS:
-
+	case State::State_enum::INFO:
+        if (key == 27) {
+            state.goMENU();
+			Menuscene.init(0);
+           Music::instance().efectoMenuAtras();
+        }
 		break;
 
 	default:
@@ -137,6 +142,8 @@ bool Game::getSpecialKey(int key) const
 {
 	return specialKeys[key];
 }
+
+
 
 
 
