@@ -105,7 +105,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND);
 	}
 	
-	posPlayer.y += 1;
+	//posPlayer.y += 1;
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
 	{
 		startY = posPlayer.y;
