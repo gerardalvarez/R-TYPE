@@ -2,13 +2,14 @@
 #include <GL/glut.h>
 #include "Game.h"
 #include "Music.h"
+#include "MapScene.h"
 
 
 void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init();
+	mapScene.init();
 	state.goMENU();
 	Menuscene.init(0);
 
@@ -16,7 +17,7 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	mapScene.update(deltaTime);
 
 	return bPlay;
 }
@@ -32,7 +33,7 @@ void Game::render()
 		break;
 
 	case State::State_enum::GAME:
-		scene.render();
+		mapScene.render();
 		break;
 
 	case State::State_enum::CREDITS:
