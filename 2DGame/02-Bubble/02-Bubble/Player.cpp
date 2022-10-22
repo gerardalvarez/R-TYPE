@@ -80,10 +80,10 @@ void Player::update(int deltaTime)
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
-		posPlayer.y -= 4;
+		posPlayer.y -= 2;
 		if (map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), (int*)&posPlayer.y)) //not implemented
 		{
-			posPlayer.y -= 4;
+			posPlayer.y -= 2;
 			sprite->changeAnimation(STAND);
 		}
 	}
@@ -91,7 +91,7 @@ void Player::update(int deltaTime)
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
-		posPlayer.y += 4;
+		posPlayer.y += 2;
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*)&posPlayer.y))
 		{
 			posPlayer.y -= 2;
@@ -106,41 +106,12 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND);
 	}
 	
-	//posPlayer.y += 1;
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*) & posPlayer.y))
 	{
 		startY = posPlayer.y;
 		
 	}
 
-	/*if(bJumping)
-	{
-		jumpAngle += JUMP_ANGLE_STEP;
-		if(jumpAngle == 180)
-		{
-			bJumping = false;
-			posPlayer.y = startY;
-		}
-		else
-		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if(jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y);
-		}
-	}
-	else
-	{
-		posPlayer.y += FALL_STEP;
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
-		{
-			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
-			{
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
-			}
-		}
-	}*/
     posPlayer.x+=0.4;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
