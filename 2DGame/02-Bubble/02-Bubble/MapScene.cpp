@@ -14,8 +14,15 @@
 
 MapScene::MapScene()
 {
+    map = NULL;
+    player = new Player();
+}
+
+MapScene::MapScene(int lvl)
+{
 	map = NULL;
-	player = NULL;
+	player = new Player();;
+    initlevel(lvl);
 }
 
 MapScene::~MapScene()
@@ -29,13 +36,20 @@ MapScene::~MapScene()
 			delete texQuad[i];
 }
 
+
 void MapScene::init()
 {
+    BaseScene::init();
+    left = 0;
+    right = SCREEN_WIDTH - 1;
 	initlevel(1);
+
 }
 
 void MapScene::initlevel(int level)
 {
+    left = 0;
+    right = (SCREEN_WIDTH - 1);
 	initShaders();
 	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
 	
@@ -45,23 +59,26 @@ void MapScene::initlevel(int level)
 	player->setTileMap(map);
 
 
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(512, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(2816, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
-	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(512/3072.f, 1.f);			
+	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(2816/3072.f, 1.f);			
 																							// fer divisions de 2^x, no decimals
 	texQuad[0] = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);				//guarda el quadrat
 
 	string lvl = "images/level0" + to_string(level) + ".png";
 
 	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGBA);									//les imatges son profunditat 32bits
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH-1), float(SCREEN_HEIGHT-1), 0.f);
+	projection = glm::ortho(left, right, float(SCREEN_HEIGHT-1), 0.f);
 	currentTime = 0.0f;
 }
 
 void MapScene::update(int deltaTime)
 {
+    left += 0.4;
+    right +=0.4;
 	currentTime += deltaTime;
 	player->update(deltaTime);
+    projection = glm::ortho(left,right, float(SCREEN_HEIGHT - 1), 0.f);
 }
 
 void MapScene::render()
@@ -78,6 +95,7 @@ void MapScene::render()
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
-	
+    map->render();
 	player->render();
+    
 }

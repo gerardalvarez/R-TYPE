@@ -14,7 +14,8 @@ class MapScene : public BaseScene
 
 public:
 	MapScene();
-	~MapScene();
+    MapScene(int lvl);
+    ~MapScene();
 
 	void init();
 	void initlevel(int level);
@@ -29,4 +30,6 @@ private:
 	Player* player;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
+    float left;
+    float right;
 };

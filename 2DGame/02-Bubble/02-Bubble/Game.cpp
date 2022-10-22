@@ -65,7 +65,9 @@ void Game::keyPressed(int key)
 	switch (state.getState()) {
 
 	case State::State_enum::MENU:
-		if (key == 32) state.goGAME();
+        if (key == 32) {
+            state.goGAME();
+        }
 		if (key == 99) state.goCREDITS();
 		if (key == 105) state.goINFO();
         if (key == 105 || key == 99 || key == 32) Music::instance().efectoMenuDelante();

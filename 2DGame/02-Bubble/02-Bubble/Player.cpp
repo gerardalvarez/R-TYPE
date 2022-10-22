@@ -22,7 +22,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
 	spritesheet.loadFromFile("images/spritesheet02.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(33/269.f, 25/269.f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(35, 25), glm::vec2(33/269.f, 25/269.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(5);
 	
 		sprite->setAnimationSpeed(STAND, 8);
@@ -52,6 +52,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
+    
 	sprite->update(deltaTime);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
@@ -80,7 +81,7 @@ void Player::update(int deltaTime)
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
 		posPlayer.y -= 4;
-		if (map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), &posPlayer.y)) //not implemented
+		if (map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), (int*)&posPlayer.y)) //not implemented
 		{
 			posPlayer.y -= 4;
 			sprite->changeAnimation(STAND);
@@ -91,7 +92,7 @@ void Player::update(int deltaTime)
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
 		posPlayer.y += 4;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*)&posPlayer.y))
 		{
 			posPlayer.y -= 2;
 			sprite->changeAnimation(STAND);
@@ -106,7 +107,7 @@ void Player::update(int deltaTime)
 	}
 	
 	//posPlayer.y += 1;
-	if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), &posPlayer.y))
+	if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*) & posPlayer.y))
 	{
 		startY = posPlayer.y;
 		
@@ -140,7 +141,7 @@ void Player::update(int deltaTime)
 			}
 		}
 	}*/
-	
+    posPlayer.x+=0.4;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
