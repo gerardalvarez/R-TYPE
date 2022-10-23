@@ -59,8 +59,21 @@ void Game::render()
 
 void Game::keyPressed(int key)
 {
-	
-
+	if (key == 49) {
+		mapScene.skip(1);
+	}
+	if (key == 50) {
+		mapScene.skip(2);
+	}
+	if (key == 51) {
+		mapScene.skip(3);
+	}
+	if (key == 52) {
+		mapScene.skip(4);
+	}
+	if (key == 53) {
+		mapScene.skip(5);
+	}
 
 	switch (state.getState()) {
 

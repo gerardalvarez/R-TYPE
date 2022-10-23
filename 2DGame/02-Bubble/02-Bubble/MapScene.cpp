@@ -46,12 +46,36 @@ void MapScene::init()
 
 }
 
+void MapScene::skip(int part)
+{
+	switch (part) {
+	case 1:
+		left = 0;
+		break;
+	case 2:
+		left = 3072/4;
+		break;
+	case 3:
+		left = 3072/2;
+		break;
+	case 4:
+		left = 3072/4*3;
+		break;
+	default:
+		left = 3072- SCREEN_WIDTH;
+		break;
+	}
+	right = left + SCREEN_WIDTH - 1;
+	player->setPosition(glm::vec2(left, (192/2)));
+
+}
+
 void MapScene::initlevel(int level)
 {
 	left = 0;
 	right = (SCREEN_WIDTH - 1);
 	initShaders();
-	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
+	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);

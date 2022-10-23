@@ -18,6 +18,7 @@ public:
 	~MapScene();
 
 	void init();
+	void skip(int part);
 	void initlevel(int level);
 	void update(int deltaTime);
 	void render();
