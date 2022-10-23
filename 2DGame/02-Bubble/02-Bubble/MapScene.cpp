@@ -11,6 +11,10 @@
 #define INIT_PLAYER_X_TILES 2
 #define INIT_PLAYER_Y_TILES 0
 
+#define INIT_ENEMY_X_TILES 50
+#define INIT_ENEMY_Y_TILES 10
+
+
 
 MapScene::MapScene()
 {
@@ -21,7 +25,8 @@ MapScene::MapScene()
 MapScene::MapScene(int lvl)
 {
 	map = NULL;
-	player = new Player();;
+	player = new Player();
+	enemy = new Enemy();
 	initlevel(lvl);
 }
 
@@ -77,11 +82,17 @@ void MapScene::initlevel(int level)
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
 
+	//PLAYER
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
+	//ENEMY
+	enemy = new Enemy();
+	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
+	enemy->setTileMap(map);
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
@@ -121,5 +132,6 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 	map->render();
 	player->render();
+	enemy->render();
 
 }

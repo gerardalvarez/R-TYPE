@@ -51,10 +51,6 @@ void Game::render()
 		break;
 
 	}
-
-
-
-
 }
 
 void Game::keyPressed(int key)

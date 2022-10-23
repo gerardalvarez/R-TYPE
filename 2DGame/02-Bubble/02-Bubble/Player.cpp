@@ -6,24 +6,18 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-
 enum PlayerAnims
 {
-	STAND, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
+	STAND, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, BOOM
 };
 
 
 //la nau fa 33px de x i 25px de y
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	bJumping = false;
 	spritesheet.loadFromFile("images/spritesheet02.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(35, 25), glm::vec2(33/269.f, 25/269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(5);
+	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33/269.f, 25/269.f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(6);
 	
 		sprite->setAnimationSpeed(STAND, 8);
 		sprite->addKeyframe(STAND, glm::vec2(0 / 269.f, 25 / 269.f));
@@ -42,6 +36,11 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_DOWN, glm::vec2(33 * 0 / 269.f, 25 / 269.f));
 		sprite->addKeyframe(MOVE_DOWN, glm::vec2(33 * 5 / 269.f, 25 * 2 / 269.f));
 		sprite->addKeyframe(MOVE_DOWN, glm::vec2(33 * 4 / 269.f, 25 * 2 / 269.f));
+
+		sprite->setAnimationSpeed(BOOM, 4);
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 0 / 269.f, 165 / 269.f));
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 1 / 269.f, 160 / 269.f));
+		sprite->addKeyframe(BOOM, glm::vec2(80 / 269.f, 150 / 269.f));
 		
 		
 	sprite->changeAnimation(0);
@@ -59,10 +58,10 @@ void Player::update(int deltaTime)
 		if(sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(8, 16)))
 		{
 			posPlayer.x += 2;
-			sprite->changeAnimation(STAND);
+			sprite->changeAnimation(BOOM);
 		}
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
@@ -70,10 +69,10 @@ void Player::update(int deltaTime)
 		if(sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);
 		posPlayer.x += 2;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
+		if(map->collisionMoveRight(posPlayer, glm::ivec2(26, 10))) //caixa rara
 		{
 			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND);
+			sprite->changeAnimation(BOOM);
 		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_UP))

@@ -3,6 +3,7 @@
 
 #include "TileMap.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "TexturedQuad.h"
 
 
@@ -29,6 +30,7 @@ private:
 private:
 	TileMap* map;
 	Player* player;
+	Enemy* enemy;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
