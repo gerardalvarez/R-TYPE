@@ -8,7 +8,7 @@
 
 enum PlayerAnims
 {
-	STAND, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, BOOM
+	STAND, MOVE_UP, MOVE_DOWN, BOOM, REVERSE_UP, REVERSE_DOWN
 };
 
 
@@ -21,14 +21,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	
 		sprite->setAnimationSpeed(STAND, 8);
 		sprite->addKeyframe(STAND, glm::vec2(0 / 269.f, 25 / 269.f));
-		
-		sprite->setAnimationSpeed(MOVE_LEFT, 8);
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(33*0 / 269.f, 25 / 269.f));
-		
-		sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(33*0 / 269.f, 25 / 269.f));
 
 		sprite->setAnimationSpeed(MOVE_UP, 8);
+		sprite->addKeyframe(MOVE_UP, glm::vec2(33 * 0 / 269.f, 25 / 269.f));
 		sprite->addKeyframe(MOVE_UP, glm::vec2(33 * 1 / 269.f, 25 / 269.f));
 		sprite->addKeyframe(MOVE_UP, glm::vec2(33 * 2 / 269.f, 25 / 269.f));
 		
@@ -37,6 +32,16 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_DOWN, glm::vec2(33 * 5 / 269.f, 25 * 2 / 269.f));
 		sprite->addKeyframe(MOVE_DOWN, glm::vec2(33 * 4 / 269.f, 25 * 2 / 269.f));
 
+		sprite->setAnimationSpeed(REVERSE_UP, 8);
+		sprite->addKeyframe(REVERSE_UP, glm::vec2(33 * 2 / 269.f, 25 / 269.f));
+		sprite->addKeyframe(REVERSE_UP, glm::vec2(33 * 1 / 269.f, 25 / 269.f));
+		sprite->addKeyframe(REVERSE_UP, glm::vec2(33 * 0 / 269.f, 25 / 269.f));
+		
+		sprite->setAnimationSpeed(REVERSE_DOWN, 8);
+		sprite->addKeyframe(REVERSE_DOWN, glm::vec2(33 * 4 / 269.f, 25 * 2 / 269.f));
+		sprite->addKeyframe(REVERSE_DOWN, glm::vec2(33 * 5 / 269.f, 25 * 2 / 269.f));
+		sprite->addKeyframe(REVERSE_DOWN, glm::vec2(33 * 0 / 269.f, 25 / 269.f));
+		
 		sprite->setAnimationSpeed(BOOM, 4);
 		sprite->addKeyframe(BOOM, glm::vec2(33 * 0 / 269.f, 165 / 269.f));
 		sprite->addKeyframe(BOOM, glm::vec2(33 * 1 / 269.f, 160 / 269.f));
@@ -53,10 +58,10 @@ void Player::update(int deltaTime)
 {
     
 	sprite->update(deltaTime);
-	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))				//MOVING LEFT
 	{
-		if(sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT);
+		if(sprite->animation() != STAND)
+			sprite->changeAnimation(STAND);
 		posPlayer.x -= 2;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(8, 16)))
 		{
@@ -64,10 +69,10 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(BOOM);
 		}
 	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))			//MOVING RIGHT
 	{
-		if(sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);
+		if(sprite->animation() != STAND)
+			sprite->changeAnimation(STAND);
 		posPlayer.x += 2;
 		if(map->collisionMoveRight(posPlayer, glm::ivec2(26, 10))) //caixa rara
 		{
@@ -75,7 +80,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(BOOM);
 		}
 	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+	else if (Game::instance().getSpecialKey(GLUT_KEY_UP))			//MOVING UP
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
@@ -86,7 +91,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND);
 		}
 	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))			//MOVING DOWN
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
@@ -99,11 +104,12 @@ void Player::update(int deltaTime)
 	}
 	else
 	{
-		if(sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND);
-		else if(sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND);
+		if (sprite->animation() == MOVE_UP)
+			sprite->changeAnimation(REVERSE_UP);
+		else if (sprite->animation() == MOVE_DOWN)
+			sprite->changeAnimation(REVERSE_DOWN);
 	}
+
 	
 	if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*) & posPlayer.y))
 	{
