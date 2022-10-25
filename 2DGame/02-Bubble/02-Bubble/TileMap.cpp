@@ -156,8 +156,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	int x, y0, y1;
 	
 	x = (pos.x + size.x)/ tileSize;
-	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
+	y0 = (pos.y + size.y - 1) / tileSize;
+	y1 = (pos.y + 21 - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
 		if(map[y*mapSize.x+x] == 2)
@@ -167,60 +167,67 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size1, const glm::ivec2& size2) const
 {
+	//primera caixa
 	int x, y0, y1;
 	
-	x = (pos.x + size.x - 1) / tileSize;
-	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
+	x = (pos.x + size1.x - 1) / tileSize;
+	y0 = (pos.y + size1.y - 1) / tileSize;
+	y1 = (pos.y + 21 - 1) / tileSize;
+
+	//segona caixa
+	int x1, y01, y11;
+
+	x1 = (pos.x + size2.x - 1) / tileSize;
+	y01 = (pos.y + size2.y - 1) / tileSize;
+	y11 = (pos.y + 21 - 1) / tileSize;
+
 	for(int y=y0; y<=y1; y++)
 	{
 		if(map[y*mapSize.x+x] == 2)
  			return true;
 	}
 	
+	for (int y = y0; y <= y11; y++)
+	{
+		if (map[y * mapSize.x + x1] == 2)
+			return true;
+	}
+	
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const
 {
 	int x0, x1, y;
 
-	x0 = pos.x / tileSize;
+	x0 = (pos.x + 6 - 1) / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] == 0)
+		if (map[y * mapSize.x + x] != 0)
 		{
-			if (*posY - tileSize * y + size.y <= 4)
-			{
-				*posY = tileSize * y - size.y;
-				return true;
-			}
+			return true;
 		}
 	}
 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
 	int x0, x1, y;
 	
-	x0 = pos.x / tileSize;
+	x0 = (pos.x + 6 - 1) / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
-	for(int x=x0; x<=x1; x++)
+	for (int x = x0; x <= x1; x++)
 	{
-		if(map[y*mapSize.x+x] != 0)
+		if(map[y * mapSize.x + x] != 0)
 		{
-			if(*posY - tileSize * y + size.y <= 4)
-			{
-				*posY = tileSize * y - size.y;
-				return true;
-			}
+			return true;
 		}
 	}
 	

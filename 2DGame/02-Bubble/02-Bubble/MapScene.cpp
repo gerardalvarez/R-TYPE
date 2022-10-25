@@ -113,6 +113,10 @@ void MapScene::update(int deltaTime)
 	right += 0.4;
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	if (player->getIsDead()) {
+		left = 0;
+		right = (SCREEN_WIDTH - 1);
+	}
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
 

@@ -12,7 +12,7 @@ enum PlayerAnims
 };
 
 
-//la nau fa 33px de x i 25px de y
+//la nau fa 33px de x i 25px de y en la spritesheet, el quad sera de 33x 30y
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.loadFromFile("images/spritesheet02.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -50,6 +50,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
+	isDead = false;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
 }
@@ -58,12 +59,16 @@ void Player::update(int deltaTime)
 {
     
 	sprite->update(deltaTime);
-	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))				//MOVING LEFT
+	if (sprite->animation() == BOOM) {
+		sprite->setPosition(glm::vec2(float(10), float(10)));
+		isDead = true;
+	}
+	else if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))				//MOVING LEFT
 	{
 		if(sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
 		posPlayer.x -= 2;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(8, 16)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(6, 14)))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(BOOM);
@@ -74,7 +79,7 @@ void Player::update(int deltaTime)
 		if(sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
 		posPlayer.x += 2;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(26, 10))) //caixa rara
+		if(map->collisionMoveRight(posPlayer, glm::ivec2(23, 14), glm::ivec2(28, 15))) //caixa rara
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(BOOM);
@@ -85,10 +90,10 @@ void Player::update(int deltaTime)
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
 		posPlayer.y -= 2;
-		if (map->collisionMoveUp(posPlayer, glm::ivec2(16, 16), (int*)&posPlayer.y)) //not implemented
+		if (map->collisionMoveUp(posPlayer, glm::ivec2(26, 12))) 
 		{
-			posPlayer.y -= 2;
-			sprite->changeAnimation(STAND);
+			posPlayer.y += 2;
+			sprite->changeAnimation(BOOM);
 		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))			//MOVING DOWN
@@ -96,10 +101,10 @@ void Player::update(int deltaTime)
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
 		posPlayer.y += 2;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*)&posPlayer.y))
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(26, 20)))
 		{
 			posPlayer.y -= 2;
-			sprite->changeAnimation(STAND);
+			sprite->changeAnimation(BOOM);
 		}
 	}
 	else
@@ -108,12 +113,16 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(REVERSE_UP);
 		else if (sprite->animation() == MOVE_DOWN)
 			sprite->changeAnimation(REVERSE_DOWN);
+		else {
+			sprite->changeAnimation(STAND);
+		}
 	}
 
 	
-	if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 16), (int*) & posPlayer.y))
+	if (map->collisionMoveRight(posPlayer, glm::ivec2(23, 12), glm::ivec2(28, 10)))
 	{
-		startY = posPlayer.y;
+		posPlayer.x -= 2;
+		sprite->changeAnimation(BOOM);
 		
 	}
 
@@ -135,4 +144,9 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
+bool Player::getIsDead()
+{
+	return isDead;
 }
