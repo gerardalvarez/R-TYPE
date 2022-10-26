@@ -21,6 +21,10 @@ public:
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void setGodMode(bool godModeActive);
+	void calculateCollisions();
+	void updatePositionX(int x);
+	void updatePositionY(int y);
 	
 private:
 	glm::ivec2 tileMapDispl;
@@ -30,6 +34,7 @@ private:
 	Sprite *sprite;
 	TileMap *map;
 	bool isDead;
+	bool godMode;
 };
 
 

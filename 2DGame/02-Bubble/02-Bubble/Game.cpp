@@ -79,20 +79,23 @@ void Game::keyPressed(int key)
 			Menuscene.init(0);
            Music::instance().efectoMenuAtras();
         }
-		if (key == 49) {
+		if (key == 49) {		//tecla 1
 			mapScene.skip(1);
 		}
-		if (key == 50) {
+		if (key == 50) {		//tecla 2
 			mapScene.skip(2);
 		}
-		if (key == 51) {
+		if (key == 51) {		//tecla 3
 			mapScene.skip(3);
 		}
-		if (key == 52) {
+		if (key == 52) {		//tecla 4
 			mapScene.skip(4);
 		}
-		if (key == 53) {
+		if (key == 53) {		//tecla 5
 			mapScene.skip(5);
+		}
+		if (key == 103) {		//tecla g
+			mapScene.godMode();
 		}
 		break;
 

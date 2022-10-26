@@ -23,6 +23,7 @@ public:
 	void initlevel(int level);
 	void update(int deltaTime);
 	void render();
+	void godMode();
 
 private:
 	//void initShaders();
@@ -35,4 +36,5 @@ private:
 	TexturedQuad* texQuad[3];
 	float left;
 	float right;
+	bool godModeActive;
 };

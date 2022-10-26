@@ -75,10 +75,18 @@ void MapScene::skip(int part)
 
 }
 
+void MapScene::godMode()
+{
+	godModeActive = !godModeActive;
+	player->setGodMode(godModeActive);
+}
+
 void MapScene::initlevel(int level)
 {
 	left = 0;
 	right = (SCREEN_WIDTH - 1);
+	godModeActive = false;
+
 	initShaders();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); //si es canvia la mida del mapa, es canvia aixo
 
