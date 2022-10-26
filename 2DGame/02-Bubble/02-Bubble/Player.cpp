@@ -15,7 +15,7 @@ enum PlayerAnims
 //la nau fa 33px de x i 25px de y en la spritesheet, el quad sera de 33x 30y
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	spritesheet.loadFromFile("images/spritesheet02.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33/269.f, 25/269.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(6);
 	
@@ -42,10 +42,13 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(REVERSE_DOWN, glm::vec2(33 * 5 / 269.f, 25 * 2 / 269.f));
 		sprite->addKeyframe(REVERSE_DOWN, glm::vec2(33 * 0 / 269.f, 25 / 269.f));
 		
-		sprite->setAnimationSpeed(BOOM, 4);
-		sprite->addKeyframe(BOOM, glm::vec2(33 * 0 / 269.f, 165 / 269.f));
-		sprite->addKeyframe(BOOM, glm::vec2(33 * 1 / 269.f, 160 / 269.f));
-		sprite->addKeyframe(BOOM, glm::vec2(80 / 269.f, 150 / 269.f));
+		sprite->setAnimationSpeed(BOOM, 16);
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 0 / 269.f, 25 * 6 / 269.f));
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 1 / 269.f, 25 * 6 / 269.f));
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 2 / 269.f, 25 * 6 / 269.f));
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 3 / 269.f, 25 * 6 / 269.f));
+		sprite->addKeyframe(BOOM, glm::vec2(33 * 4 / 269.f, 25 * 6 / 269.f));
+
 		
 		
 	sprite->changeAnimation(0);
@@ -111,7 +114,7 @@ void Player::update(int deltaTime)
 			case 0:
 				break;
 			case 2:
-				posPlayer.y += 2;
+				posPlayer.y += 4;
 				sprite->changeAnimation(BOOM);
 				break;
 			default:
@@ -130,7 +133,7 @@ void Player::update(int deltaTime)
 			case 0:
 				break;
 			case 2:
-				posPlayer.y -= 2;
+				posPlayer.y -= 6;
 				sprite->changeAnimation(BOOM);
 				break;
 			default:
