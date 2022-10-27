@@ -110,6 +110,9 @@ void Player::calculateCollisions()
 		if (sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
 		posPlayer.x += 2;
+		if (cameraright - 35 <= posPlayer.x) {
+			posPlayer.x = cameraright - 35;
+		}
 		switch (map->collisionMoveRight(posPlayer, glm::ivec2(23, 14), glm::ivec2(28, 15)))
 		{
 		case 0:
@@ -210,8 +213,9 @@ void Player::updatePositionY(int y)
 	if (!godMode) posPlayer.y += y;
 }
 
-void Player::sendLeft(float left)
+void Player::sendcamera(float left,float right)
 {
+	cameraright = right;
 	cameraleft = left;
 }
 

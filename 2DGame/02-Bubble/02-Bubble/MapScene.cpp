@@ -118,7 +118,7 @@ void MapScene::initlevel(int level)
 void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->sendLeft(left);
+	player->sendcamera(left,right);
 	player->update(deltaTime);
 	enemy->update(deltaTime);
 	if (!player->getIsDead() && right <= 3160) {

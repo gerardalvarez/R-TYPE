@@ -25,7 +25,7 @@ public:
 	void calculateCollisions();
 	void updatePositionX(int x);
 	void updatePositionY(int y);
-	void sendLeft(float left);
+	void sendcamera(float left,float right);
 	
 private:
 	glm::ivec2 tileMapDispl;
@@ -37,6 +37,7 @@ private:
 	bool isDead;
 	bool godMode;
 	float cameraleft;
+	float cameraright;
 };
 
 
