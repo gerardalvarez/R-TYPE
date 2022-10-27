@@ -9,7 +9,6 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	mapScene.init();
 	state.goMENU();
 	Menuscene.init(0);
 
@@ -17,6 +16,9 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
+	if(state.getState() == State::State_enum::MENU)
+		return bPlay;
+
 	mapScene.update(deltaTime);
 
 	return bPlay;
@@ -51,21 +53,15 @@ void Game::render()
 		break;
 
 	}
-
-
-
-
 }
 
 void Game::keyPressed(int key)
 {
-	
-
-
 	switch (state.getState()) {
 
 	case State::State_enum::MENU:
         if (key == 32) {
+			mapScene.init();
             state.goGAME();
         }
 		if (key == 99) state.goCREDITS();
@@ -83,7 +79,24 @@ void Game::keyPressed(int key)
 			Menuscene.init(0);
            Music::instance().efectoMenuAtras();
         }
-
+		if (key == 49) {		//tecla 1
+			mapScene.skip(1);
+		}
+		if (key == 50) {		//tecla 2
+			mapScene.skip(2);
+		}
+		if (key == 51) {		//tecla 3
+			mapScene.skip(3);
+		}
+		if (key == 52) {		//tecla 4
+			mapScene.skip(4);
+		}
+		if (key == 53) {		//tecla 5
+			mapScene.skip(5);
+		}
+		if (key == 103) {		//tecla g
+			mapScene.godMode();
+		}
 		break;
 
 	case State::State_enum::CREDITS:

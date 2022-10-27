@@ -3,6 +3,7 @@
 
 #include "TileMap.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "TexturedQuad.h"
 
 
@@ -14,13 +15,16 @@ class MapScene : public BaseScene
 
 public:
 	MapScene();
-    MapScene(int lvl);
-    ~MapScene();
+	MapScene(int lvl);
+	~MapScene();
 
 	void init();
+	void skip(int part);
 	void initlevel(int level);
 	void update(int deltaTime);
 	void render();
+	void godMode();
+	float getLeft();
 
 private:
 	//void initShaders();
@@ -28,8 +32,10 @@ private:
 private:
 	TileMap* map;
 	Player* player;
+	Enemy* enemy;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
-    float left;
-    float right;
+	float left;
+	float right;
+	bool godModeActive;
 };

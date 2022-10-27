@@ -17,19 +17,26 @@ public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
+	bool getIsDead();
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void setGodMode(bool godModeActive);
+	void calculateCollisions();
+	void updatePositionX(int x);
+	void updatePositionY(int y);
+	void sendLeft(float left);
 	
 private:
-	bool bJumping;
-    glm::ivec2 tileMapDispl;
+	glm::ivec2 tileMapDispl;
     glm::vec2 posPlayer;
-	int jumpAngle, startY;
+	int startY;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-
+	bool isDead;
+	bool godMode;
+	float cameraleft;
 };
 
 
