@@ -118,8 +118,10 @@ void MapScene::initlevel(int level)
 void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	player->sendLeft(left);
 	player->update(deltaTime);
-	if (!player->getIsDead()) {
+	enemy->update(deltaTime);
+	if (!player->getIsDead() && right <= 3160) {
 		left += 0.4;
 		right += 0.4;
 	}
@@ -140,8 +142,13 @@ void MapScene::render()
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
-	map->render();
+	//map->render();
 	player->render();
-	enemy->render();
+	//enemy->render();
 
+}
+
+float MapScene::getLeft()
+{
+	return left;
 }

@@ -27,7 +27,7 @@ private:
 	glm::vec2 posEnemy;
 	int startY;
 	Texture spritesheet;
-	Sprite* sprite;
+	Sprite* sprite[2];
 	TileMap* map;
 
 };

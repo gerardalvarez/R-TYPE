@@ -69,7 +69,9 @@ void Player::update(int deltaTime)
 	}
 	else {
 		calculateCollisions();
-		posPlayer.x += 0.4;
+		if (posPlayer.x <= 2950) {
+			posPlayer.x += 0.4;
+		}
 		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	}
 }
@@ -86,18 +88,19 @@ void Player::calculateCollisions()
 		if (sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
 		posPlayer.x -= 2;
+		if (cameraleft+5>=posPlayer.x) {
+			posPlayer.x = cameraleft + 5;
+		}
 		switch (map->collisionMoveLeft(posPlayer, glm::ivec2(6, 14)))
 		{
 		case 0:
 			break;
 		case 2:
 			updatePositionX(2);
-			//posPlayer.x += 2;
 			sprite->changeAnimation(BOOM);
 			break;
 		default:
 			updatePositionX(2);
-			//posPlayer.x += 2;
 			sprite->changeAnimation(STAND);
 			break;
 		}
@@ -113,12 +116,10 @@ void Player::calculateCollisions()
 			break;
 		case 2:
 			updatePositionX(-2);
-			//posPlayer.x -= 2;
 			sprite->changeAnimation(BOOM);
 			break;
 		default:
 			updatePositionX(-2);
-			//posPlayer.x -= 2;
 			sprite->changeAnimation(STAND);
 			break;
 		}
@@ -134,12 +135,10 @@ void Player::calculateCollisions()
 			break;
 		case 2:
 			updatePositionY(4);
-			//posPlayer.y += 4;
 			sprite->changeAnimation(BOOM);
 			break;
 		default:
 			updatePositionY(2);
-			//posPlayer.y += 2;
 			sprite->changeAnimation(STAND);
 			break;
 		}
@@ -155,12 +154,10 @@ void Player::calculateCollisions()
 			break;
 		case 2:
 			updatePositionY(-6);
-			//posPlayer.y -= 6;
 			sprite->changeAnimation(BOOM);
 			break;
 		default:
 			updatePositionY(-2);
-			//posPlayer.y -= 2;
 			sprite->changeAnimation(STAND);
 			break;
 		}
@@ -180,7 +177,6 @@ void Player::calculateCollisions()
 	{
 	case 2:
 		updatePositionX(-2);
-		//posPlayer.x -= 2;
 		sprite->changeAnimation(BOOM);
 		break;
 	default:
@@ -212,6 +208,11 @@ void Player::updatePositionX(int x)
 void Player::updatePositionY(int y)
 {
 	if (!godMode) posPlayer.y += y;
+}
+
+void Player::sendLeft(float left)
+{
+	cameraleft = left;
 }
 
 bool Player::getIsDead()

@@ -11,26 +11,29 @@ enum EnemyAnims
 	STAND, BOOM
 };
 
-
+//x35 y35
 void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	posEnemy.x = 192;
 	posEnemy.y = 192;
-	spritesheet.loadFromFile("images/varied.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	spritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite[0] = Sprite::createSprite(glm::ivec2(35, 35), glm::vec2(35/506.f, 35/1856.f), &spritesheet, &shaderProgram);
+	sprite[0]->setNumberAnimations(1);
 
-	sprite->setAnimationSpeed(STAND, 8);
-	sprite->addKeyframe(STAND, glm::vec2(0,0));
+	sprite[0]->setAnimationSpeed(STAND, 8);
+	sprite[0]->addKeyframe(STAND, glm::vec2(35 * 1 / 506.f, 35 * 3 / 1856.f));
+	sprite[0]->addKeyframe(STAND, glm::vec2(35 * 2 / 506.f, 35 * 3 / 1856.f));
+	sprite[0]->addKeyframe(STAND, glm::vec2(35 * 3 / 506.f, 35 * 3 / 1856.f));
 
- 	sprite->changeAnimation(0);
+ 	sprite[0]->changeAnimation(0);
 	tileMapDispl = tileMapPos;
- 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+ 	sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
 void Enemy::update(int deltaTime)
 {
-	sprite->update(deltaTime);
+	sprite[0]->update(deltaTime);
+
 	if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 16)))
 	{
 		startY = posEnemy.y;
@@ -40,12 +43,12 @@ void Enemy::update(int deltaTime)
 		posEnemy.y += 1;
 	}
 
-    sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+    sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
 void Enemy::render()
 {
-	sprite->render();
+	sprite[0]->render();
 }
 
 void Enemy::setTileMap(TileMap* tileMap)
@@ -56,5 +59,5 @@ void Enemy::setTileMap(TileMap* tileMap)
 void Enemy::setPosition(const glm::vec2& pos)
 {
   	posEnemy = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }

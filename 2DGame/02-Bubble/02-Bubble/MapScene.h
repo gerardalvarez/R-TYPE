@@ -24,6 +24,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	void godMode();
+	float getLeft();
 
 private:
 	//void initShaders();
