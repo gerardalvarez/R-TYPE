@@ -37,7 +37,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 28 + 5), float(tileMapDispl.y + pos.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 70), float(tileMapDispl.y + pos.y)));
 
 }
 
@@ -67,6 +67,10 @@ void Shoot::calculateCollisions()
 	}
 }
 
+float Shoot::getPos()
+{
+	return posShoot.x;
+}
 
 void Shoot::setTileMap(TileMap* tileMap)
 {

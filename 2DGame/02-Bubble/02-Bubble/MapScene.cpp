@@ -133,10 +133,12 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left,right);
 	player->update(deltaTime);
 	enemy->update(deltaTime);
-	shoot->update(deltaTime);
+	if (shoot->getPos() <= right) {
+		shoot->update(deltaTime);
+	}
 	if (!player->getIsDead() && right <= 3160) {
 		left += 0.4;
-		right += 0.4;
+		right += 0.4; 
 	}
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
@@ -157,7 +159,9 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 	//map->render();
 	player->render();
-	shoot->render();
+	if (shoot->getPos() <= right) {
+		shoot->render();
+	}
 	//enemy->render();
 
 }

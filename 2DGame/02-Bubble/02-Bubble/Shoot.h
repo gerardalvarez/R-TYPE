@@ -17,6 +17,7 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void calculateCollisions();
+	float getPos();
 
 private:
 	glm::ivec2 tileMapDispl;
