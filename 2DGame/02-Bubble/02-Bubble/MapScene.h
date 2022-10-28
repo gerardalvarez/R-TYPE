@@ -25,6 +25,7 @@ public:
 	void render();
 	void godMode();
 	float getLeft();
+	void normalShoot();
 
 private:
 	//void initShaders();

@@ -103,9 +103,7 @@ void MapScene::initlevel(int level)
 	player->setTileMap(map);
 
 	//SHOOT
-	shoot = new Shoot();
-	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player->getPos());
-	shoot->setTileMap(map);
+	shoot = NULL;
 
 
 	//ENEMY
@@ -133,8 +131,12 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left,right);
 	player->update(deltaTime);
 	enemy->update(deltaTime);
-	if (shoot->getPos() <= right) {
+	if (shoot != NULL){
 		shoot->update(deltaTime);
+		if (shoot->getPos() > right) {
+			shoot->destroy();
+			shoot = NULL;
+		}
 	}
 	if (!player->getIsDead() && right <= 3160) {
 		left += 0.4;
@@ -159,11 +161,22 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 	//map->render();
 	player->render();
-	if (shoot->getPos() <= right) {
+	if (shoot != NULL) {
 		shoot->render();
 	}
 	//enemy->render();
 
+}
+
+void MapScene::normalShoot() {
+	if (shoot != NULL) {
+		shoot->destroy();
+	}
+	shoot = new Shoot();
+	glm::vec2 posPlayer = player->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+	shoot->setTileMap(map);
 }
 
 float MapScene::getLeft()

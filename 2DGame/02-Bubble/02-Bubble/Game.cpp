@@ -97,6 +97,9 @@ void Game::keyPressed(int key)
 		if (key == 103) {		//tecla g
 			mapScene.godMode();
 		}
+		if (key == 122) {		//tecla z
+			mapScene.normalShoot();
+		}
 		break;
 
 	case State::State_enum::CREDITS:

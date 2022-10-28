@@ -18,6 +18,8 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void calculateCollisions();
 	float getPos();
+	void setPosition(const glm::vec2& pos);
+	void destroy();
 
 private:
 	glm::ivec2 tileMapDispl;
