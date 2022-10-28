@@ -26,6 +26,7 @@ public:
 	void updatePositionX(int x);
 	void updatePositionY(int y);
 	void sendcamera(float left,float right);
+	glm::vec2 getPos();
 	
 private:
 	glm::ivec2 tileMapDispl;

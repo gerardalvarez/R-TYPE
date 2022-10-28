@@ -20,6 +20,7 @@ MapScene::MapScene()
 {
 	map = NULL;
 	player = new Player();
+	enemy = new Enemy();
 }
 
 MapScene::MapScene(int lvl)
@@ -27,6 +28,7 @@ MapScene::MapScene(int lvl)
 	map = NULL;
 	player = new Player();
 	enemy = new Enemy();
+	shoot = new Shoot();
 	initlevel(lvl);
 }
 
@@ -36,6 +38,10 @@ MapScene::~MapScene()
 		delete map;
 	if (player != NULL)
 		delete player;
+	if (enemy != NULL)
+		delete enemy;
+	if (shoot != NULL)
+		delete shoot;
 	for (int i = 0; i < 3; i++)
 		if (texQuad[i] != NULL)
 			delete texQuad[i];
@@ -96,6 +102,12 @@ void MapScene::initlevel(int level)
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 
+	//SHOOT
+	shoot = new Shoot();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, player->getPos());
+	shoot->setTileMap(map);
+
+
 	//ENEMY
 	enemy = new Enemy();
 	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -121,6 +133,7 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left,right);
 	player->update(deltaTime);
 	enemy->update(deltaTime);
+	shoot->update(deltaTime);
 	if (!player->getIsDead() && right <= 3160) {
 		left += 0.4;
 		right += 0.4;
@@ -144,6 +157,7 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 	//map->render();
 	player->render();
+	shoot->render();
 	//enemy->render();
 
 }

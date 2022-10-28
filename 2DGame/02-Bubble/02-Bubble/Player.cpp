@@ -219,6 +219,11 @@ void Player::sendcamera(float left,float right)
 	cameraleft = left;
 }
 
+glm::vec2 Player::getPos()
+{
+	return posPlayer;
+}
+
 bool Player::getIsDead()
 {
 	return isDead;

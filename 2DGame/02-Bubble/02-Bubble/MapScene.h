@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "TexturedQuad.h"
-
+#include "Shoot.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -33,6 +33,7 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
+	Shoot* shoot;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
