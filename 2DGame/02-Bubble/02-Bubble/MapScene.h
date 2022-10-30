@@ -26,6 +26,8 @@ public:
 	void godMode();
 	float getLeft();
 	void normalShoot();
+	void powerShoot();
+	void charge();
 	void relocateShoots();
 
 private:
@@ -42,4 +44,5 @@ private:
 	float left;
 	float right;
 	bool godModeActive;
+	int chargePos;
 };

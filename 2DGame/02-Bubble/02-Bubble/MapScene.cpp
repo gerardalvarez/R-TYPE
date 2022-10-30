@@ -135,6 +135,7 @@ void MapScene::update(int deltaTime)
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
 			if (shoot != NULL) {
+				shoot->setPlayerPos(player->getPos());
 				shoot->update(deltaTime);
 				if (shoot->getPos() > right) {
 					shoots[i] = NULL;
@@ -185,6 +186,19 @@ void MapScene::normalShoot() {
 	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
 	shoot->setTileMap(map);
 	shoots.push_back(shoot);
+}
+
+void MapScene::powerShoot()
+{
+	shoots[chargePos] = NULL;
+	normalShoot();
+	shoot->powerShoot();
+}
+
+void MapScene::charge() {
+	normalShoot();
+	shoot->charge();
+	chargePos = shoots.size() - 1;
 }
 
 void MapScene::relocateShoots()

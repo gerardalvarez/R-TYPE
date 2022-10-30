@@ -43,6 +43,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 
 void Shoot::update(int deltaTime)
 {
+	sprite->setCharge(sprite->animation() == CHARGING);
 	sprite->update(deltaTime);
 	calculateCollisions();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posShoot.x), float(tileMapDispl.y + posShoot.y)));
@@ -62,7 +63,13 @@ void Shoot::render()
 
 void Shoot::calculateCollisions()
 {
-	posShoot.x += 6;
+	if (sprite->animation() != CHARGING){
+		posShoot.x += 6;
+	}
+	else {
+		posShoot.x = posPlayer.x + 22;
+		posShoot.y = posPlayer.y + 5;
+	}
 	switch (map->collisionMoveRight(posShoot, glm::ivec2(23, 14), glm::ivec2(28, 15)))
 	{
 	case 0:
@@ -71,6 +78,21 @@ void Shoot::calculateCollisions()
 		sprite->changeAnimation(POWER);
 		break;
 	}
+}
+
+void Shoot::charge()
+{
+	sprite->changeAnimation(CHARGING);
+}
+
+void Shoot::powerShoot()
+{
+	sprite->changeAnimation(POWER);
+}
+
+void Shoot::setPlayerPos(glm::vec2& pos)
+{
+	posPlayer = pos;
 }
 
 void Shoot::setPosition(const glm::vec2& pos)
