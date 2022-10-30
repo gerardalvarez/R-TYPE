@@ -62,7 +62,7 @@ void MenuScene::render() {
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	
-	text.render("'Aaaaaaaaaaaaaaaaaa", glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
+	//text.render("'Aaaaaaaaaaaaaaaaaa", glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
 	background->render();
 }
 
