@@ -70,7 +70,6 @@ void Player::update(int deltaTime)
 	if (sprite != NULL) {
 		sprite->update(deltaTime);
 		if (sprite->animation() == BOOM) {
-			//while (1) {}
 			isDead = true;
 			Music::instance().explosion_player();
 		}
@@ -92,11 +91,16 @@ int Player::getlives()
 void Player::revive()
 {
 	--lives;
+	//Sleep(1000);
 	isDead = false;
-	Sleep(1000);
 	posPlayer.y -= 56;
 	posPlayer.x -= 20;
 	sprite->changeAnimation(STAND);
+}
+
+bool Player::animationFinished()
+{
+	return sprite->lastAnimation();
 }
 
 void Player::render()

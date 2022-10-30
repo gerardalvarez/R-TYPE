@@ -35,6 +35,8 @@ public:
 	void setCharge(bool charge);
 	void setPosition(const glm::vec2 &pos);
 
+	bool lastAnimation();
+
 private:
 	Texture *texture;
 	ShaderProgram *shaderProgram;
