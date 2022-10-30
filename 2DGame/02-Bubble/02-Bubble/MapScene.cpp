@@ -136,6 +136,7 @@ void MapScene::update(int deltaTime)
 	currentTime += deltaTime;
 
 	if (player->getIsDead()) {
+		
 		if (player->getlives() <= 1) {
 
 			gameover = true;
@@ -147,9 +148,13 @@ void MapScene::update(int deltaTime)
 			Music::instance().musicaMenu();
 		}
 		else {
-			if(player->animationFinished())
+			if (player->animationFinished()) {
+				Music::instance().explosion_player();
 				player->revive();
+				
+			}
 		}
+		
 	}
 	player->sendcamera(left, right);
 	if (player != NULL) player->update(deltaTime);

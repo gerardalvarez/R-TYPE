@@ -71,7 +71,7 @@ void Player::update(int deltaTime)
 		sprite->update(deltaTime);
 		if (sprite->animation() == BOOM) {
 			isDead = true;
-			Music::instance().explosion_player();
+			
 		}
 		else {
 			calculateCollisions();
@@ -90,12 +90,14 @@ int Player::getlives()
 
 void Player::revive()
 {
+	
 	--lives;
-	//Sleep(1000);
 	isDead = false;
-	posPlayer.y -= 56;
-	posPlayer.x -= 20;
+	posPlayer.y = 192/2-15;
+	posPlayer.x = cameraright -((cameraright - cameraleft) / 2)-70;
 	sprite->changeAnimation(STAND);
+	//Sleep(2000);
+
 }
 
 bool Player::animationFinished()
@@ -145,7 +147,7 @@ void Player::calculateCollisions()
 		{
 		case 0:
 			break;
-		case 2:
+		case 1:
 			updatePositionX(-2);
 			sprite->changeAnimation(BOOM);
 			break;
