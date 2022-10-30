@@ -93,8 +93,7 @@ void Player::revive()
 	--lives;
 	//Sleep(1000);
 	isDead = false;
-	posPlayer.y -= 56;	//millor canviaro depenent de la camera (sino te bugs quan mor amb el sostre)
-	posPlayer.x -= 20;
+	posPlayer.y = 192/2;
 	sprite->changeAnimation(STAND);
 }
 
