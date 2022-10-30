@@ -100,7 +100,7 @@ void Game::keyPressed(int key)
 			mapScene.godMode();
 		}
 		if (key == 122) {		//tecla z
-			if (timer >= 10) {
+			if (timer >= 2) {
 				if (!charging) {
 					mapScene.charge();
 				}

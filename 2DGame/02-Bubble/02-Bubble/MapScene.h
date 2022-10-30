@@ -44,5 +44,4 @@ private:
 	float left;
 	float right;
 	bool godModeActive;
-	int chargePos;
 };

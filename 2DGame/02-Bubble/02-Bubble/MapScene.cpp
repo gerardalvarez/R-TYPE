@@ -190,7 +190,7 @@ void MapScene::normalShoot() {
 
 void MapScene::powerShoot()
 {
-	shoots[chargePos] = NULL;
+	shoots[shoots.size() - 1] = NULL;
 	normalShoot();
 	shoot->powerShoot();
 }
@@ -198,7 +198,6 @@ void MapScene::powerShoot()
 void MapScene::charge() {
 	normalShoot();
 	shoot->charge();
-	chargePos = shoots.size() - 1;
 }
 
 void MapScene::relocateShoots()
