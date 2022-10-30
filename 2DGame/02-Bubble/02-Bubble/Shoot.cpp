@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "Shoot.h"
 #include "Game.h"
+#include "Music.h"
 
 
 enum ShootAnims
@@ -83,11 +84,13 @@ void Shoot::calculateCollisions()
 void Shoot::charge()
 {
 	sprite->changeAnimation(CHARGING);
+	Music::instance().disparo_charge();
 }
 
 void Shoot::powerShoot()
 {
 	sprite->changeAnimation(POWER);
+	Music::instance().disparo2();
 }
 
 void Shoot::setPlayerPos(glm::vec2& pos)

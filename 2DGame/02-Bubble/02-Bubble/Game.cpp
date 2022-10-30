@@ -152,11 +152,13 @@ void Game::keyReleased(int key)
 			if (!charging) {
 				mapScene.normalShoot();
 				timer = 0;
+				Music::instance().disparo();
 			}
 			else {
 				mapScene.powerShoot();
  				charging = false;
 				timer = 0;
+				
 			}
 		}
 		break;

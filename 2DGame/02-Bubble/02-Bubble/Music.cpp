@@ -32,6 +32,22 @@ void Music::explosion_player()
     engine->play2D("./sounds/explosion.wav", false, false, true);
 }
 
+void Music::disparo()
+{
+    engine->play2D("./sounds/disparo1.wav", false, false, true);
+}
+
+void Music::disparo_charge()
+{
+    engine->play2D("./sounds/carga.wav", false, false, true);
+    
+}
+
+void Music::disparo2()
+{
+    engine->play2D("./sounds/disparo2.wav", false, false, true);
+
+}
 
 void Music::stop()
 {

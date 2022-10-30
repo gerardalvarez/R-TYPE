@@ -24,6 +24,9 @@ public:
 	void musicaMenu();
 	void musicaGame();
 	void explosion_player();
+	void disparo();
+	void disparo_charge();
+	void disparo2();
 	void stop();
 	void pause();
 	bool muted;
