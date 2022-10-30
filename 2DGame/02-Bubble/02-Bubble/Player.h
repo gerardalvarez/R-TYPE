@@ -26,8 +26,14 @@ public:
 	void updatePositionX(int x);
 	void updatePositionY(int y);
 	void sendcamera(float left,float right);
+
+	int getlives();
+	void revive();
+
+
 	glm::vec2 getPos();
 	
+
 private:
 	glm::ivec2 tileMapDispl;
     glm::vec2 posPlayer;
@@ -39,6 +45,7 @@ private:
 	bool godMode;
 	float cameraleft;
 	float cameraright;
+	int lives;
 };
 
 

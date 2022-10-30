@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "MapScene.h"
 #include "Game.h"
+#include "Music.h"
 
 
 #define SCREEN_X 0
@@ -30,6 +31,7 @@ MapScene::MapScene(int lvl)
 	enemy = new Enemy();
 	shoot = new Shoot();
 	initlevel(lvl);
+
 }
 
 MapScene::~MapScene()
@@ -54,6 +56,7 @@ void MapScene::init()
 	left = 0;
 	right = SCREEN_WIDTH - 1;
 	initlevel(1);
+
 
 }
 
@@ -99,7 +102,7 @@ void MapScene::initlevel(int level)
 	//PLAYER
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()+70));
 	player->setTileMap(map);
 
 	//SHOOT
@@ -122,13 +125,33 @@ void MapScene::initlevel(int level)
 	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGBA);									//les imatges son profunditat 32bits
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+	spritesheet.loadFromFile("images/3.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	background = Sprite::createSprite(glm::ivec2(256, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
+	
+	gameover = false;
 }
 
 void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	
+	if (player->getIsDead()) {
+		if (player->getlives() <= 1) {
+			
+			gameover = true;
+			background->render();
+
+			//ense�ar pantalla game over
+			Game::instance().state.goMENU();
+			Music::instance().stop();
+			Music::instance().musicaMenu();
+		}
+		else {
+			player->revive();
+		}
+	}
 	player->sendcamera(left,right);
-	player->update(deltaTime);
+	if (player != NULL ) player->update(deltaTime);
 	enemy->update(deltaTime);
 
 	if (!shoots.empty()) {
@@ -144,7 +167,8 @@ void MapScene::update(int deltaTime)
 		}
 	}
 	relocateShoots();
-	if (!player->getIsDead() && right <= 3160) {
+		if (!player->getIsDead() && right <=3070) {
+
 		left += 0.4;
 		right += 0.4; 
 	}
@@ -176,6 +200,8 @@ void MapScene::render()
 		}
 	}
 	//enemy->render();
+	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
+
 
 }
 

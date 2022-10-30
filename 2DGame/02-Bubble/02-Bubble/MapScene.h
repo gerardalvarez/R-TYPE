@@ -5,7 +5,11 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "TexturedQuad.h"
+
+#include "Text.h"
+
 #include "Shoot.h"
+
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -44,4 +48,6 @@ private:
 	float left;
 	float right;
 	bool godModeActive;
+	Text text;
+	bool gameover;
 };

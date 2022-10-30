@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseScene.h"
+#include "Text.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <glm/glm.hpp>
@@ -19,4 +20,5 @@ public:
 
 private:
 	Texture scene;
+	Text text;
 };

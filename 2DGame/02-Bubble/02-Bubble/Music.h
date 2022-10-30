@@ -21,7 +21,11 @@ public:
 	void Musica();
     void efectoMenuDelante();
     void efectoMenuAtras();
+	void musicaMenu();
+	void musicaGame();
+	void explosion_player();
 	void stop();
+	void pause();
 	bool muted;
 
 private:
