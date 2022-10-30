@@ -63,7 +63,11 @@
     <ClInclude Include="Enemy.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+
     <ClInclude Include="Text.h">
+
+    <ClInclude Include="Shoot.h">
+
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +120,11 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
+
     <ClCompile Include="Text.cpp">
+
+    <ClCompile Include="Shoot.cpp">
+
       <Filter>Archivos de c�digo fuente</Filter>
     </ClCompile>
   </ItemGroup>

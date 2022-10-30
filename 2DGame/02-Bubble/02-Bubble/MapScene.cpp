@@ -21,6 +21,7 @@ MapScene::MapScene()
 {
 	map = NULL;
 	player = new Player();
+	enemy = new Enemy();
 }
 
 MapScene::MapScene(int lvl)
@@ -28,6 +29,7 @@ MapScene::MapScene(int lvl)
 	map = NULL;
 	player = new Player();
 	enemy = new Enemy();
+	shoot = new Shoot();
 	initlevel(lvl);
 
 }
@@ -38,6 +40,10 @@ MapScene::~MapScene()
 		delete map;
 	if (player != NULL)
 		delete player;
+	if (enemy != NULL)
+		delete enemy;
+	if (shoot != NULL)
+		delete shoot;
 	for (int i = 0; i < 3; i++)
 		if (texQuad[i] != NULL)
 			delete texQuad[i];
@@ -99,6 +105,9 @@ void MapScene::initlevel(int level)
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()+70));
 	player->setTileMap(map);
 
+	//SHOOT
+	shoot = NULL;
+	
 	//ENEMY
 	enemy = new Enemy();
 	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -132,7 +141,7 @@ void MapScene::update(int deltaTime)
 			gameover = true;
 			background->render();
 
-			//enseñar pantalla game over
+			//enseï¿½ar pantalla game over
 			Game::instance().state.goMENU();
 			Music::instance().stop();
 			Music::instance().musicaMenu();
@@ -144,9 +153,24 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left,right);
 	if (player != NULL ) player->update(deltaTime);
 	enemy->update(deltaTime);
-	if (!player->getIsDead() && right <=3070) {
+
+	if (!shoots.empty()) {
+		for (int i = 0; i < shoots.size(); i++) {
+			shoot = shoots[i];
+			if (shoot != NULL) {
+				shoot->setPlayerPos(player->getPos());
+				shoot->update(deltaTime);
+				if (shoot->getPos() > right) {
+					shoots[i] = NULL;
+				}
+			}
+		}
+	}
+	relocateShoots();
+		if (!player->getIsDead() && right <=3070) {
+
 		left += 0.4;
-		right += 0.4;
+		right += 0.4; 
 	}
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
@@ -167,10 +191,51 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 	//map->render();
 	player->render();
+	if (!shoots.empty()) {
+		for (int i = 0; i < shoots.size(); i++) {
+			shoot = shoots[i];
+			if (shoot != NULL) {
+				shoot->render();
+			}
+		}
+	}
 	//enemy->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 
 
+}
+
+void MapScene::normalShoot() {
+	shoot = new Shoot();				
+	glm::vec2 posPlayer = player->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+	shoot->setTileMap(map);
+	shoots.push_back(shoot);
+}
+
+void MapScene::powerShoot()
+{
+	shoots[shoots.size() - 1] = NULL;
+	normalShoot();
+	shoot->powerShoot();
+}
+
+void MapScene::charge() {
+	normalShoot();
+	shoot->charge();
+}
+
+void MapScene::relocateShoots()
+{
+	if (!shoots.empty()) {
+		for (int i = 0; i < shoots.size(); i++) {
+			shoot = shoots[i];
+			if (shoot == NULL) {
+				shoots.erase(shoots.begin() + i);
+			}
+		}
+	}
 }
 
 float MapScene::getLeft()

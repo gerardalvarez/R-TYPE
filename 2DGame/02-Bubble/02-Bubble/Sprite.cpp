@@ -14,6 +14,7 @@ Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInS
 
 Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
 {
+	charging = false;
 	float vertices[24] = {0.f, 0.f, 0.f, 0.f, 
 												quadSize.x, 0.f, sizeInSpritesheet.x, 0.f, 
 												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
@@ -43,6 +44,8 @@ void Sprite::update(int deltaTime)
 		{
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
 			if(currentKeyframe != animations[currentAnimation].keyframeDispl.size()-1)
+				currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
+			else if (charging)
 				currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
@@ -100,6 +103,11 @@ void Sprite::changeAnimation(int animId)
 int Sprite::animation() const
 {
 	return currentAnimation;
+}
+
+void Sprite::setCharge(bool charge)
+{
+	charging = charge;
 }
 
 void Sprite::setPosition(const glm::vec2 &pos)

@@ -5,8 +5,10 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "TexturedQuad.h"
+
 #include "Text.h"
 
+#include "Shoot.h"
 
 
 // Scene contains all the entities of our game.
@@ -27,6 +29,10 @@ public:
 	void render();
 	void godMode();
 	float getLeft();
+	void normalShoot();
+	void powerShoot();
+	void charge();
+	void relocateShoots();
 
 private:
 	//void initShaders();
@@ -35,6 +41,8 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
+	Shoot* shoot;
+	vector<Shoot*> shoots;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
