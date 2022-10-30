@@ -195,7 +195,7 @@ void MapScene::render()
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
-	//map->render();
+	map->render();
 	player->render();
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {

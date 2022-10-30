@@ -27,6 +27,11 @@ public:
 	void updatePositionY(int y);
 	void sendcamera(float left,float right);
 
+	void rightCollisions();
+	void leftCollisions();
+	void upCollisions();
+	void downCollisions();
+
 	int getlives();
 	void revive();
 
