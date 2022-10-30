@@ -30,6 +30,8 @@ public:
 	int getlives();
 	void revive();
 
+	bool animationFinished();
+
 
 	glm::vec2 getPos();
 	

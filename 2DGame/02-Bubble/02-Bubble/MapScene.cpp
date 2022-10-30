@@ -67,20 +67,20 @@ void MapScene::skip(int part)
 		left = 0;
 		break;
 	case 2:
-		left = 3072/4;
+		left = 3072 / 4;
 		break;
 	case 3:
-		left = 3072/2;
+		left = 3072 / 2;
 		break;
 	case 4:
-		left = 3072/4*3;
+		left = 3072 / 4 * 3;
 		break;
 	default:
-		left = 3072- SCREEN_WIDTH;
+		left = 3072 - SCREEN_WIDTH;
 		break;
 	}
 	right = left + SCREEN_WIDTH - 1;
-	player->setPosition(glm::vec2(left, (192/2)));
+	player->setPosition(glm::vec2(left, (192 / 2)));
 
 }
 
@@ -102,12 +102,12 @@ void MapScene::initlevel(int level)
 	//PLAYER
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()+70));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
 	player->setTileMap(map);
 
 	//SHOOT
 	shoot = NULL;
-	
+
 	//ENEMY
 	enemy = new Enemy();
 	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -127,31 +127,32 @@ void MapScene::initlevel(int level)
 	currentTime = 0.0f;
 	spritesheet.loadFromFile("images/3.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	background = Sprite::createSprite(glm::ivec2(256, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
-	
+
 	gameover = false;
 }
 
 void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	
+
 	if (player->getIsDead()) {
 		if (player->getlives() <= 1) {
-			
+
 			gameover = true;
 			background->render();
 
-			//ense�ar pantalla game over
+			//pantalla game over
 			Game::instance().state.goMENU();
 			Music::instance().stop();
 			Music::instance().musicaMenu();
 		}
 		else {
-			player->revive();
+			if(player->animationFinished())
+				player->revive();
 		}
 	}
-	player->sendcamera(left,right);
-	if (player != NULL ) player->update(deltaTime);
+	player->sendcamera(left, right);
+	if (player != NULL) player->update(deltaTime);
 	enemy->update(deltaTime);
 
 	if (!shoots.empty()) {
@@ -167,10 +168,10 @@ void MapScene::update(int deltaTime)
 		}
 	}
 	relocateShoots();
-		if (!player->getIsDead() && right <=3070) {
+	if (!player->getIsDead() && right <= 3070) {
 
 		left += 0.4;
-		right += 0.4; 
+		right += 0.4;
 	}
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
@@ -206,7 +207,7 @@ void MapScene::render()
 }
 
 void MapScene::normalShoot() {
-	shoot = new Shoot();				
+	shoot = new Shoot();
 	glm::vec2 posPlayer = player->getPos();
 	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
 	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
