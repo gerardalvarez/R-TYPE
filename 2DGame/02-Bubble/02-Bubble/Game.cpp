@@ -11,7 +11,7 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	state.goMENU();
 	Menuscene.init(0);
-
+	Music::instance().musicaMenu();
 }
 
 bool Game::update(int deltaTime)
@@ -62,7 +62,11 @@ void Game::keyPressed(int key)
 	case State::State_enum::MENU:
         if (key == 32) {
 			mapScene.init();
+			Music::instance().stop();
             state.goGAME();
+			Music::instance().musicaGame();
+			
+			
         }
 		if (key == 99) state.goCREDITS();
 		if (key == 105) state.goINFO();
@@ -75,9 +79,12 @@ void Game::keyPressed(int key)
 
 	case State::State_enum::GAME:
         if (key == 27) {
+			Music::instance().stop();
             state.goMENU();
+			Music::instance().musicaMenu();
 			Menuscene.init(0);
            Music::instance().efectoMenuAtras();
+		   
         }
 		if (key == 49) {		//tecla 1
 			mapScene.skip(1);

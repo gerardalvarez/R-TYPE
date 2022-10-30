@@ -32,18 +32,20 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Enemy::update(int deltaTime)
 {
-	sprite[0]->update(deltaTime);
+	if (this != NULL) {
+		sprite[0]->update(deltaTime);
 
-	if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 16)))
-	{
-		startY = posEnemy.y;
-	}
-	else {
-		posEnemy.x -= 1;
-		posEnemy.y += 1;
-	}
+		if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 16)))
+		{
+			startY = posEnemy.y;
+		}
+		else {
+			posEnemy.x -= 1;
+			posEnemy.y += 1;
+		}
 
-    sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+		sprite[0]->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	}
 }
 
 void Enemy::render()

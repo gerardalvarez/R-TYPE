@@ -29,6 +29,10 @@ void MenuScene::init(int level) {
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
+	if (!text.init("fonts/OpenSans-Regular.ttf") ){
+		text.getSize();
+	}
+
 	loadSprites();
 
 
@@ -57,7 +61,8 @@ void MenuScene::render() {
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
+	
+	text.render("'Aaaaaaaaaaaaaaaaaa", glm::vec2(10, 10), 32, glm::vec4(1, 1, 1, 1));
 	background->render();
-
 }
 

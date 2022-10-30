@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "TexturedQuad.h"
+#include "Text.h"
+
 
 
 // Scene contains all the entities of our game.
@@ -38,4 +40,6 @@ private:
 	float left;
 	float right;
 	bool godModeActive;
+	Text text;
+	bool gameover;
 };
