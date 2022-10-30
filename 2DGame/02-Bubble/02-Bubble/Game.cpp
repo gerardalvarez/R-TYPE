@@ -11,6 +11,8 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	state.goMENU();
 	Menuscene.init(0);
+	timer = 0;
+	charging = false;
 
 }
 
@@ -97,6 +99,15 @@ void Game::keyPressed(int key)
 		if (key == 103) {		//tecla g
 			mapScene.godMode();
 		}
+		if (key == 122) {		//tecla z
+			if (timer >= 10) {
+				if (!charging) {
+					mapScene.charge();
+				}
+				charging = true;
+			}
+			timer += 1;
+		}
 		break;
 
 	case State::State_enum::CREDITS:
@@ -124,7 +135,25 @@ void Game::keyPressed(int key)
 
 void Game::keyReleased(int key)
 {
-	keys[key] = false;
+	switch (state.getState()) {
+	case State::State_enum::GAME:
+		if (key == 122) {		//tecla z
+			if (!charging) {
+				mapScene.normalShoot();
+				timer = 0;
+			}
+			else {
+				mapScene.powerShoot();
+ 				charging = false;
+				timer = 0;
+			}
+		}
+		break;
+	default:
+		break;
+
+	}
+	keys[key] = true;
 }
 
 void Game::specialKeyPressed(int key)
