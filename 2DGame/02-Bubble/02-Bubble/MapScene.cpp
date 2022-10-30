@@ -64,20 +64,20 @@ void MapScene::skip(int part)
 		left = 0;
 		break;
 	case 2:
-		left = 3072/4;
+		left = 3072 / 4;
 		break;
 	case 3:
-		left = 3072/2;
+		left = 3072 / 2;
 		break;
 	case 4:
-		left = 3072/4*3;
+		left = 3072 / 4 * 3;
 		break;
 	default:
-		left = 3072- SCREEN_WIDTH;
+		left = 3072 - SCREEN_WIDTH;
 		break;
 	}
 	right = left + SCREEN_WIDTH - 1;
-	player->setPosition(glm::vec2(left, (192/2)));
+	player->setPosition(glm::vec2(left, (192 / 2)));
 
 }
 
@@ -104,7 +104,7 @@ void MapScene::initlevel(int level)
 
 	//SHOOT
 	shoot = NULL;
-	
+
 	//ENEMY
 	enemy = new Enemy();
 	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -127,8 +127,9 @@ void MapScene::initlevel(int level)
 void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->sendcamera(left,right);
+	player->sendcamera(left, right);
 	player->update(deltaTime);
+
 	enemy->update(deltaTime);
 
 	if (!shoots.empty()) {
@@ -146,7 +147,7 @@ void MapScene::update(int deltaTime)
 	relocateShoots();
 	if (!player->getIsDead() && right <= 3160) {
 		left += 0.4;
-		right += 0.4; 
+		right += 0.4;
 	}
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
@@ -175,12 +176,12 @@ void MapScene::render()
 			}
 		}
 	}
-	//enemy->render();
+	enemy->render();
 
 }
 
 void MapScene::normalShoot() {
-	shoot = new Shoot();				
+	shoot = new Shoot();
 	glm::vec2 posPlayer = player->getPos();
 	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
 	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
