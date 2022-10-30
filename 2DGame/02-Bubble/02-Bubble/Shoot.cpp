@@ -53,12 +53,12 @@ void Shoot::render()
 {
 	sprite->render();
 }
-
-void Shoot::destroy() {
-	delete sprite;
-	posShoot.x = 0;
-	posShoot.y = 0;
-}
+//
+//void Shoot::destroy() {
+//	delete sprite;
+//	posShoot.x = 0;
+//	posShoot.y = 0;
+//}
 
 void Shoot::calculateCollisions()
 {

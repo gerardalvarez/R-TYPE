@@ -26,6 +26,7 @@ public:
 	void godMode();
 	float getLeft();
 	void normalShoot();
+	void relocateShoots();
 
 private:
 	//void initShaders();
@@ -35,6 +36,7 @@ private:
 	Player* player;
 	Enemy* enemy;
 	Shoot* shoot;
+	vector<Shoot*> shoots;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
