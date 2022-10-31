@@ -35,6 +35,7 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
  	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 
+	direction = false;
 	sprite->setLoopAnimations(true);
  	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
@@ -42,6 +43,18 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	if (type == 1) {
+		posEnemy.x -= 0.5f;
+		if (direction) {
+			posEnemy.y -= 1;
+		}
+		else{
+			posEnemy.y += 1;
+		}
+		if (posEnemy.y == 39 || posEnemy.y == 70) {
+			direction = !direction;
+		}
+	}
 	if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 16)))
 	{
 		startY = posEnemy.y;

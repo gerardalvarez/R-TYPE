@@ -31,6 +31,7 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	int type;
+	bool direction;
 
 };
 
