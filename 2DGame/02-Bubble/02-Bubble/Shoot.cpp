@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "Shoot.h"
 #include "Game.h"
+#include "Music.h"
 
 
 enum ShootAnims
@@ -54,12 +55,6 @@ void Shoot::render()
 {
 	sprite->render();
 }
-//
-//void Shoot::destroy() {
-//	delete sprite;
-//	posShoot.x = 0;
-//	posShoot.y = 0;
-//}
 
 void Shoot::calculateCollisions()
 {
@@ -70,24 +65,26 @@ void Shoot::calculateCollisions()
 		posShoot.x = posPlayer.x + 22;
 		posShoot.y = posPlayer.y + 5;
 	}
-	switch (map->collisionMoveRight(posShoot, glm::ivec2(23, 14), glm::ivec2(28, 15)))
+	/*switch (map->collisionMoveRight(posShoot, glm::ivec2(23, 14), glm::ivec2(28, 15)))
 	{
 	case 0:
 		break;
 	default:
 		sprite->changeAnimation(POWER);
 		break;
-	}
+	}*/
 }
 
 void Shoot::charge()
 {
 	sprite->changeAnimation(CHARGING);
+	Music::instance().disparo_charge();
 }
 
 void Shoot::powerShoot()
 {
 	sprite->changeAnimation(POWER);
+	Music::instance().disparo2();
 }
 
 void Shoot::setPlayerPos(glm::vec2& pos)

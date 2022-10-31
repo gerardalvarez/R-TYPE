@@ -21,7 +21,6 @@ class Game
 
 private:
 	Game() {}
-	State state;
 
 public:
 	static Game& instance()
@@ -30,6 +29,8 @@ public:
 
 		return G;
 	}
+
+	State state;
 
 	void init();
 	bool update(int deltaTime);
