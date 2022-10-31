@@ -44,7 +44,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 
 void Shoot::update(int deltaTime)
 {
-	sprite->setCharge(sprite->animation() == CHARGING);
+	sprite->setLoopAnimations(sprite->animation() == CHARGING);
 	sprite->update(deltaTime);
 	calculateCollisions();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posShoot.x), float(tileMapDispl.y + posShoot.y)));

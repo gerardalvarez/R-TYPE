@@ -21,6 +21,7 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
+	void setType(int t);
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -29,6 +30,7 @@ private:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+	int type;
 
 };
 

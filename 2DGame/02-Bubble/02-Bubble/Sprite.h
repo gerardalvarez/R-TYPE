@@ -32,7 +32,7 @@ public:
 	void addKeyframe(int animId, const glm::vec2 &frame);
 	void changeAnimation(int animId);
 	int animation() const;
-	void setCharge(bool charge);
+	void setLoopAnimations(bool loop);
 	void setPosition(const glm::vec2 &pos);
 
 	bool lastAnimation();
@@ -48,7 +48,7 @@ private:
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;
-	bool charging;
+	bool looping;
 };
 
 
