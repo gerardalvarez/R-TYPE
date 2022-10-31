@@ -40,10 +40,6 @@ MapScene::~MapScene()
 		delete map;
 	if (player != NULL)
 		delete player;
-	if (enemy != NULL)
-		delete enemy;
-	if (shoot != NULL)
-		delete shoot;
 	for (int i = 0; i < 3; i++)
 		if (texQuad[i] != NULL)
 			delete texQuad[i];
@@ -108,18 +104,11 @@ void MapScene::initlevel(int level)
 	//SHOOT
 	shoot = NULL;
 
-	//ENEMY
-	enemy = new Enemy();
-	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
-	enemy->setTileMap(map);
-	enemy->setType(1);
-
-	enemy2 = new Enemy();
-	enemy2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	enemy2->setPosition(glm::vec2((INIT_ENEMY_X_TILES + 6) * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
-	enemy2->setTileMap(map);
-	enemy2->setType(1);
+	//ENEMIES
+	createEnemy(1, glm::vec2(50, 8));
+	createEnemy(1, glm::vec2(57, 12));
+	createEnemy(1, glm::vec2(64, 8));
+	createEnemy(1, glm::vec2(71, 12));
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
@@ -165,9 +154,16 @@ void MapScene::update(int deltaTime)
 	}
 	player->sendcamera(left, right);
 	if (player != NULL) player->update(deltaTime);
-	enemy->update(deltaTime);
-
-	enemy2->update(deltaTime);
+	
+	if (!enemies.empty()) {
+		for (int i = 0; i < enemies.size(); i++) {
+			enemy = enemies[i];
+			if (enemy != NULL) {
+				enemy->update(deltaTime);
+			}
+		}
+	}
+	
 
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
@@ -204,8 +200,12 @@ void MapScene::render()
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
-	map->render();
+	
+	//map->render();
+	
 	player->render();
+
+
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
@@ -214,8 +214,19 @@ void MapScene::render()
 			}
 		}
 	}
-	enemy->render();
-	enemy2->render();
+
+	for (int i = 0; i <= enemies.size(); i++) {
+
+	}
+
+	if (!enemies.empty()) {
+		for (int i = 0; i < enemies.size(); i++) {
+			enemy = enemies[i];
+			if (enemy != NULL) {
+				enemy->render();
+			}
+		}
+	}
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 }
 
@@ -250,6 +261,25 @@ void MapScene::relocateShoots()
 			}
 		}
 	}
+}
+
+void MapScene::createEnemy(int type, glm::vec2 pos)
+{
+	enemy = new Enemy();
+	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemy->setPosition(glm::vec2(pos.x * map->getTileSize(), pos.y * map->getTileSize()));
+	enemy->setTileMap(map);
+	enemy->setType(type);
+	enemies.push_back(enemy);
+}
+
+void MapScene::clear()
+{
+	if (!enemies.empty())
+		enemies.clear();
+
+	if (!shoots.empty())
+		shoots.clear();
 }
 
 float MapScene::getLeft()

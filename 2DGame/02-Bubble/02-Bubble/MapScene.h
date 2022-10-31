@@ -33,6 +33,8 @@ public:
 	void powerShoot();
 	void charge();
 	void relocateShoots();
+	void createEnemy(int type, glm::vec2 pos);
+	void clear();
 
 private:
 	//void initShaders();
@@ -41,9 +43,9 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
-	Enemy* enemy2;
 	Shoot* shoot;
 	vector<Shoot*> shoots;
+	vector<Enemy*> enemies;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;

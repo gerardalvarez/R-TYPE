@@ -89,8 +89,8 @@ void Game::keyPressed(int key)
             state.goMENU();
 			Music::instance().musicaMenu();
 			Menuscene.init(0);
-           Music::instance().efectoMenuAtras();
-		   
+			Music::instance().efectoMenuAtras();
+			mapScene.clear();
         }
 		if (key == 49) {		//tecla 1
 			mapScene.skip(1);

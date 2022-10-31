@@ -46,12 +46,12 @@ void Enemy::update(int deltaTime)
 	if (type == 1) {
 		posEnemy.x -= 0.5f;
 		if (direction) {
-			posEnemy.y -= 1;
+			posEnemy.y -= 0.5f;
 		}
 		else{
-			posEnemy.y += 1;
+			posEnemy.y += 0.5f;
 		}
-		if (posEnemy.y == 39 || posEnemy.y == 70) {
+		if (posEnemy.y == (startY + 10) || posEnemy.y == (startY - 10)) {
 			direction = !direction;
 		}
 	}
@@ -76,6 +76,7 @@ void Enemy::setPosition(const glm::vec2& pos)
 {
   	posEnemy = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	startY = posEnemy.y;
 }
 
 void Enemy::setType(int t)
