@@ -117,7 +117,7 @@ void Game::keyPressed(int key)
 				}
 				charging = true;
 			}
-			timer += 1;
+			timer += 2;
 		}
 		break;
 

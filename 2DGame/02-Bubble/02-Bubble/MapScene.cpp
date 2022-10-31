@@ -113,7 +113,13 @@ void MapScene::initlevel(int level)
 	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
 	enemy->setTileMap(map);
-	enemy->setType(2);
+	enemy->setType(1);
+
+	enemy2 = new Enemy();
+	enemy2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemy2->setPosition(glm::vec2((INIT_ENEMY_X_TILES + 6) * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
+	enemy2->setTileMap(map);
+	enemy2->setType(1);
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
@@ -161,6 +167,8 @@ void MapScene::update(int deltaTime)
 	if (player != NULL) player->update(deltaTime);
 	enemy->update(deltaTime);
 
+	enemy2->update(deltaTime);
+
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
@@ -207,6 +215,7 @@ void MapScene::render()
 		}
 	}
 	enemy->render();
+	enemy2->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 }
 

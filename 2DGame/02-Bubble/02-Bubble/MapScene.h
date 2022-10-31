@@ -41,6 +41,7 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
+	Enemy* enemy2;
 	Shoot* shoot;
 	vector<Shoot*> shoots;
 	Texture texs[1];

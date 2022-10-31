@@ -41,16 +41,6 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Enemy::update(int deltaTime)
 {
-	switch (type) {
-	case 1:
-		sprite->changeAnimation(TYPE_1);
-		break;
-	case 2:
-		sprite->changeAnimation(TYPE_2);
-		break;
-	default:
-		break;
-	}
 	sprite->update(deltaTime);
 	if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 16)))
 	{
@@ -78,4 +68,14 @@ void Enemy::setPosition(const glm::vec2& pos)
 void Enemy::setType(int t)
 {
 	type = t;
+	switch (t) {
+	case 1:
+		sprite->changeAnimation(TYPE_1);
+		break;
+	case 2:
+		sprite->changeAnimation(TYPE_2);
+		break;
+	default:
+		break;
+	}
 }
