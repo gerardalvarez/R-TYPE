@@ -207,8 +207,6 @@ void MapScene::render()
 	}
 	//enemy->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
-
-
 }
 
 void MapScene::normalShoot() {
