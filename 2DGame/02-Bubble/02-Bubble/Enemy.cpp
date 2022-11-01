@@ -8,7 +8,7 @@
 
 enum EnemyAnims
 {
-	TYPE_1, TYPE_2, BOOM
+	TYPE_1, TYPE_2, TYPE_3, TYPE_4, BOOM
 };
 
 //x35 y35
@@ -16,7 +16,7 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(2);
+	sprite->setNumberAnimations(4);
 
 	sprite->setAnimationSpeed(TYPE_1, 4);
 	sprite->addKeyframe(TYPE_1, glm::vec2(35 * 0 / 483.f, 35 * 0 / 1787.f));
@@ -30,6 +30,19 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(TYPE_2, glm::vec2(35 * 0 / 483.f, 35 * 1 / 1787.f));
 	sprite->addKeyframe(TYPE_2, glm::vec2(35 * 1 / 483.f, 35 * 1 / 1787.f));
 	sprite->addKeyframe(TYPE_2, glm::vec2(35 * 2 / 483.f, 35 * 1 / 1787.f));
+
+	sprite->setAnimationSpeed(TYPE_3, 4);
+	sprite->addKeyframe(TYPE_3, glm::vec2(35 * 0 / 483.f, 35 * 3 / 1787.f));
+	sprite->addKeyframe(TYPE_3, glm::vec2(35 * 1 / 483.f, 35 * 3 / 1787.f));
+	sprite->addKeyframe(TYPE_3, glm::vec2(35 * 2 / 483.f, 35 * 3 / 1787.f));
+	sprite->addKeyframe(TYPE_3, glm::vec2(35 * 3 / 483.f, 35 * 3 / 1787.f));
+	sprite->addKeyframe(TYPE_3, glm::vec2(35 * 4 / 483.f, 35 * 3 / 1787.f));
+	sprite->addKeyframe(TYPE_3, glm::vec2(35 * 5 / 483.f, 35 * 3 / 1787.f));
+
+	sprite->setAnimationSpeed(TYPE_4, 2);
+	//sprite->addKeyframe(TYPE_4, glm::vec2(35 * 0 / 483.f, 35 * 4 / 1787.f));
+	sprite->addKeyframe(TYPE_4, glm::vec2(35 * 1 / 483.f, 35 * 4 / 1787.f));
+	sprite->addKeyframe(TYPE_4, glm::vec2(35 * 2 / 483.f, 35 * 4 / 1787.f));
 
 
  	sprite->changeAnimation(0);
@@ -88,6 +101,12 @@ void Enemy::setType(int t)
 		break;
 	case 2:
 		sprite->changeAnimation(TYPE_2);
+		break;
+	case 3:
+		sprite->changeAnimation(TYPE_3);
+		break;
+	case 4:
+		sprite->changeAnimation(TYPE_4);
 		break;
 	default:
 		break;

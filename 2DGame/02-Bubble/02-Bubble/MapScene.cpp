@@ -105,10 +105,12 @@ void MapScene::initlevel(int level)
 	shoot = NULL;
 
 	//ENEMIES
-	createEnemy(1, glm::vec2(50, 8));
-	createEnemy(1, glm::vec2(57, 12));
-	createEnemy(1, glm::vec2(64, 8));
-	createEnemy(1, glm::vec2(71, 12));
+	createEnemy(1, glm::vec2(65, 8));
+	createEnemy(1, glm::vec2(72, 12));
+	createEnemy(1, glm::vec2(79, 8));
+	createEnemy(1, glm::vec2(86, 12));
+
+	createEnemy(4, glm::vec2(45, 32));
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
@@ -201,7 +203,7 @@ void MapScene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
 	
-	//map->render();
+	map->render();
 	
 	player->render();
 
