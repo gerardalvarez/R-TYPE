@@ -87,10 +87,6 @@ void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	move();
-	/*if (map->collisionMoveDown(posEnemy, glm::ivec2(16, 16)))
-	{
-		startY = posEnemy.y;
-	}*/
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
@@ -199,6 +195,24 @@ void Enemy::move()
 		}
 		break;
 	case 4:											//cap llarg
+		posEnemy.x -= 0.8;
+		if (posPlayer.y > posEnemy.y) {
+			posEnemy.y += 0.8;
+		}
+		else {
+			posEnemy.y -= 0.8;
+		}
+
+		if (map->collisionMoveLeft(posEnemy, glm::ivec2(6, 6)) == 1) {
+			posEnemy.x += 0.8;
+		}
+
+		if (map->collisionMoveUp(posEnemy, glm::ivec2(25, 7)) == 1) {
+			posEnemy.y += 0.8;
+		}
+		else if (map->collisionMoveDown(posEnemy, glm::ivec2(25, 25)) == 1) {
+			posEnemy.y -= 0.8;
+		}
 		sprite->changeAnimation(TYPE_4);
 		break;
 	default:

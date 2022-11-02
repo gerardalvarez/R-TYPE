@@ -110,7 +110,7 @@ void MapScene::initlevel(int level)
 	createEnemy(1, glm::vec2(79, 8));
 	createEnemy(1, glm::vec2(86, 12));*/
 
-	createEnemy(3, glm::vec2(90, 20));
+	createEnemy(4, glm::vec2(90, 20));
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
