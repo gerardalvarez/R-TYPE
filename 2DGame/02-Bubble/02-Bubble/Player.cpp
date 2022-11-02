@@ -125,7 +125,6 @@ void Player::calculateCollisions()
 			sprite->changeAnimation(MOVE_DOWN);
 		rightCollisions();
 		downCollisions();
-		
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))				//MOVING LEFT UP
 	{
