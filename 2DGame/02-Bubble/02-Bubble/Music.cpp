@@ -64,6 +64,21 @@ void Music::ultimaex()
     engine->play2D("./sounds/ultimaexplosion.wav", false, false, true);
 }
 
+void Music::grito()
+{ 
+    engine->play2D("./sounds/grito.wav", false, false, true);
+}
+
+void Music::disparoboss()
+{
+    engine->play2D("./sounds/bosd.wav", false, false, true);
+}
+
+void Music::disparoboss2()
+{
+    engine->play2D("./sounds/ultimaexplosion.wav", false, false, true);
+}
+
 void Music::pause()
 {
     engine->setAllSoundsPaused(true);

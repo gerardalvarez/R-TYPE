@@ -3,6 +3,7 @@
 #include <../../../libs/irrKlang/include/irrKlang.h>
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <string>
 //#pragma comment(lib, "../../../libs/irrklang/lib/irrklang.lib")
 
 using namespace irrklang;
@@ -30,6 +31,9 @@ public:
 	void stop();
 	void gameover();
 	void ultimaex();
+	void grito();
+	void disparoboss();
+	void disparoboss2();
 	void pause();
 	bool muted;
 

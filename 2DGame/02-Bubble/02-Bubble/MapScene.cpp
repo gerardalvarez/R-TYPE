@@ -156,13 +156,14 @@ void MapScene::initlevel(int level)
 	background->addKeyframe(G, glm::vec2(478 *2 / 1436.f, 304 / 304.f));
 	gameover = false;
 	counter = 0;
+	Music::instance().musicaGame();
 }
 
 void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if (player->getIsDead() || bosss->getlife() <= 0) {
+	if (player->getIsDead()) {
 		
 		if ((player->getlives() <= 1 || bosss->getlife()<=0 )) {
 
@@ -170,22 +171,20 @@ void MapScene::update(int deltaTime)
 			++counter;
 			background->setPosition(glm::vec2(left, 0));
 			
-			if (counter < 100) {
-				if (counter == 1) {
+			if (counter < 150) {
+				if (counter == 5) {
 					Music::instance().stop();
-					Music::instance().explosion_player();
+					Music::instance().ultimaex();
 				}
 				background->changeAnimation(F);
 			}
-			else if (counter < 200) {
+			else if (counter < 250) {
 				background->changeAnimation(T);
-				if (counter == 101) Music::instance().gameover();
+				if (counter == 151) Music::instance().gameover();
 			}
-			else if (counter < 300) background->changeAnimation(G);
+			else if (counter < 350) background->changeAnimation(G);
 			else {
-				Game::instance().state.goMENU();
-				Music::instance().stop();
-				Music::instance().musicaMenu();
+				this->init();
 			}
 
 		}
@@ -197,6 +196,9 @@ void MapScene::update(int deltaTime)
 			}
 		}
 		
+	}
+	if (bosss->getlife() <= 0) {
+		//pantalla victoria
 	}
 
 	player->sendcamera(left, right);
@@ -210,7 +212,7 @@ void MapScene::update(int deltaTime)
 	if (right >= 3070) {
 		if (bosss->ispower()) {
 			powerBossShoot();
-			bosss->power = false;
+			bosss->power = false; 
 		}
 		if (bosss->isnormal()) {
 			normalBossShoot(false);
@@ -250,8 +252,10 @@ void MapScene::update(int deltaTime)
 		}
 	}
 	relocateShoots();
-	if (!player->getIsDead() && right <= 3070) {
 
+	if (right == 3060) Music::instance().grito();
+	if (!player->getIsDead() && right <= 3070) {
+		
 		left += 0.4;
 		right += 0.4;
 	}
@@ -322,6 +326,7 @@ void MapScene::normalBossShoot(bool t) {
 	bshoot->setTileMap(map);
 	bshoot->setNaveLastPos(player->getPos());
 	bshoots.push_back(bshoot);
+	Music::instance().disparoboss();
 }
 
 void MapScene::powerShoot()

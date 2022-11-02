@@ -101,7 +101,7 @@ void bossShoot::charge()
 void bossShoot::powerbossShoot()
 {
 	sprite->changeAnimation(POWER);
-	Music::instance().disparo2();
+	Music::instance().disparoboss2();
 }
 
 void bossShoot::setPlayerPos(glm::vec2& pos)

@@ -13,7 +13,6 @@ void Game::init()
 	Menuscene.init(0);
 	mapScene.init();
 	Music::instance().musicaMenu();
-
 	timer = 0;
 	charging = false;
 
@@ -71,7 +70,6 @@ void Game::keyPressed(int key)
 			Music::instance().stop();
             state.goGAME();
 			Music::instance().musicaGame();
-			
 			
         }
 		if (key == 99) state.goCREDITS();
