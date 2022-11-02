@@ -198,13 +198,14 @@ void Enemy::move()
 		break;
 	case 4:											//cap llarg
 		posEnemy.x -= 0.8;
-		if (posPlayer.y > posEnemy.y) {
-			posEnemy.y += 0.8;
+		if (posEnemy.y < (posPlayer.y - 5) || posEnemy.y > (posPlayer.y + 5)) {
+			if (posPlayer.y > posEnemy.y) {
+				posEnemy.y += 0.8;
+			}
+			else if (posPlayer.y < posEnemy.y) {
+				posEnemy.y -= 0.8;
+			}
 		}
-		else if (posPlayer.y < posEnemy.y) {
-			posEnemy.y -= 0.8;
-		}
-
 		if (map->collisionMoveLeft(posEnemy, glm::ivec2(6, 6)) == 1) {
 			posEnemy.x += 0.8;
 		}

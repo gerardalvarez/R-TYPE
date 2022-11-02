@@ -269,7 +269,7 @@ void MapScene::relocateShoots()
 void MapScene::createEnemy(int type, glm::vec2 pos)
 {
 	enemy = new Enemy();
-	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
 	enemy->setPosition(glm::vec2(pos.x * map->getTileSize(), pos.y * map->getTileSize()));
 	enemy->setTileMap(map);
 	enemy->setType(type);
