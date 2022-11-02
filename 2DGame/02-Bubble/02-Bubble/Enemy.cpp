@@ -199,7 +199,7 @@ void Enemy::move()
 		if (posPlayer.y > posEnemy.y) {
 			posEnemy.y += 0.8;
 		}
-		else {
+		else if (posPlayer.y < posEnemy.y) {
 			posEnemy.y -= 0.8;
 		}
 
@@ -208,10 +208,10 @@ void Enemy::move()
 		}
 
 		if (map->collisionMoveUp(posEnemy, glm::ivec2(25, 7)) == 1) {
-			posEnemy.y += 0.8;
+			posEnemy.y += 1;
 		}
 		else if (map->collisionMoveDown(posEnemy, glm::ivec2(25, 25)) == 1) {
-			posEnemy.y -= 0.8;
+			posEnemy.y -= 1;
 		}
 		sprite->changeAnimation(TYPE_4);
 		break;
