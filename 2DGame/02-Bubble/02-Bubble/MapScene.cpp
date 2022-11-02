@@ -156,7 +156,7 @@ void MapScene::initlevel(int level)
 	background->addKeyframe(G, glm::vec2(478 *2 / 1436.f, 304 / 304.f));
 	gameover = false;
 	counter = 0;
-	Music::instance().musicaGame();
+	
 }
 
 void MapScene::update(int deltaTime)
@@ -184,6 +184,9 @@ void MapScene::update(int deltaTime)
 			}
 			else if (counter < 350) background->changeAnimation(G);
 			else {
+				
+				Music::instance().stop();
+				Music::instance().musicaGame();
 				this->init();
 			}
 
