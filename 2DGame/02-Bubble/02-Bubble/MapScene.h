@@ -4,11 +4,13 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "boss.h"
 #include "TexturedQuad.h"
 
 #include "Text.h"
 
 #include "Shoot.h"
+#include "bossShoot.h"
 
 
 // Scene contains all the entities of our game.
@@ -41,8 +43,11 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
+	boss* bosss;
 	Shoot* shoot;
 	vector<Shoot*> shoots;
+	bossShoot* bshoot;
+	vector<bossShoot*> bshoots;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;

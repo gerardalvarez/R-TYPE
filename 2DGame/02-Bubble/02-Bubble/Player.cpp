@@ -125,24 +125,7 @@ void Player::calculateCollisions()
 			sprite->changeAnimation(MOVE_DOWN);
 		rightCollisions();
 		downCollisions();
-		posPlayer.x += 2;
-		posPlayer.y += 2;
-		if (cameraright - 35 <= posPlayer.x) {
-			posPlayer.x = cameraright - 35;
-		}
-		switch (map->collisionMoveRight(posPlayer, glm::ivec2(23, 14), glm::ivec2(28, 15)))
-		{
-		case 0:
-			break;
-		case 1:
-			updatePositionX(-2);
-			sprite->changeAnimation(BOOM);
-			break;
-		default:
-			updatePositionX(-2);
-			sprite->changeAnimation(STAND);
-			break;
-		}
+		
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))				//MOVING LEFT UP
 	{

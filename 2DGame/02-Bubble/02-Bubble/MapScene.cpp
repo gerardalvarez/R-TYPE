@@ -30,6 +30,8 @@ MapScene::MapScene(int lvl)
 	player = new Player();
 	enemy = new Enemy();
 	shoot = new Shoot();
+	bshoot = new bossShoot();
+
 	initlevel(lvl);
 
 }
@@ -44,6 +46,8 @@ MapScene::~MapScene()
 		delete enemy;
 	if (shoot != NULL)
 		delete shoot;
+	if (bshoot != NULL)
+		delete bshoot;
 	for (int i = 0; i < 3; i++)
 		if (texQuad[i] != NULL)
 			delete texQuad[i];
@@ -108,11 +112,20 @@ void MapScene::initlevel(int level)
 	//SHOOT
 	shoot = NULL;
 
+	//BOSSSHOOT
+	bshoot = NULL;
+
 	//ENEMY
 	enemy = new Enemy();
 	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	enemy->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize(), INIT_ENEMY_Y_TILES * map->getTileSize()));
 	enemy->setTileMap(map);
+
+	//BOSS
+	bosss = new boss();
+	bosss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2760, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
+	bosss->setTileMap(map);
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
@@ -135,9 +148,9 @@ void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if (player->getIsDead()) {
+	if (player->getIsDead() || bosss->getlife() <= 0) {
 		
-		if (player->getlives() <= 1) {
+		if (player->getlives() <= 1 || bosss->getlife()<=0) {
 
 			gameover = true;
 			background->render();
@@ -156,9 +169,11 @@ void MapScene::update(int deltaTime)
 		}
 		
 	}
+
 	player->sendcamera(left, right);
 	if (player != NULL) player->update(deltaTime);
 	enemy->update(deltaTime);
+	bosss->update(deltaTime);
 
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
@@ -168,6 +183,19 @@ void MapScene::update(int deltaTime)
 				shoot->update(deltaTime);
 				if (shoot->getPos() > right) {
 					shoots[i] = NULL;
+				}
+			}
+		}
+	}
+
+	if (!bshoots.empty()) {
+		for (int i = 0; i < bshoots.size(); i++) {
+			bshoot = bshoots[i];
+			if (bshoot != NULL) {
+				bshoot->setPlayerPos(player->getPos());
+				bshoot->update(deltaTime);
+				if (bshoot->getPos() > right) {
+					bshoots[i] = NULL;
 				}
 			}
 		}
@@ -195,8 +223,10 @@ void MapScene::render()
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
-	map->render();
+	//map->render();
+	
 	player->render();
+	
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
@@ -205,6 +235,16 @@ void MapScene::render()
 			}
 		}
 	}
+
+	if (!bshoots.empty()) {
+		for (int i = 0; i < bshoots.size(); i++) {
+			bshoot = bshoots[i];
+			if (bshoot != NULL) {
+				bshoot->render();
+			}
+		}
+	}
+	bosss->render();
 	//enemy->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 
@@ -213,6 +253,7 @@ void MapScene::render()
 
 void MapScene::normalShoot() {
 	shoot = new Shoot();
+	
 	glm::vec2 posPlayer = player->getPos();
 	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
 	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
@@ -239,6 +280,7 @@ void MapScene::relocateShoots()
 			shoot = shoots[i];
 			if (shoot == NULL) {
 				shoots.erase(shoots.begin() + i);
+				bosss->hitted();
 			}
 		}
 	}
