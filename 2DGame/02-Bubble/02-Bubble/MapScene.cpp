@@ -16,6 +16,11 @@
 #define INIT_ENEMY_Y_TILES 10
 
 
+enum FAnims
+{
+	F, T, G
+};
+
 
 MapScene::MapScene()
 {
@@ -139,10 +144,18 @@ void MapScene::initlevel(int level)
 	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGBA);									//les imatges son profunditat 32bits
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
-	spritesheet.loadFromFile("images/3.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	background = Sprite::createSprite(glm::ivec2(256, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
+	spritesheet.loadFromFile("images/32.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	background = Sprite::createSprite(glm::ivec2(750, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
+	background->setNumberAnimations(3);
+	background->setAnimationSpeed(F, 32);
+	background->addKeyframe(F, glm::vec2(478*0 / 1436.f, 304 / 304.f));
 
+	background->setAnimationSpeed(T, 32);
+	background->addKeyframe(T, glm::vec2(478 *1 / 1436.f, 304 / 304.f));
+	background->setAnimationSpeed(G, 32);
+	background->addKeyframe(G, glm::vec2(478 *2 / 1436.f, 304 / 304.f));
 	gameover = false;
+	counter = 0;
 }
 
 void MapScene::update(int deltaTime)
@@ -151,15 +164,30 @@ void MapScene::update(int deltaTime)
 
 	if (player->getIsDead() || bosss->getlife() <= 0) {
 		
-		if (player->getlives() <= 1 || bosss->getlife()<=0) {
+		if ((player->getlives() <= 1 || bosss->getlife()<=0 )) {
 
 			gameover = true;
-			background->render();
+			++counter;
+			background->setPosition(glm::vec2(left, 0));
+			
+			if (counter < 100) {
+				if (counter == 1) {
+					Music::instance().stop();
+					Music::instance().explosion_player();
+				}
+				background->changeAnimation(F);
+			}
+			else if (counter < 200) {
+				background->changeAnimation(T);
+				if (counter == 101) Music::instance().gameover();
+			}
+			else if (counter < 300) background->changeAnimation(G);
+			else {
+				Game::instance().state.goMENU();
+				Music::instance().stop();
+				Music::instance().musicaMenu();
+			}
 
-			//pantalla game over
-			Game::instance().state.goMENU();
-			Music::instance().stop();
-			Music::instance().musicaMenu();
 		}
 		else {
 			if (player->animationFinished()) {
@@ -265,7 +293,9 @@ void MapScene::render()
 			}
 		}
 	}
-	
+	if (gameover) {
+		background->render();
+	}
 	//enemy->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 

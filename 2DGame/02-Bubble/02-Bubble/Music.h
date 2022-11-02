@@ -28,6 +28,8 @@ public:
 	void disparo_charge();
 	void disparo2();
 	void stop();
+	void gameover();
+	void ultimaex();
 	void pause();
 	bool muted;
 

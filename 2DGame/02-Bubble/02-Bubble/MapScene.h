@@ -58,4 +58,5 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
+	int counter;
 };

@@ -54,6 +54,16 @@ void Music::stop()
     engine->stopAllSounds();
 }
 
+void Music::gameover()
+{
+    engine->play2D("./sounds/gameover.wav", false, false, true);
+}
+
+void Music::ultimaex()
+{
+    engine->play2D("./sounds/ultimaexplosion.wav", false, false, true);
+}
+
 void Music::pause()
 {
     engine->setAllSoundsPaused(true);
