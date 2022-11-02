@@ -17,7 +17,7 @@ enum EnemyAnims
 };
 
 //x35 y35
-void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida)
 {
 	spritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
@@ -79,6 +79,8 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	direction = false;
 	landed = false;
 	walking = false;
+
+	life = vida;
 	sprite->setLoopAnimations(true);
  	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
@@ -218,4 +220,9 @@ void Enemy::move()
 	default:
 		break;
 	}
+}
+
+void Enemy::recieveDamage()
+{
+	life--;
 }
