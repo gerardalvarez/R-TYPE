@@ -4,11 +4,13 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "boss.h"
 #include "TexturedQuad.h"
 
 #include "Text.h"
 
 #include "Shoot.h"
+#include "bossShoot.h"
 
 
 // Scene contains all the entities of our game.
@@ -30,7 +32,9 @@ public:
 	void godMode();
 	float getLeft();
 	void normalShoot();
+	void normalBossShoot(bool t);
 	void powerShoot();
+	void powerBossShoot();
 	void charge();
 	void relocateShoots();
 
@@ -41,8 +45,12 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
+	boss* bosss;
 	Shoot* shoot;
 	vector<Shoot*> shoots;
+	bossShoot* bshoot;
+	vector<bossShoot*> bshoots;
+	vector<glm::vec2> plastpos;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
@@ -50,4 +58,5 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
+	int counter;
 };

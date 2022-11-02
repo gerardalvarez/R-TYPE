@@ -11,9 +11,8 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	state.goMENU();
 	Menuscene.init(0);
-
+	mapScene.init();
 	Music::instance().musicaMenu();
-
 	timer = 0;
 	charging = false;
 
@@ -71,7 +70,6 @@ void Game::keyPressed(int key)
 			Music::instance().stop();
             state.goGAME();
 			Music::instance().musicaGame();
-			
 			
         }
 		if (key == 99) state.goCREDITS();
@@ -160,6 +158,9 @@ void Game::keyReleased(int key)
 				timer = 0;
 				
 			}
+		}
+		if (key == 97) {
+			
 		}
 		break;
 	default:
