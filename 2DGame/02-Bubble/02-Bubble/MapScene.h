@@ -32,7 +32,9 @@ public:
 	void godMode();
 	float getLeft();
 	void normalShoot();
+	void normalBossShoot(bool t);
 	void powerShoot();
+	void powerBossShoot();
 	void charge();
 	void relocateShoots();
 
@@ -48,6 +50,7 @@ private:
 	vector<Shoot*> shoots;
 	bossShoot* bshoot;
 	vector<bossShoot*> bshoots;
+	vector<glm::vec2> plastpos;
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;

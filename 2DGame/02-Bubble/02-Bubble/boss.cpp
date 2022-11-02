@@ -17,16 +17,17 @@ void boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(HITTED, 8);
 	sprite->addKeyframe(HITTED, glm::vec2(468 / 908.f, 231 / 231.f));
 	sprite->setAnimationSpeed(NORMAL, 8);
-	sprite->addKeyframe(NORMAL, glm::vec2(0 / 908.f, 231 / 231.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(12 / 908.f, 231 / 231.f));
 
 	
 
-	bossHealth = bossMaxHealth = 10;
+	bossHealth = bossMaxHealth = 30;
 	defeated = false;
 	phase1 = false;
 	tileMapDispl = tileMapPos;
 	sprite->changeAnimation(0);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+	normal = power = false;
 }
 
 void boss::update(int deltaTime)
@@ -34,7 +35,7 @@ void boss::update(int deltaTime)
 	if (sprite != NULL) {
 		sprite->update(deltaTime);
 		sprite->changeAnimation(NORMAL);
-		}
+	}
 
 }
 
@@ -66,4 +67,18 @@ void boss::setPosition(const glm::vec2& pos)
 {
 	posEnemy = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
+}
+
+int boss::dispara(int deltaTime) {
+	if (deltaTime  == 0) return 0;
+	else return 2;
+	
+}
+
+bool boss::isnormal() {
+	return normal;
+}
+
+bool boss::ispower() {
+	return power;
 }

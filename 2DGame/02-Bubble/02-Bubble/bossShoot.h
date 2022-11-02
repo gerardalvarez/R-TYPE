@@ -19,14 +19,18 @@ public:
 	void calculateCollisions();
 	float getPos();
 	void setPosition(const glm::vec2& pos);
+	void setNaveLastPos(glm::vec2& pos);
 	void charge();
 	void powerbossShoot();
 	void setPlayerPos(glm::vec2& pos);
+	void setNavePos(glm::vec2& pos);
 
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posbossShoot;
-	glm::vec2 posPlayer;
+	glm::vec2 posBoss;
+	glm::vec2 ppos;
+	glm::vec2 lppos;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;

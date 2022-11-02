@@ -4,7 +4,7 @@
 #include "MapScene.h"
 #include "Game.h"
 #include "Music.h"
-
+#include <time.h>
 
 #define SCREEN_X 0
 #define SCREEN_Y 0
@@ -114,6 +114,7 @@ void MapScene::initlevel(int level)
 
 	//BOSSSHOOT
 	bshoot = NULL;
+	
 
 	//ENEMY
 	enemy = new Enemy();
@@ -124,7 +125,7 @@ void MapScene::initlevel(int level)
 	//BOSS
 	bosss = new boss();
 	bosss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2760, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
+	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
 	bosss->setTileMap(map);
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
@@ -175,6 +176,25 @@ void MapScene::update(int deltaTime)
 	enemy->update(deltaTime);
 	bosss->update(deltaTime);
 
+	//ia boss
+	if (int(currentTime ) % 200 == 10) bosss->power = true;
+	if (int(currentTime) % 30 == 10) bosss->normal = true;
+	if (right >= 3070) {
+		if (bosss->ispower()) {
+			powerBossShoot();
+			bosss->power = false;
+		}
+		if (bosss->isnormal()) {
+			normalBossShoot(false);
+			bosss->normal = false;
+		}
+
+	}
+
+
+
+	
+
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
@@ -192,9 +212,10 @@ void MapScene::update(int deltaTime)
 		for (int i = 0; i < bshoots.size(); i++) {
 			bshoot = bshoots[i];
 			if (bshoot != NULL) {
-				bshoot->setPlayerPos(player->getPos());
+				bshoot->setPlayerPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
+				bshoot->setNavePos(player->getPos());
 				bshoot->update(deltaTime);
-				if (bshoot->getPos() > right) {
+				if (bshoot->getPos() < left) {
 					bshoots[i] = NULL;
 				}
 			}
@@ -226,7 +247,7 @@ void MapScene::render()
 	//map->render();
 	
 	player->render();
-	
+	bosss->render();
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
@@ -244,7 +265,7 @@ void MapScene::render()
 			}
 		}
 	}
-	bosss->render();
+	
 	//enemy->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 
@@ -261,11 +282,32 @@ void MapScene::normalShoot() {
 	shoots.push_back(shoot);
 }
 
+void MapScene::normalBossShoot(bool t) {
+	bshoot = new bossShoot();
+
+	glm::vec2 posBoss = glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 48);
+	bshoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posBoss);
+	if (!t) bshoot->setPosition(glm::vec2((posBoss.x - 7), (posBoss.y + 55)));
+	else bshoot->setPosition(glm::vec2((posBoss.x + 33), (posBoss.y + 125)));
+	bshoot->setTileMap(map);
+	bshoot->setNaveLastPos(player->getPos());
+	bshoots.push_back(bshoot);
+}
+
 void MapScene::powerShoot()
 {
 	shoots[shoots.size() - 1] = NULL;
 	normalShoot();
 	shoot->powerShoot();
+
+	
+}
+
+void MapScene::powerBossShoot()
+{
+	normalBossShoot(true);
+	bshoot->powerbossShoot();
+
 }
 
 void MapScene::charge() {
@@ -281,6 +323,16 @@ void MapScene::relocateShoots()
 			if (shoot == NULL) {
 				shoots.erase(shoots.begin() + i);
 				bosss->hitted();
+			}
+		}
+	}
+
+	if (!bshoots.empty()) {
+		for (int i = 0; i < bshoots.size(); i++) {
+			bshoot = bshoots[i];
+			if (bshoot == NULL) {
+				bshoots.erase(bshoots.begin() + i);
+				
 			}
 		}
 	}

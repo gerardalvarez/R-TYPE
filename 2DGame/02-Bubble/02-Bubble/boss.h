@@ -27,9 +27,12 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-
+	bool isnormal();
+	bool ispower();
+	int dispara(int deltaTime);
+	bool invincible, defeated, phase1, normal, power;
 private:
-	bool invincible, defeated, phase1;
+	
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posEnemy;
 	int startY;
