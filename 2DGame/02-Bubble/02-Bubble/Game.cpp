@@ -54,6 +54,11 @@ void Game::render()
 		Menuscene.render();
 		break;
 
+	case State::State_enum::WIN:
+		Menuscene.init(2);
+		Menuscene.render();
+		break;
+
 	default:
 		break;
 
@@ -133,6 +138,14 @@ void Game::keyPressed(int key)
 			Menuscene.init(0);
            Music::instance().efectoMenuAtras();
         }
+		break;
+
+	case State::State_enum::WIN:
+		if (key == 27) {
+			state.goMENU();
+			Menuscene.init(0);
+			Music::instance().efectoMenuAtras();
+		}
 		break;
 
 	default:

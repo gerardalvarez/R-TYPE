@@ -200,9 +200,7 @@ void MapScene::update(int deltaTime)
 		}
 		
 	}
-	if (bosss->getlife() <= 0) {
-		//pantalla victoria
-	}
+	
 
 	player->sendcamera(left, right);
 	if (player != NULL) player->update(deltaTime);
@@ -210,18 +208,24 @@ void MapScene::update(int deltaTime)
 	bosss->update(deltaTime);
 
 	//ia boss
-	if (int(currentTime ) % 200 == 10) bosss->power = true;
-	if (int(currentTime) % 30 == 10) bosss->normal = true;
-	if (right >= 3070) {
-		if (bosss->ispower()) {
-			powerBossShoot();
-			bosss->power = false; 
-		}
-		if (bosss->isnormal()) {
-			normalBossShoot(false);
-			bosss->normal = false;
-		}
+	if (bosss->getlife() <= 0 ) {
+		//pantalla victoria
+		
+	}
+	else if (!right <= 3070 && !gameover) {
+		if (int(currentTime) % 200 == 10) bosss->power = true;
+		if (int(currentTime) % 30 == 10) bosss->normal = true;
+		if (right >= 3070) {
+			if (bosss->ispower()) {
+				powerBossShoot();
+				bosss->power = false;
+			}
+			if (bosss->isnormal()) {
+				normalBossShoot(false);
+				bosss->normal = false;
+			}
 
+		}
 	}
 
 
@@ -281,8 +285,9 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 	//map->render();
 	
-	player->render();
+	
 	bosss->render();
+
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
@@ -300,11 +305,15 @@ void MapScene::render()
 			}
 		}
 	}
+
+	player->render();
+
 	if (gameover) {
 		background->render();
 	}
 	//enemy->render();
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
+	
 }
 
 void MapScene::normalShoot() {

@@ -64,17 +64,18 @@ void bossShoot::calculateCollisions()
 {
 	if (sprite->animation() != CHARGING) {
 		if (sprite->animation() == POWER) {
-			if (posBoss.x > ppos.x) {
-				posbossShoot.x -= 1;
-				if (posbossShoot.y < ppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > ppos.y) posbossShoot.y -= 1;
-			}
+			if (posbossShoot.y < ppos.y) posbossShoot.y += 1;
+			else if (posbossShoot.y > ppos.y) posbossShoot.y -= 1;
+		    posbossShoot.x -= 1;
+				
+			
 		}
 		if (sprite->animation() == NORMAL) {
+			if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
+			else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
 			if (posBoss.x > lppos.x) {
 				posbossShoot.x -= 1;
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
+				
 			}
 		}
 	}
@@ -84,10 +85,10 @@ void bossShoot::calculateCollisions()
 	}
 	switch (map->collisionMoveLeft(posbossShoot, glm::ivec2(28, 15)))
 	{
-	case 0:
+	case 1:
 		break;
 	default:
-		sprite->changeAnimation(POWER);
+		//sprite->changeAnimation(POWER);
 		break;
 	}
 }

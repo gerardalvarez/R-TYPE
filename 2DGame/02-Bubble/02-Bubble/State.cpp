@@ -25,6 +25,10 @@ void State::goINFO() {
     state = State_enum::INFO;
 }
 
+void State::goWIN() {
+    state = State_enum::WIN;
+}
+
 State::State_enum State::getState() { return state; }
 
 
