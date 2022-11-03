@@ -11,9 +11,8 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	state.goMENU();
 	Menuscene.init(0);
-
+	mapScene.init();
 	Music::instance().musicaMenu();
-
 	timer = 0;
 	charging = false;
 
@@ -55,6 +54,11 @@ void Game::render()
 		Menuscene.render();
 		break;
 
+	case State::State_enum::WIN:
+		Menuscene.init(2);
+		Menuscene.render();
+		break;
+
 	default:
 		break;
 
@@ -72,7 +76,6 @@ void Game::keyPressed(int key)
             state.goGAME();
 			Music::instance().musicaGame();
 			
-			
         }
 		if (key == 99) state.goCREDITS();
 		if (key == 105) state.goINFO();
@@ -87,6 +90,7 @@ void Game::keyPressed(int key)
         if (key == 27) {
 			Music::instance().stop();
             state.goMENU();
+			mapScene.init();
 			Music::instance().musicaMenu();
 			Menuscene.init(0);
 			Music::instance().efectoMenuAtras();
@@ -137,6 +141,14 @@ void Game::keyPressed(int key)
         }
 		break;
 
+	case State::State_enum::WIN:
+		if (key == 27) {
+			state.goMENU();
+			Menuscene.init(0);
+			Music::instance().efectoMenuAtras();
+		}
+		break;
+
 	default:
 		break;
 
@@ -160,6 +172,9 @@ void Game::keyReleased(int key)
 				timer = 0;
 				
 			}
+		}
+		if (key == 97) {
+			
 		}
 		break;
 	default:
