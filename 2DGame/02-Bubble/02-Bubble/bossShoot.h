@@ -17,9 +17,11 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void calculateCollisions();
-	float getPos();
+	float getPosx();
+	float getPosy();
 	void setPosition(const glm::vec2& pos);
 	void setNaveLastPos(glm::vec2& pos);
+	glm::vec2 getNaveLastPos();
 	void charge();
 	void powerbossShoot();
 	void setPlayerPos(glm::vec2& pos);

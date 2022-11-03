@@ -1,6 +1,6 @@
 class State {
 public:
-    enum class State_enum { MENU, GAME, CREDITS, INFO };
+    enum class State_enum { MENU, GAME, CREDITS, INFO, WIN };
 
     State();
 
@@ -17,6 +17,8 @@ public:
     void goGAME();
 
     void goINFO();
+
+    void goWIN();
 
     State_enum getState();
 

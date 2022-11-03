@@ -49,6 +49,18 @@ void Music::disparo2()
 
 }
 
+void Music::win()
+{
+    engine->play2D("./sounds/win.wav", false, false, true);
+
+}
+
+void Music::bm()
+{
+    engine->play2D("./sounds/d.wav", true, false, true);
+
+}
+
 void Music::stop()
 {
     engine->stopAllSounds();
