@@ -174,7 +174,7 @@ void Game::keyReleased(int key)
 			}
 		}
 		if (key == 97) {
-			
+			mapScene.putforce();
 		}
 		break;
 	default:

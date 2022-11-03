@@ -114,6 +114,14 @@ void MapScene::initlevel(int level)
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
 	player->setTileMap(map);
 
+
+	force = new Force();
+	force->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+220, INIT_PLAYER_Y_TILES * map->getTileSize() + 50));
+
+
+	
+	
 	//SHOOT
 	shoot = NULL;
 
@@ -205,6 +213,8 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left, right);
 	if (player != NULL && !gameover) {
 		player->update(deltaTime);
+		if (force ->istaken()) force->setPosition(glm::vec2(player->getPos().x+28,player->getPos().y+11));
+		force->update(deltaTime);
 		enemy->update(deltaTime);
 		bosss->update(deltaTime);
 	}
@@ -256,6 +266,7 @@ void MapScene::update(int deltaTime)
 				shoot->setPlayerPos(player->getPos());
 				shoot->update(deltaTime);
 				if (shoot->getPos() > right) {
+					delete shoots[i];
 					shoots[i] = NULL;
 				}
 			}
@@ -330,6 +341,7 @@ void MapScene::render()
 		}
 	}
 
+	force->render();
 	player->render();
 
 	if (gameover) {
@@ -341,13 +353,34 @@ void MapScene::render()
 }
 
 void MapScene::normalShoot() {
-	shoot = new Shoot();
 	
-	glm::vec2 posPlayer = player->getPos();
-	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
-	shoot->setTileMap(map);
-	shoots.push_back(shoot);
+
+	if (force->istaken()) {
+		shoot = new Shoot();
+
+		glm::vec2 posPlayer = player->getPos();
+		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 10)));
+		shoot->setTileMap(map);
+
+		shoots.push_back(shoot);
+
+		shoot2 = new Shoot();
+		shoot2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y -1 )));
+		shoot2->setTileMap(map);
+		shoots.push_back(shoot2);
+	}
+	else {
+		shoot = new Shoot();
+
+		glm::vec2 posPlayer = player->getPos();
+		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+		shoot->setTileMap(map);
+		shoots.push_back(shoot);
+	}
+
 }
 
 void MapScene::normalBossShoot(bool t) {
@@ -368,6 +401,7 @@ void MapScene::powerShoot()
 	shoots[shoots.size() - 1] = NULL;
 	normalShoot();
 	shoot->powerShoot();
+	shoot2->powerShoot();
 
 	
 }
@@ -410,4 +444,9 @@ void MapScene::relocateShoots()
 float MapScene::getLeft()
 {
 	return left;
+}
+
+
+void MapScene::putforce() {
+	force->setTaken(!force->istaken());
 }

@@ -21,6 +21,7 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossShoot.cpp" />
+    <ClCompile Include="Force.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -43,5 +44,6 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossShoot.h" />
+    <ClInclude Include="Force.h" />
   </ItemGroup>
 </Project>
