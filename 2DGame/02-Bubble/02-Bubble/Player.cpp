@@ -224,7 +224,7 @@ void Player::sendcamera(float left,float right)
 
 void Player::rightCollisions()
 {
-	posPlayer.x += 2;
+	posPlayer.x += 1;
 	if (cameraright - 35 <= posPlayer.x) {
 		posPlayer.x = cameraright - 35;
 	}
@@ -233,11 +233,11 @@ void Player::rightCollisions()
 	case 0:
 		break;
 	case 1:
-		updatePositionX(-2);
+		updatePositionX(-1);
 		sprite->changeAnimation(BOOM);
 		break;
 	default:
-		updatePositionX(-2);
+		updatePositionX(-1);
 		sprite->changeAnimation(STAND);
 		break;
 	}
@@ -245,7 +245,7 @@ void Player::rightCollisions()
 
 void Player::leftCollisions()
 {
-	posPlayer.x -= 2;
+	posPlayer.x -= 1;
 	if (cameraleft + 5 >= posPlayer.x) {
 		posPlayer.x = cameraleft + 5;
 	}
@@ -254,11 +254,11 @@ void Player::leftCollisions()
 	case 0:
 		break;
 	case 1:
-		updatePositionX(2);
+		updatePositionX(1);
 		sprite->changeAnimation(BOOM);
 		break;
 	default:
-		updatePositionX(2);
+		updatePositionX(1);
 		sprite->changeAnimation(STAND);
 		break;
 	}
@@ -266,17 +266,17 @@ void Player::leftCollisions()
 
 void Player::upCollisions()
 {
-	posPlayer.y -= 2;
+	posPlayer.y -= 1;
 	switch (map->collisionMoveUp(posPlayer, glm::ivec2(26, 12)))
 	{
 	case 0:
 		break;
 	case 1:
-		updatePositionY(4);
+		updatePositionY(1);
 		sprite->changeAnimation(BOOM);
 		break;
 	default:
-		updatePositionY(2);
+		updatePositionY(1);
 		sprite->changeAnimation(STAND);
 		break;
 	}
@@ -284,7 +284,7 @@ void Player::upCollisions()
 
 void Player::downCollisions()
 {
-	posPlayer.y += 2;
+	posPlayer.y += 1;
 	switch (map->collisionMoveDown(posPlayer, glm::ivec2(26, 20)))
 	{
 	case 0:
@@ -294,7 +294,7 @@ void Player::downCollisions()
 		sprite->changeAnimation(BOOM);
 		break;
 	default:
-		updatePositionY(-2);
+		updatePositionY(-1);
 		sprite->changeAnimation(STAND);
 		break;
 	}

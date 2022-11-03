@@ -5,6 +5,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Shoot.h"
 
 
 // Enemy is basically a Sprite that represents the enemies. As such it has
@@ -15,21 +16,36 @@ class Enemy
 {
 
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void init(Texture &spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida);
 	void update(int deltaTime);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
+	void setPlayerPosition(const glm::vec2& pos);
+	void setType(int t);
+	void move();
+	void recieveDamage();
+	glm::vec2 getPos();
+	void setRight(int r);
 
 private:
+	ShaderProgram texProgram;
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posEnemy;
+	glm::vec2 posPlayer;
+	Shoot* shoot;
+	vector<Shoot*> shoots;
 	int startY;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-
+	bool landed;
+	bool walking;
+	int type;
+	bool direction;
+	int life;
+	int right;
 };
 
 

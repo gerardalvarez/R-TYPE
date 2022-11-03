@@ -34,9 +34,13 @@ public:
 	void normalShoot();
 	void normalBossShoot(bool t);
 	void powerShoot();
+	void enemyShoot();
 	void powerBossShoot();
 	void charge();
 	void relocateShoots();
+	void createEnemy(int type, glm::vec2 pos);
+	void clear();
+	void initEnemiesOnMap();
 
 private:
 	//void initShaders();
@@ -48,9 +52,13 @@ private:
 	boss* bosss;
 	Shoot* shoot;
 	vector<Shoot*> shoots;
+
+	vector<Enemy*> enemies;
+
 	bossShoot* bshoot;
 	vector<bossShoot*> bshoots;
 	vector<glm::vec2> plastpos;
+
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
@@ -58,5 +66,10 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
+
+	bool shooting;
+	Texture enemySpritesheet;
+
 	int counter;
+
 };
