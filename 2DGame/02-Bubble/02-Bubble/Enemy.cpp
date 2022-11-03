@@ -20,6 +20,7 @@ enum EnemyAnims
 void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida)
 {
 	spritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	texProgram = shaderProgram;
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(13);
 
@@ -226,4 +227,9 @@ void Enemy::move()
 void Enemy::recieveDamage()
 {
 	life--;
+}
+
+glm::vec2 Enemy::getPos()
+{
+	return posEnemy;
 }

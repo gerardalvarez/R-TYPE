@@ -26,8 +26,10 @@ public:
 	void setType(int t);
 	void move();
 	void recieveDamage();
+	glm::vec2 getPos();
 
 private:
+	ShaderProgram texProgram;
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posEnemy;
 	glm::vec2 posPlayer;

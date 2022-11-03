@@ -31,6 +31,7 @@ public:
 	float getLeft();
 	void normalShoot();
 	void powerShoot();
+	void enemyShoot();
 	void charge();
 	void relocateShoots();
 	void createEnemy(int type, glm::vec2 pos);
@@ -53,4 +54,5 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
+	bool shooting;
 };

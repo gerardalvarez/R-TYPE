@@ -110,7 +110,8 @@ void MapScene::initlevel(int level)
 	createEnemy(1, glm::vec2(79, 8));
 	createEnemy(1, glm::vec2(86, 12));*/
 
-	createEnemy(4, glm::vec2(90, 20));
+	createEnemy(1, glm::vec2(90, 20));
+	shooting = false;
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
@@ -227,6 +228,11 @@ void MapScene::render()
 			enemy = enemies[i];
 			if (enemy != NULL) {
 				enemy->render();
+				glm::vec2 posEnemy = enemy->getPos();
+				if (!shooting && posEnemy.x < (right - 30)) {
+					shooting = true;
+					enemyShoot();
+				}
 			}
 		}
 	}
@@ -275,6 +281,21 @@ void MapScene::createEnemy(int type, glm::vec2 pos)
 	enemy->setType(type);
 	enemies.push_back(enemy);
 }
+
+void MapScene::enemyShoot()
+{
+	shooting = true;
+	shoot = new Shoot();
+	glm::vec2 posEnemy = enemy->getPos();
+	shoot->init(glm::ivec2(0, 0), texProgram, posEnemy);
+	shoot->setPosition(glm::vec2((posEnemy.x), (posEnemy.y + 2)));
+	shoot->setTileMap(map);
+	shoot->setPlayerPos(player->getPos());
+	shoot->setEnemyPos(posEnemy);
+	shoot->enemyShoot();
+	shoots.push_back(shoot);
+}
+
 
 void MapScene::clear()
 {
