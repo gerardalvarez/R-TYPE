@@ -17,9 +17,8 @@ enum EnemyAnims
 };
 
 //x35 y35
-void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida)
+void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida)
 {
-	spritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	texProgram = shaderProgram;
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(13);
@@ -89,7 +88,8 @@ void Enemy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	move();
+	if (right > posEnemy.x)
+		move();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
@@ -232,4 +232,9 @@ void Enemy::recieveDamage()
 glm::vec2 Enemy::getPos()
 {
 	return posEnemy;
+}
+
+void Enemy::setRight(int r)
+{
+	right = r;
 }

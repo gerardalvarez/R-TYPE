@@ -36,6 +36,7 @@ public:
 	void relocateShoots();
 	void createEnemy(int type, glm::vec2 pos);
 	void clear();
+	void initEnemiesOnMap();
 
 private:
 	//void initShaders();
@@ -55,4 +56,5 @@ private:
 	Text text;
 	bool gameover;
 	bool shooting;
+	Texture enemySpritesheet;
 };

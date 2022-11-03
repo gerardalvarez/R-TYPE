@@ -105,12 +105,8 @@ void MapScene::initlevel(int level)
 	shoot = NULL;
 
 	//ENEMIES
-	/*createEnemy(1, glm::vec2(65, 8));
-	createEnemy(1, glm::vec2(72, 12));
-	createEnemy(1, glm::vec2(79, 8));
-	createEnemy(1, glm::vec2(86, 12));*/
-
-	createEnemy(1, glm::vec2(90, 20));
+	enemySpritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	initEnemiesOnMap();
 	shooting = false;
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
@@ -158,10 +154,13 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left, right);
 	if (player != NULL) player->update(deltaTime);
 	
+	//initEnemiesOnMap();
+
 	if (!enemies.empty()) {
 		for (int i = 0; i < enemies.size(); i++) {
 			enemy = enemies[i];
 			if (enemy != NULL) {
+				enemy->setRight(right);
 				enemy->setPlayerPosition(player->getPos());
 				enemy->update(deltaTime);
 			}
@@ -175,7 +174,7 @@ void MapScene::update(int deltaTime)
 			if (shoot != NULL) {
 				shoot->setPlayerPos(player->getPos());
 				shoot->update(deltaTime);
-				if (shoot->getPos() > right) {
+				if (shoot->getPos() > right || shoot->getPos() < (left-20)) {
 					shoots[i] = NULL;
 				}
 			}
@@ -275,8 +274,9 @@ void MapScene::relocateShoots()
 void MapScene::createEnemy(int type, glm::vec2 pos)
 {
 	enemy = new Enemy();
-	enemy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
-	enemy->setPosition(glm::vec2(pos.x * map->getTileSize(), pos.y * map->getTileSize()));
+	int mapSize = map->getTileSize();
+	enemy->init(enemySpritesheet, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1);
+	enemy->setPosition(glm::vec2(pos.x * mapSize, pos.y * mapSize));
 	enemy->setTileMap(map);
 	enemy->setType(type);
 	enemies.push_back(enemy);
@@ -304,6 +304,111 @@ void MapScene::clear()
 
 	if (!shoots.empty())
 		shoots.clear();
+}
+
+void MapScene::initEnemiesOnMap()
+{
+	//primera orde
+	createEnemy(1, glm::vec2(83, 14));
+	createEnemy(1, glm::vec2(89, 10));
+	createEnemy(1, glm::vec2(92, 15));
+	createEnemy(1, glm::vec2(99, 11));
+	
+	//segona orde
+	createEnemy(1, glm::vec2(104, 31));
+	createEnemy(1, glm::vec2(107, 34));
+	createEnemy(1, glm::vec2(112, 34));
+	createEnemy(1, glm::vec2(117, 31));
+	
+	//tercera orde
+	createEnemy(1, glm::vec2(126, 20));
+	createEnemy(1, glm::vec2(131, 21));
+	createEnemy(1, glm::vec2(136, 17));
+	createEnemy(1, glm::vec2(141, 23));
+	createEnemy(1, glm::vec2(144, 19));
+	
+	//quarta orde
+	createEnemy(1, glm::vec2(159, 20));
+	createEnemy(1, glm::vec2(162, 15));
+	createEnemy(1, glm::vec2(166, 14));
+	createEnemy(1, glm::vec2(171, 15));
+	
+	//cinquena orde
+	createEnemy(1, glm::vec2(168, 4));
+	createEnemy(1, glm::vec2(172, 6));
+	createEnemy(1, glm::vec2(176, 4));
+	createEnemy(1, glm::vec2(180, 6));
+	createEnemy(1, glm::vec2(184, 4));
+	//sisena orde
+	createEnemy(1, glm::vec2(168, 25));
+	createEnemy(1, glm::vec2(172, 29));
+	createEnemy(1, glm::vec2(177, 29));
+
+	//primera orde torreta terra
+	createEnemy(21, glm::vec2(174, 40));
+	
+	//primer rodo
+	createEnemy(3, glm::vec2(180, 20));
+	
+	//setena orde
+	createEnemy(1, glm::vec2(189, 17));
+	createEnemy(1, glm::vec2(193, 14));
+	createEnemy(1, glm::vec2(195, 17));
+	createEnemy(1, glm::vec2(196, 34));
+	createEnemy(1, glm::vec2(204, 34));
+	
+	//vuitena orde
+	createEnemy(1, glm::vec2(226, 19));
+	createEnemy(1, glm::vec2(232, 24));
+
+	//segona orde torreta terra
+	createEnemy(21, glm::vec2(238, 40));
+	createEnemy(21, glm::vec2(266, 40));
+	
+	//primera orde cap llarg
+	createEnemy(4, glm::vec2(257, 13));
+	createEnemy(4, glm::vec2(270, 24));
+	createEnemy(4, glm::vec2(285, 22));
+	createEnemy(4, glm::vec2(299, 24));
+	createEnemy(4, glm::vec2(306, 17));
+	createEnemy(4, glm::vec2(315, 8));
+	createEnemy(4, glm::vec2(307, 39));
+	createEnemy(4, glm::vec2(311, 33));
+	createEnemy(4, glm::vec2(322, 39));
+	createEnemy(4, glm::vec2(327, 19));
+	
+	//novena orde
+	createEnemy(1, glm::vec2(332, 32));
+	createEnemy(1, glm::vec2(338, 30));
+
+	//tercera orde torreta terra
+	createEnemy(21, glm::vec2(334, 36));				
+	createEnemy(21, glm::vec2(337, 36));
+	createEnemy(21, glm::vec2(340, 36));
+	createEnemy(21, glm::vec2(345, 32));
+	createEnemy(21, glm::vec2(348, 32));
+	createEnemy(21, glm::vec2(351, 32));
+
+	//primera orde torreta sostre
+	createEnemy(22, glm::vec2(334, 5));
+	createEnemy(22, glm::vec2(337, 5));
+	createEnemy(22, glm::vec2(340, 5));
+	createEnemy(22, glm::vec2(345, 10));
+	createEnemy(22, glm::vec2(348, 10));
+	createEnemy(22, glm::vec2(351, 10));
+
+	//desena orde
+	createEnemy(1, glm::vec2(370, 11));
+	createEnemy(1, glm::vec2(374, 11));
+	createEnemy(1, glm::vec2(378, 14));
+
+	//segona orde rodo
+	createEnemy(3, glm::vec2(376, 24));
+	createEnemy(3, glm::vec2(398, 33));
+
+	//onzena orde
+	createEnemy(1, glm::vec2(384, 39));
+	createEnemy(1, glm::vec2(390, 38));
 }
 
 float MapScene::getLeft()

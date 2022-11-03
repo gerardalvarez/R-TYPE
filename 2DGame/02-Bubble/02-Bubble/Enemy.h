@@ -16,7 +16,7 @@ class Enemy
 {
 
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida);
+	void init(Texture &spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida);
 	void update(int deltaTime);
 	void render();
 
@@ -27,6 +27,7 @@ public:
 	void move();
 	void recieveDamage();
 	glm::vec2 getPos();
+	void setRight(int r);
 
 private:
 	ShaderProgram texProgram;
@@ -44,6 +45,7 @@ private:
 	int type;
 	bool direction;
 	int life;
+	int right;
 };
 
 
