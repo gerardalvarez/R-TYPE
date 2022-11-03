@@ -144,7 +144,7 @@ void MapScene::initlevel(int level)
 	texs[0].loadFromFile(lvl, TEXTURE_PIXEL_FORMAT_RGBA);									//les imatges son profunditat 32bits
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
-	spritesheet.loadFromFile("images/32.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/312.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	background = Sprite::createSprite(glm::ivec2(750, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
 	background->setNumberAnimations(3);
 	background->setAnimationSpeed(F, 32);
@@ -165,7 +165,7 @@ void MapScene::update(int deltaTime)
 
 	if (player->getIsDead()) {
 		
-		if ((player->getlives() <= 1 || bosss->getlife()<=0 )) {
+		if ((player->getlives() <= 1 )) {
 
 			gameover = true;
 			++counter;
@@ -203,14 +203,31 @@ void MapScene::update(int deltaTime)
 	
 
 	player->sendcamera(left, right);
-	if (player != NULL) player->update(deltaTime);
-	enemy->update(deltaTime);
-	bosss->update(deltaTime);
+	if (player != NULL && !gameover) {
+		player->update(deltaTime);
+		enemy->update(deltaTime);
+		bosss->update(deltaTime);
+	}
 
 	//ia boss
 	if (bosss->getlife() <= 0 ) {
-		//pantalla victoria
-		
+		++counter;
+		gameover = true;
+		for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
+		if (counter == 60) {
+			Music::instance().stop();
+			Music::instance().grito();
+		}
+		///si se quiere alguna animacion
+		if (counter == 170) {
+			Music::instance().stop();
+			Music::instance().ultimaex();
+		}
+		if (counter == 310) {
+			Game::instance().state.goCREDITS();
+			Music::instance().win();
+		}
+
 	}
 	else if (!right <= 3070 && !gameover) {
 		if (int(currentTime) % 200 == 10) bosss->power = true;
@@ -252,7 +269,7 @@ void MapScene::update(int deltaTime)
 				bshoot->setPlayerPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
 				bshoot->setNavePos(player->getPos());
 				bshoot->update(deltaTime);
-				if (bshoot->getPos() < left) {
+				if (bshoot->getPosx() < left ){
 					bshoots[i] = NULL;
 				}
 			}
@@ -260,7 +277,12 @@ void MapScene::update(int deltaTime)
 	}
 	relocateShoots();
 
-	if (right == 3060) Music::instance().grito();
+	if (right <= 3036 && right >= 3030) {
+		Music::instance().stop();
+		Music::instance().bm();
+	}
+
+	//if (right == 3060) Music::instance().grito();
 	if (!player->getIsDead() && right <= 3070) {
 		
 		left += 0.4;
@@ -286,7 +308,7 @@ void MapScene::render()
 	//map->render();
 	
 	
-	bosss->render();
+	
 
 	if (!shoots.empty()) {
 		for (int i = 0; i < shoots.size(); i++) {
@@ -296,6 +318,8 @@ void MapScene::render()
 			}
 		}
 	}
+
+	bosss->render();
 
 	if (!bshoots.empty()) {
 		for (int i = 0; i < bshoots.size(); i++) {

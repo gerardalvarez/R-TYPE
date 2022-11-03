@@ -71,11 +71,26 @@ void bossShoot::calculateCollisions()
 			
 		}
 		if (sprite->animation() == NORMAL) {
-			if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-			else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-			if (posBoss.x > lppos.x) {
+			if (posbossShoot.x < lppos.x) {
+				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
+				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
 				posbossShoot.x -= 1;
-				
+			}
+			else
+			 if (abs(posbossShoot.y - lppos.y) > abs(posbossShoot.x - lppos.x)) {
+				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
+				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
+				posbossShoot.x -= 0.2;
+			}
+			else if (abs(posbossShoot.y - lppos.y) < abs(posbossShoot.x - lppos.x)) {
+				if (posbossShoot.y < lppos.y) posbossShoot.y += 0.2;
+				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 0.2;
+				posbossShoot.x -= 1;
+			}
+			else {
+				posbossShoot.x -= 1;
+				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
+				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
 			}
 		}
 	}
@@ -126,8 +141,17 @@ void bossShoot::setNaveLastPos(glm::vec2& pos)
 	lppos = pos;
 }
 
+glm::vec2 bossShoot::getNaveLastPos()
+{
+	return lppos;
+}
 
-float bossShoot::getPos()
+
+float bossShoot::getPosx()
+{
+	return posbossShoot.x;
+}
+float bossShoot::getPosy()
 {
 	return posbossShoot.x;
 }

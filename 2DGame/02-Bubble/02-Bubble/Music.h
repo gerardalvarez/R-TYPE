@@ -28,6 +28,8 @@ public:
 	void disparo();
 	void disparo_charge();
 	void disparo2();
+	void win();
+	void bm();
 	void stop();
 	void gameover();
 	void ultimaex();

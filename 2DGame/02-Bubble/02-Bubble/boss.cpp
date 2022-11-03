@@ -10,7 +10,7 @@ void boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	posEnemy.x = 192;
 	posEnemy.y = 192;
-	spritesheet.loadFromFile("images/boss-final.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/boss-final2.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(908,231), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(2);
 
