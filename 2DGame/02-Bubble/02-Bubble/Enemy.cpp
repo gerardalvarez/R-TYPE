@@ -259,22 +259,22 @@ void Enemy::setEnemyCollisionBox()
 {
 	switch (type) {
 	case 1:
-		setBox(9, 27, 10, 24);
+		setBox(6, 19, 7, 16);
 		break;
 	case 21:
-		setBox(12, 23, 19, 33);
+		setBox(9, 16, 14, 24);
 		break;
 	case 22:
-		setBox(12, 23, 19, 33);
+		setBox(9, 16, 14, 24);
 		break;
 	case 3:
 		if (walking)
-			setBox(6, 28, 9, 32);
+			setBox(4, 20, 6, 23);
 		else
-			setBox(8, 26, 3, 19);
+			setBox(6, 19, 2, 14);
 		break;
 	case 4:
-		setBox(7, 27, 9, 33);
+		setBox(5, 19, 6, 24);
 		break;
 	default:
 		break;
@@ -286,5 +286,5 @@ void Enemy::setBox(int xmin, int xmax, int ymin, int ymax)
 	xMinE = posEnemy.x + xmin;
 	xMaxE = posEnemy.x + xmax;
 	yMinE = posEnemy.y + ymin;
-	yMaxE = posEnemy.y + yMax;
+	yMaxE = posEnemy.y + ymax;
 }

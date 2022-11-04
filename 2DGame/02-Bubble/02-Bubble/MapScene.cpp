@@ -187,7 +187,6 @@ void MapScene::update(int deltaTime)
 			if (player->animationFinished()) {
 				Music::instance().explosion_player();
 				player->revive();
-				
 			}
 		}
 	}
@@ -737,8 +736,11 @@ void MapScene::updateEnemies(int deltaTime)
 				
 				enemy->update(deltaTime);
 
-				if (enemy->calculatePlayerCollisions())
-					player->setBoom();
+				if (enemy->getPos().x < (right-10)) {
+					if (enemy->calculatePlayerCollisions() && !player->getExplode()) {
+						player->setBoom();
+					}
+				}
 
 				if (enemy->getPos().x < (left - 20)) {
 					enemies[i] = NULL;

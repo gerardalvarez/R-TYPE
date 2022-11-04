@@ -37,6 +37,7 @@ public:
 	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 	bool animationFinished();
 	void setBoom();
+	bool getExplode();
 	glm::vec2 getPos();
 	int xMin, xMax, yMin, yMax;
 
@@ -52,6 +53,7 @@ private:
 	float cameraleft;
 	float cameraright;
 	int lives;
+	bool explode;
 	
 };
 

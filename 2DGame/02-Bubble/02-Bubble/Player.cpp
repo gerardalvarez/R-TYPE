@@ -12,7 +12,7 @@
 
 enum PlayerAnims
 {
-	STAND, MOVE_UP, MOVE_DOWN, BOOM, REVERSE_UP, REVERSE_DOWN, GOD
+	STAND, MOVE_UP, MOVE_DOWN, BOOM, REVERSE_UP, REVERSE_DOWN, GOD, BOOM2
 };
 
 
@@ -21,7 +21,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33/269.f, 25/269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(7);
+	sprite->setNumberAnimations(8);
 	
 		sprite->setAnimationSpeed(STAND, 8);
 		sprite->addKeyframe(STAND, glm::vec2(0 / 269.f, 25 / 269.f));
@@ -55,8 +55,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 		sprite->setAnimationSpeed(GOD, 8);
 		sprite->addKeyframe(GOD, glm::vec2(33 * 6 / 269.f, 25 * 2 / 269.f));
-		
-		
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	isDead = false;
@@ -72,7 +71,6 @@ void Player::update(int deltaTime)
 		sprite->update(deltaTime);
 		if (sprite->animation() == BOOM) {
 			isDead = true;
-			
 		}
 		else {
 			calculateMapCollisions();
@@ -94,6 +92,7 @@ void Player::revive()
 	
 	--lives;
 	isDead = false;
+	explode = false;
 	posPlayer.y = 192/2-15;
 	posPlayer.x = cameraright -((cameraright - cameraleft) / 2)-70;
 	sprite->changeAnimation(STAND);
@@ -106,7 +105,7 @@ void Player::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
 	xMin = posPlayer.x + xmin;
 	xMax = posPlayer.x + xmax;
 	yMin = posPlayer.y + ymin;
-	yMax = posPlayer.y + yMax;
+	yMax = posPlayer.y + ymax;
 }
 
 
@@ -118,6 +117,12 @@ bool Player::animationFinished()
 void Player::setBoom()
 {
 	sprite->changeAnimation(BOOM);
+	explode = true;
+}
+
+bool Player::getExplode()
+{
+	return explode;
 }
 
 void Player::render()
@@ -131,7 +136,7 @@ void Player::calculateMapCollisions()
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
-		setCollisionBox(5, 27, 11, 21);
+		setCollisionBox(5, 27, 13, 25);
 		rightCollisions();
 		upCollisions();
 	}
@@ -139,7 +144,7 @@ void Player::calculateMapCollisions()
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
-		setCollisionBox(5, 26, 9, 19);
+		setCollisionBox(5, 26, 11, 23);
 		rightCollisions();
 		downCollisions();
 	}
@@ -147,7 +152,7 @@ void Player::calculateMapCollisions()
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
-		setCollisionBox(5, 27, 11, 21);
+		setCollisionBox(5, 27, 13, 25);
 		leftCollisions();
 		upCollisions();
 	
@@ -156,7 +161,7 @@ void Player::calculateMapCollisions()
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
-		setCollisionBox(5, 26, 9, 19);
+		setCollisionBox(5, 26, 11, 23);
 		leftCollisions();
 		downCollisions();
 	}
@@ -164,12 +169,12 @@ void Player::calculateMapCollisions()
 	{
 		if (sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
-		setCollisionBox(5, 28, 12, 21);
+		setCollisionBox(5, 28, 14, 25);
 		leftCollisions();
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))			//MOVING RIGHT
 	{
-		setCollisionBox(5, 28, 37, 46);
+		setCollisionBox(5, 28, 14, 25);
 		if (sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
 		rightCollisions();
@@ -178,19 +183,19 @@ void Player::calculateMapCollisions()
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
-		setCollisionBox(5, 27, 11, 21);
+		setCollisionBox(5, 27, 13, 25);
 		upCollisions();
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))				//MOVING DOWN
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
-		setCollisionBox(5, 26, 9, 19);
+		setCollisionBox(5, 26, 13, 23);
 		downCollisions();
 	}
 	else
 	{
-		setCollisionBox(5, 28, 37, 46);
+		setCollisionBox(5, 28, 12, 21);
 		if (sprite->animation() == MOVE_UP)
 			sprite->changeAnimation(REVERSE_UP);
 		else if (sprite->animation() == MOVE_DOWN)
