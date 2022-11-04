@@ -659,5 +659,7 @@ float MapScene::getLeft()
 
 
 void MapScene::putforce() {
+	force->setinscreen(!force->inScreen());
 	force->setTaken(!force->istaken());
+	
 }

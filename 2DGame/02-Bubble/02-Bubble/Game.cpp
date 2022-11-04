@@ -173,7 +173,7 @@ void Game::keyReleased(int key)
 				
 			}
 		}
-		if (key == 97) {
+		if (key == 102) {
 			mapScene.putforce();
 		}
 		break;

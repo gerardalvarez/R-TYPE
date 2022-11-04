@@ -20,7 +20,7 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/force.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(23, 20), glm::vec2(33 / 269.f, 25 / 505.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(3);
+	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
@@ -31,17 +31,9 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
 	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
 	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
-	sprite->setCharge(true);
+	sprite->setLoopAnimations(true),
 
-	sprite->setAnimationSpeed(VERTICALSHOOTS, 8);
-	sprite->addKeyframe(VERTICALSHOOTS, glm::vec2(33 * 0 / 269.f, 25 / 505.f));
-	sprite->addKeyframe(VERTICALSHOOTS, glm::vec2(33 * 1 / 269.f, 25 / 505.f));
-	sprite->addKeyframe(VERTICALSHOOTS, glm::vec2(33 * 2 / 269.f, 25 / 505.f));
-
-	sprite->setAnimationSpeed(DOUBLESHOOT, 8);
-	sprite->addKeyframe(DOUBLESHOOT, glm::vec2(33 * 0 / 269.f, 25 / 505.f));
-	sprite->addKeyframe(DOUBLESHOOT, glm::vec2(33 * 5 / 269.f, 25 * 2 / 505.f));
-	sprite->addKeyframe(DOUBLESHOOT, glm::vec2(33 * 4 / 269.f, 25 * 2 / 505.f));
+	
 
 
 
