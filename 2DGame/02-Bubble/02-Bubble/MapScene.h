@@ -42,9 +42,11 @@ public:
 	void powerBossShoot();
 	void charge();
 	void relocateShoots();
+	void relocateEnemies();
 	void createEnemy(int type, glm::vec2 pos);
 	void clear();
 	void initEnemiesOnMap();
+	void doForce();
 
 private:
 	//void initShaders();

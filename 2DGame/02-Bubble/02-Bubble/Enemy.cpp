@@ -88,8 +88,8 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (right > posEnemy.x)
-		move();
+	if ((right-7) > posEnemy.x)
+		//move();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
