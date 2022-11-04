@@ -8,6 +8,8 @@
 #include "TexturedQuad.h"
 
 #include "Text.h"
+#include "Force.h"
+#include "Object.h"
 
 #include "Shoot.h"
 #include "bossShoot.h"
@@ -31,7 +33,9 @@ public:
 	void render();
 	void godMode();
 	float getLeft();
+	void putforce();
 	void normalShoot();
+	void normalShootForce();
 	void normalBossShoot(bool t);
 	void powerShoot();
 	void enemyShoot();
@@ -50,7 +54,10 @@ private:
 	Player* player;
 	Enemy* enemy;
 	boss* bosss;
+	Force* force;
 	Shoot* shoot;
+	Shoot* shoot2;
+	Object* object;
 	vector<Shoot*> shoots;
 
 	vector<Enemy*> enemies;
@@ -66,10 +73,9 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
-
 	bool shooting;
 	Texture enemySpritesheet;
-
 	int counter;
+	int num;
 
 };
