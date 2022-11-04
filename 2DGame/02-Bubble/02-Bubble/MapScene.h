@@ -9,6 +9,7 @@
 
 #include "Text.h"
 #include "Force.h"
+#include "Object.h"
 
 #include "Shoot.h"
 #include "bossShoot.h"
@@ -34,6 +35,7 @@ public:
 	float getLeft();
 	void putforce();
 	void normalShoot();
+	void normalShootForce();
 	void normalBossShoot(bool t);
 	void powerShoot();
 	void powerBossShoot();
@@ -51,6 +53,7 @@ private:
 	Force* force;
 	Shoot* shoot;
 	Shoot* shoot2;
+	Object* object;
 	vector<Shoot*> shoots;
 	bossShoot* bshoot;
 	vector<bossShoot*> bshoots;
@@ -63,4 +66,5 @@ private:
 	Text text;
 	bool gameover;
 	int counter;
+	int num;
 };

@@ -1,5 +1,5 @@
-#ifndef _FORCE_INCLUDE
-#define _FORCE_INCLUDE
+#ifndef _OBJECT_INCLUDE
+#define _OBJECT_INCLUDE
 
 
 #include "Sprite.h"
@@ -10,7 +10,7 @@
 // all properties it needs to track its movement, jumping, and collisions.
 
 
-class Force
+class Object
 {
 
 public:
@@ -39,7 +39,7 @@ public:
 
 private:
 	glm::ivec2 tileMapDispl;
-	glm::vec2 posForce;
+	glm::vec2 posObject;
 	int startY;
 	Texture spritesheet;
 	Sprite* sprite;

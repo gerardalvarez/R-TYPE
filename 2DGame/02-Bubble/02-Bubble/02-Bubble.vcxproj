@@ -29,6 +29,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="MapScene.h" />
     <ClInclude Include="Music.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="MapScene.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Music.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />

@@ -24,6 +24,14 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(43 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(43 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
+	sprite->setCharge(true);
 
 	sprite->setAnimationSpeed(VERTICALSHOOTS, 8);
 	sprite->addKeyframe(VERTICALSHOOTS, glm::vec2(33 * 0 / 269.f, 25 / 505.f));
@@ -38,6 +46,7 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 
 	taken = false;
+	inscreen = false;
 	sprite->changeAnimation(NORMAL);
 	tileMapDispl = tileMapPos;
 
@@ -63,6 +72,11 @@ bool Force::istaken()
 bool Force::animationFinished()
 {
 	return sprite->lastAnimation();
+}
+
+glm::vec2 Force::getPos()
+{
+	return posForce;
 }
 
 void Force::render()
@@ -122,6 +136,12 @@ void Force::setTaken(bool b)
 	taken = b;
 }
 
+void Force::setinscreen(bool b)
+{
+	inscreen = b;
+}
+
+
 
 void Force::setTileMap(TileMap* tileMap)
 {
@@ -139,6 +159,11 @@ void Force::sendcamera(float left, float right)
 {
 	cameraright = right;
 	cameraleft = left;
+}
+
+bool Force::inScreen()
+{
+	return inscreen;
 }
 
 void Force::rightCollisions()
@@ -164,10 +189,6 @@ void Force::downCollisions()
 	posForce.y += 2;
 }
 
-glm::vec2 Force::getPos()
-{
-	return posForce;
-}
 
 
 

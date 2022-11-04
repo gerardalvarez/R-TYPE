@@ -66,6 +66,12 @@ void Music::stop()
     engine->stopAllSounds();
 }
 
+void Music::force()
+{
+    engine->play2D("./sounds/force.wav", false, false, true);
+
+}
+
 void Music::gameover()
 {
     engine->play2D("./sounds/gameover.wav", false, false, true);

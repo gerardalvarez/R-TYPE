@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Music.h"
 #include <time.h>
+#include <stdlib.h> 
 
 #define SCREEN_X 0
 #define SCREEN_Y 0
@@ -114,10 +115,16 @@ void MapScene::initlevel(int level)
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
 	player->setTileMap(map);
 
-
+	//force
 	force = new Force();
 	force->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+220, INIT_PLAYER_Y_TILES * map->getTileSize() + 50));
+	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
+
+
+	//object
+	object = new Object();
+	object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	object->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+208, INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
 
 
 	
@@ -162,9 +169,11 @@ void MapScene::initlevel(int level)
 	background->addKeyframe(T, glm::vec2(478 *1 / 1436.f, 304 / 304.f));
 	background->setAnimationSpeed(G, 32);
 	background->addKeyframe(G, glm::vec2(478 *2 / 1436.f, 304 / 304.f));
+
+	//variables
 	gameover = false;
 	counter = 0;
-	
+	num = 1;
 }
 
 void MapScene::update(int deltaTime)
@@ -212,11 +221,45 @@ void MapScene::update(int deltaTime)
 
 	player->sendcamera(left, right);
 	if (player != NULL && !gameover) {
+		if (object != NULL && (player->getPos().y - 10 < object->getPos().y && player->getPos().y + 20 > object->getPos().y) && (player->getPos().x  < object->getPos().x && player->getPos().x + 30 > object->getPos().x)) {
+			force->setinscreen(true);
+			object = NULL;
+			force->setPosition(glm::vec2(left-20, INIT_PLAYER_Y_TILES * map->getTileSize() + 30));
+			Music::instance().force();
+		}
 		player->update(deltaTime);
-		if (force ->istaken()) force->setPosition(glm::vec2(player->getPos().x+28,player->getPos().y+11));
+		
+
+		if (force->inScreen()) {
+			if ((player->getPos().y - 10 < force->getPos().y && player->getPos().y + 20 > force->getPos().y) && (player->getPos().x  < force->getPos().x && player->getPos().x + 30 > force->getPos().x)) force->setTaken(true);
+			if (force->istaken()) force->setPosition(glm::vec2(player->getPos().x + 28, player->getPos().y + 11));
+			else {
+
+				switch (num) {
+				case 1:
+					force->setPosition(glm::vec2(force->getPos().x + 1, force->getPos().y));
+					if (force->getPos().x > right - 50) num = rand() % 4 + 1;
+					break;
+				case 2:
+					force->setPosition(glm::vec2(force->getPos().x - 0.8, force->getPos().y));
+					if (force->getPos().x < left + 50) num = rand() % 4 + 1;
+					break;
+				case 3:
+					force->setPosition(glm::vec2(force->getPos().x, force->getPos().y - 0.8));
+					if (force->getPos().y < 30) num = rand() % 4 + 1;
+					break;
+				case 4:
+					force->setPosition(glm::vec2(force->getPos().x, force->getPos().y + 2));
+					if (force->getPos().y > 160) num = rand() % 4 + 1;
+					break;
+				}
+				if (rand() % 30 + 1 == 2) normalShootForce();
+			}
+		}
 		force->update(deltaTime);
 		enemy->update(deltaTime);
 		bosss->update(deltaTime);
+		if (object != NULL) object->update(deltaTime);
 	}
 
 	//ia boss
@@ -341,9 +384,10 @@ void MapScene::render()
 		}
 	}
 
-	force->render();
+	if (force->inScreen()) force->render();
+	
+	if (object != NULL) object->render();
 	player->render();
-
 	if (gameover) {
 		background->render();
 	}
@@ -383,6 +427,18 @@ void MapScene::normalShoot() {
 
 }
 
+void MapScene::normalShootForce() {
+
+	shoot = new Shoot();
+
+	glm::vec2 posPlayer = force->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x ), (posPlayer.y -5 )));
+	shoot->setTileMap(map);
+	shoots.push_back(shoot);
+}
+
+
 void MapScene::normalBossShoot(bool t) {
 	bshoot = new bossShoot();
 
@@ -401,7 +457,7 @@ void MapScene::powerShoot()
 	shoots[shoots.size() - 1] = NULL;
 	normalShoot();
 	shoot->powerShoot();
-	shoot2->powerShoot();
+	if (force->istaken()) shoot2->powerShoot();
 
 	
 }
@@ -425,7 +481,7 @@ void MapScene::relocateShoots()
 			shoot = shoots[i];
 			if (shoot == NULL) {
 				shoots.erase(shoots.begin() + i);
-				bosss->hitted();
+				//bosss->hitted();
 			}
 		}
 	}
