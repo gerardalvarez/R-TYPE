@@ -116,8 +116,10 @@ bool Player::animationFinished()
 
 void Player::setBoom()
 {
-	sprite->changeAnimation(BOOM);
-	explode = true;
+	if (!godMode) {
+		sprite->changeAnimation(BOOM);
+		explode = true;
+	}
 }
 
 bool Player::getExplode()

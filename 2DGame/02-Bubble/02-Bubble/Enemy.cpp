@@ -265,7 +265,7 @@ void Enemy::setEnemyCollisionBox()
 		setBox(9, 16, 14, 24);
 		break;
 	case 22:
-		setBox(9, 16, 14, 24);
+		setBox(9, 16, 2, 11);
 		break;
 	case 3:
 		if (walking)
