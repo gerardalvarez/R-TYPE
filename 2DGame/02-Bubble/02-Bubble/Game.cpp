@@ -93,8 +93,8 @@ void Game::keyPressed(int key)
 			mapScene.init();
 			Music::instance().musicaMenu();
 			Menuscene.init(0);
-           Music::instance().efectoMenuAtras();
-		   
+			Music::instance().efectoMenuAtras();
+			mapScene.clear();
         }
 		if (key == 49) {		//tecla 1
 			mapScene.skip(1);
@@ -121,7 +121,7 @@ void Game::keyPressed(int key)
 				}
 				charging = true;
 			}
-			timer += 1;
+			timer += 2;
 		}
 		break;
 

@@ -262,4 +262,3 @@ int TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size) co
 
 
 
-

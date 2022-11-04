@@ -42,7 +42,7 @@ void bossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram,
 
 void bossShoot::update(int deltaTime)
 {
-	sprite->setCharge(sprite->animation() == CHARGING);
+	//sprite->setCharge(sprite->animation() == CHARGING);
 	sprite->update(deltaTime);
 	calculateCollisions();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posbossShoot.x), float(tileMapDispl.y + posbossShoot.y)));

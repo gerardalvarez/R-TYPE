@@ -21,15 +21,23 @@ public:
 	void setPosition(const glm::vec2& pos);
 	void charge();
 	void powerShoot();
+	void enemyShoot();
 	void setPlayerPos(glm::vec2& pos);
+	void setEnemyPos(glm::vec2& pos);
+	void calculateXDirecection();
+	void calculateYDirecection();
 
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posShoot;
 	glm::vec2 posPlayer;
+	glm::vec2 posEnemy;
+	glm::vec2 posObjective;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+	int xDirection;
+	double yDirection;
 };
 
 

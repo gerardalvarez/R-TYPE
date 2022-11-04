@@ -9,7 +9,7 @@
 
 enum ShootAnims
 {
-	NORMAL, POWER, CHARGING
+	NORMAL, POWER, CHARGING, ENEMY
 };
 
 
@@ -18,9 +18,9 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 {
 	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(3);
+	sprite->setNumberAnimations(4);
 
-	sprite->setAnimationSpeed(NORMAL, 8);
+	sprite->setAnimationSpeed(NORMAL, 2);
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 1 / 269.f, 25 * 3 / 269.f));
 
@@ -36,6 +36,9 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 	sprite->addKeyframe(CHARGING, glm::vec2(33 * 5 / 269.f, 25 * 3 / 269.f));
 	sprite->addKeyframe(CHARGING, glm::vec2(33 * 0 / 269.f, 25 * 4 / 269.f));
 
+	sprite->setAnimationSpeed(ENEMY, 2);
+	sprite->addKeyframe(ENEMY, glm::vec2(33 * 4 / 269.f, 25 * 4 / 269.f));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(pos.x), float(pos.y)));
@@ -44,7 +47,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 
 void Shoot::update(int deltaTime)
 {
-	sprite->setCharge(sprite->animation() == CHARGING);
+	sprite->setLoopAnimations(sprite->animation() == CHARGING);
 	sprite->update(deltaTime);
 	calculateCollisions();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posShoot.x), float(tileMapDispl.y + posShoot.y)));
@@ -58,21 +61,17 @@ void Shoot::render()
 
 void Shoot::calculateCollisions()
 {
-	if (sprite->animation() != CHARGING){
-		posShoot.x += 6;
+	if (sprite->animation() == ENEMY) {
+		posShoot.x += xDirection;
+		posShoot.y += yDirection;
+	}
+	else if (sprite->animation() != CHARGING){
+		posShoot.x += 4;
 	}
 	else {
 		posShoot.x = posPlayer.x + 22;
 		posShoot.y = posPlayer.y + 5;
 	}
-	/*switch (map->collisionMoveRight(posShoot, glm::ivec2(23, 14), glm::ivec2(28, 15)))
-	{
-	case 0:
-		break;
-	default:
-		sprite->changeAnimation(POWER);
-		break;
-	}*/
 }
 
 void Shoot::charge()
@@ -87,9 +86,47 @@ void Shoot::powerShoot()
 	Music::instance().disparo2();
 }
 
+void Shoot::enemyShoot()
+{
+	sprite->changeAnimation(ENEMY);
+	posObjective.x = posPlayer.x + 5;
+	posObjective.y = posPlayer.y;
+	calculateXDirecection();
+	calculateYDirecection();
+	
+}
+
 void Shoot::setPlayerPos(glm::vec2& pos)
 {
 	posPlayer = pos;
+}
+
+void Shoot::setEnemyPos(glm::vec2& pos)
+{
+	posEnemy = pos;
+}
+
+void Shoot::calculateXDirecection()
+{
+	if (posObjective.x < posShoot.x) {
+		xDirection = -1;
+	}
+	else if (posObjective.x > posShoot.x) {
+		xDirection = 1;
+	}
+	else {
+		xDirection = 0;
+	}
+}
+
+void Shoot::calculateYDirecection()
+{
+	double x1 = posEnemy.x;
+	double x2 = posObjective.x;
+	double y1 = posEnemy.y;
+	double y2 = posObjective.y;
+
+	yDirection = -((y2 - y1) / (x2 - x1));
 }
 
 void Shoot::setPosition(const glm::vec2& pos)
