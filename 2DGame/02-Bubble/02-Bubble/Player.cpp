@@ -6,6 +6,7 @@
 #include "Game.h"
 #include<windows.h>
 #include "Music.h"
+#include <list>
 
 
 
@@ -74,7 +75,7 @@ void Player::update(int deltaTime)
 			
 		}
 		else {
-			calculateCollisions();
+			calculateMapCollisions();
 			if (cameraright <= 3070) {
 				posPlayer.x += 0.4;
 			}
@@ -100,9 +101,23 @@ void Player::revive()
 
 }
 
+void Player::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = posPlayer.x + xmin;
+	xMax = posPlayer.x + xmax;
+	yMin = posPlayer.y + ymin;
+	yMax = posPlayer.y + yMax;
+}
+
+
 bool Player::animationFinished()
 {
 	return sprite->lastAnimation();
+}
+
+void Player::setBoom()
+{
+	sprite->changeAnimation(BOOM);
 }
 
 void Player::render()
@@ -110,12 +125,13 @@ void Player::render()
 	sprite->render();
 }
 
-void Player::calculateCollisions() 
+void Player::calculateMapCollisions() 
 {
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))					//MOVING RIGHT UP
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
+		setCollisionBox(5, 27, 11, 21);
 		rightCollisions();
 		upCollisions();
 	}
@@ -123,6 +139,7 @@ void Player::calculateCollisions()
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
+		setCollisionBox(5, 26, 9, 19);
 		rightCollisions();
 		downCollisions();
 	}
@@ -130,6 +147,7 @@ void Player::calculateCollisions()
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
+		setCollisionBox(5, 27, 11, 21);
 		leftCollisions();
 		upCollisions();
 	
@@ -138,6 +156,7 @@ void Player::calculateCollisions()
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
+		setCollisionBox(5, 26, 9, 19);
 		leftCollisions();
 		downCollisions();
 	}
@@ -145,10 +164,12 @@ void Player::calculateCollisions()
 	{
 		if (sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
+		setCollisionBox(5, 28, 12, 21);
 		leftCollisions();
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))			//MOVING RIGHT
 	{
+		setCollisionBox(5, 28, 37, 46);
 		if (sprite->animation() != STAND)
 			sprite->changeAnimation(STAND);
 		rightCollisions();
@@ -157,16 +178,19 @@ void Player::calculateCollisions()
 	{
 		if (sprite->animation() != MOVE_UP)
 			sprite->changeAnimation(MOVE_UP);
+		setCollisionBox(5, 27, 11, 21);
 		upCollisions();
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))				//MOVING DOWN
 	{
 		if (sprite->animation() != MOVE_DOWN)
 			sprite->changeAnimation(MOVE_DOWN);
+		setCollisionBox(5, 26, 9, 19);
 		downCollisions();
 	}
 	else
 	{
+		setCollisionBox(5, 28, 37, 46);
 		if (sprite->animation() == MOVE_UP)
 			sprite->changeAnimation(REVERSE_UP);
 		else if (sprite->animation() == MOVE_DOWN)

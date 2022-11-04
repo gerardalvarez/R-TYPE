@@ -203,6 +203,7 @@ void MapScene::update(int deltaTime)
 			force->setPosition(glm::vec2(left-20, INIT_PLAYER_Y_TILES * map->getTileSize() + 30));
 			Music::instance().force();
 		}
+
 		player->update(deltaTime);
 	
 		if (force->inScreen()) {
@@ -731,8 +732,13 @@ void MapScene::updateEnemies(int deltaTime)
 			enemy = enemies[i];
 			if (enemy != NULL) {
 				enemy->setRight(right);
+				enemy->setPlayerCollisionBox(player->xMin, player->xMax, player->yMin, player->yMax);
 				enemy->setPlayerPosition(player->getPos());
+				
 				enemy->update(deltaTime);
+
+				if (enemy->calculatePlayerCollisions())
+					player->setBoom();
 
 				if (enemy->getPos().x < (left - 20)) {
 					enemies[i] = NULL;

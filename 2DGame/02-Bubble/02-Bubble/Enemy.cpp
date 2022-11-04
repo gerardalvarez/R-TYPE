@@ -88,8 +88,10 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if ((right-7) > posEnemy.x)
-		//move();
+	/*if ((right-7) > posEnemy.x)
+		move();*/
+	calculatePlayerCollisions();
+	setEnemyCollisionBox();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
@@ -237,4 +239,52 @@ glm::vec2 Enemy::getPos()
 void Enemy::setRight(int r)
 {
 	right = r;
+}
+
+bool Enemy::calculatePlayerCollisions()
+{
+	return ((xMin < xMaxE) && (xMinE < xMax) 
+		&& (yMin < yMaxE) && (yMinE < yMax));
+}
+
+void Enemy::setPlayerCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = xmin;
+	xMax = xmax;
+	yMin = ymin;
+	yMax = ymax;
+}
+
+void Enemy::setEnemyCollisionBox()
+{
+	switch (type) {
+	case 1:
+		setBox(9, 27, 10, 24);
+		break;
+	case 21:
+		setBox(12, 23, 19, 33);
+		break;
+	case 22:
+		setBox(12, 23, 19, 33);
+		break;
+	case 3:
+		if (walking)
+			setBox(6, 28, 9, 32);
+		else
+			setBox(8, 26, 3, 19);
+		break;
+	case 4:
+		setBox(7, 27, 9, 33);
+		break;
+	default:
+		break;
+	}
+}
+
+void Enemy::setBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMinE = posEnemy.x + xmin;
+	xMaxE = posEnemy.x + xmax;
+	yMinE = posEnemy.y + ymin;
+	yMaxE = posEnemy.y + yMax;
 }

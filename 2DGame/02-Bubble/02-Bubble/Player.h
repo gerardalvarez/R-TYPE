@@ -22,7 +22,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setGodMode(bool godModeActive);
-	void calculateCollisions();
+	void calculateMapCollisions();
 	void updatePositionX(int x);
 	void updatePositionY(int y);
 	void sendcamera(float left,float right);
@@ -34,12 +34,11 @@ public:
 
 	int getlives();
 	void revive();
-
+	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 	bool animationFinished();
-
-
+	void setBoom();
 	glm::vec2 getPos();
-	
+	int xMin, xMax, yMin, yMax;
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -53,6 +52,7 @@ private:
 	float cameraleft;
 	float cameraright;
 	int lives;
+	
 };
 
 
