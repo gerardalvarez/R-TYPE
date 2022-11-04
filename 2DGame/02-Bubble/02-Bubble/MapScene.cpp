@@ -140,6 +140,7 @@ void MapScene::initlevel(int level)
 	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
 	bosss->setTileMap(map);
 
+	//BACKGROUND QUAD CREATION
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
 	glm::vec2 texCoords[2] = { glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f) };					//COORDENADES DE LA TEXTURA
 	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(3072.f / 3072.f, 1.f);
@@ -152,16 +153,19 @@ void MapScene::initlevel(int level)
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 
+	//GAMEOVER BACKGORUNDS
 	spritesheet.loadFromFile("images/312.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	background = Sprite::createSprite(glm::ivec2(750, 192), glm::vec2(1.f, 1.f), &spritesheet, &texProgram);
 	background->setNumberAnimations(3);
-	background->setAnimationSpeed(F, 32);
-	background->addKeyframe(F, glm::vec2(478*0 / 1436.f, 304 / 304.f));
 
-	background->setAnimationSpeed(T, 32);
-	background->addKeyframe(T, glm::vec2(478 *1 / 1436.f, 304 / 304.f));
-	background->setAnimationSpeed(G, 32);
-	background->addKeyframe(G, glm::vec2(478 *2 / 1436.f, 304 / 304.f));
+		background->setAnimationSpeed(F, 32);
+		background->addKeyframe(F, glm::vec2(478*0 / 1436.f, 304 / 304.f));
+
+		background->setAnimationSpeed(T, 32);
+		background->addKeyframe(T, glm::vec2(478 *1 / 1436.f, 304 / 304.f));
+
+		background->setAnimationSpeed(G, 32);
+		background->addKeyframe(G, glm::vec2(478 *2 / 1436.f, 304 / 304.f));
 
 	//variables
 	gameover = false;
@@ -173,33 +177,11 @@ void MapScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
+	//PLAYER IS DEAD
 	if (player->getIsDead()) {
 		
 		if ((player->getlives() <= 1 )) {
-
-			gameover = true;
-			++counter;
-			background->setPosition(glm::vec2(left, 0));
-			
-			if (counter < 150) {
-				if (counter == 5) {
-					Music::instance().stop();
-					Music::instance().ultimaex();
-				}
-				background->changeAnimation(F);
-			}
-			else if (counter < 250) {
-				background->changeAnimation(T);
-				if (counter == 151) Music::instance().gameover();
-			}
-			else if (counter < 350) background->changeAnimation(G);
-			else {
-				
-				Music::instance().stop();
-				Music::instance().musicaGame();
-				this->init();
-			}
-
+			doGameOver();
 		}
 		else {
 			if (player->animationFinished()) {
@@ -208,15 +190,13 @@ void MapScene::update(int deltaTime)
 				
 			}
 		}
-		
 	}
 	
-
+	//PLAYER IS ALIVE
 	player->sendcamera(left, right);
   
 	if (player != NULL && !gameover) {
-		if (object != NULL && (player->getPos().y - 10 < object->getPos().y && player->getPos().y + 20 > object->getPos().y)
-			&& (player->getPos().x  < object->getPos().x && player->getPos().x + 30 > object->getPos().x)) 
+		if (playerReachedForce()) 
 		{
 			force->setinscreen(true);
 			object = NULL;
@@ -225,104 +205,27 @@ void MapScene::update(int deltaTime)
 		}
 		player->update(deltaTime);
 	
-
 		if (force->inScreen()) {
 			doForce();
 		}
 		force->update(deltaTime);
 
-		if (!enemies.empty()) {
-		  for (int i = 0; i < enemies.size(); i++) {
-			enemy = enemies[i];
-			if (enemy != NULL) {
-			  enemy->setRight(right);
-			  enemy->setPlayerPosition(player->getPos());
-			  enemy->update(deltaTime);
-
-			  if (enemy->getPos().x < (left - 20)) {
-				  enemies[i] = NULL;
-			  }
-			}
-		  }
-		}
-
-		relocateEnemies();
-
+		updateEnemies(deltaTime);
 		bosss->update(deltaTime);
+		
 		if (object != NULL) object->update(deltaTime);
 	}
 
-	//ia boss
-	if (bosss->getlife() <= 0 ) {
-		++counter;
-		gameover = true;
-		for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
-		if (counter == 60) {
-			Music::instance().stop();
-			Music::instance().grito();
-		}
-		///si se quiere alguna animacion
-		if (counter == 170) {
-			Music::instance().stop();
-			Music::instance().ultimaex();
-		}
-		if (counter == 310) {
-			Game::instance().state.goCREDITS();
-			Music::instance().win();
-		}
-
-	}
-	else if (!right <= 3070 && !gameover) {
-		if (int(currentTime) % 200 == 10) bosss->power = true;
-		if (int(currentTime) % 30 == 10) bosss->normal = true;
-		if (right >= 3070) {
-			if (bosss->ispower()) {
-				powerBossShoot();
-				bosss->power = false;
-			}
-			if (bosss->isnormal()) {
-				normalBossShoot(false);
-				bosss->normal = false;
-			}
-
-		}
-	}
-
-	if (!shoots.empty()) {
-		for (int i = 0; i < shoots.size(); i++) {
-			shoot = shoots[i];
-			if (shoot != NULL) {
-				shoot->setPlayerPos(player->getPos());
-				shoot->update(deltaTime);
-
-				if (shoot->getPos() > right || shoot->getPos() < (left-20)) {
-					shoots[i] = NULL;
-				}
-			}
-		}
-	}
-
-	if (!bshoots.empty()) {
-		for (int i = 0; i < bshoots.size(); i++) {
-			bshoot = bshoots[i];
-			if (bshoot != NULL) {
-				bshoot->setPlayerPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
-				bshoot->setNavePos(player->getPos());
-				bshoot->update(deltaTime);
-				if (bshoot->getPosx() < left ){
-					bshoots[i] = NULL;
-				}
-			}
-		}
-	}
-	relocateShoots();
+	//AI BOSS
+	bossAI();
+	updateShoots(deltaTime);
+	updateBossShoots(deltaTime);
 
 	if (right <= 3036 && right >= 3030) {
 		Music::instance().stop();
 		Music::instance().bm();
 	}
 
-	//if (right == 3060) Music::instance().grito();
 	if (!player->getIsDead() && right <= 3070) {
 		
 		left += 0.4;
@@ -346,52 +249,24 @@ void MapScene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
 
-	map->render();
-	if (!shoots.empty()) {
-		for (int i = 0; i < shoots.size(); i++) {
-			shoot = shoots[i];
-			if (shoot != NULL) {
-				shoot->render();
-			}
-		}
-	}
-
-
-	if (!enemies.empty()) {
-		for (int i = 0; i < enemies.size(); i++) {
-			enemy = enemies[i];
-			if (enemy != NULL) {
-				enemy->render();
-				glm::vec2 posEnemy = enemy->getPos();
-				if (!shooting && posEnemy.x < (right - 30)) {
-					shooting = true;
-					enemyShoot();
-				}
-			}
-		}
-	}
-
+	//map->render();
+	
+	renderShoots();
+	renderBossShoots();
+	renderEnemies();
+	
 	bosss->render();
-
-	if (!bshoots.empty()) {
-		for (int i = 0; i < bshoots.size(); i++) {
-			bshoot = bshoots[i];
-			if (bshoot != NULL) {
-				bshoot->render();
-			}
-		}
-	}
 
 	if (force->inScreen()) force->render();
 	
 	if (object != NULL) object->render();
+	
 	player->render();
+	
 	if (gameover) {
 		background->render();
 	}
-
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
-	
 }
 
 void MapScene::normalShoot() {
@@ -409,7 +284,7 @@ void MapScene::normalShoot() {
 
 		shoot2 = new Shoot();
 		shoot2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y -1 )));
+		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y - 1)));
 		shoot2->setTileMap(map);
 		shoots.push_back(shoot2);
 	}
@@ -457,7 +332,6 @@ void MapScene::powerShoot()
 	shoot->powerShoot();
 	if (force->istaken()) shoot2->powerShoot();
 
-	
 }
 
 void MapScene::powerBossShoot()
@@ -479,7 +353,7 @@ void MapScene::relocateShoots()
 			shoot = shoots[i];
 			if (shoot == NULL) {
 				shoots.erase(shoots.begin() + i);
-				//bosss->hitted();
+				bosss->hitted();
 			}
 		}
 	}
@@ -516,6 +390,48 @@ void MapScene::createEnemy(int type, glm::vec2 pos)
 	enemy->setTileMap(map);
 	enemy->setType(type);
 	enemies.push_back(enemy);
+}
+
+void MapScene::renderShoots()
+{
+	if (!shoots.empty()) {
+		for (int i = 0; i < shoots.size(); i++) {
+			shoot = shoots[i];
+			if (shoot != NULL) {
+				shoot->render();
+			}
+		}
+	}
+}
+
+void MapScene::renderEnemies()
+{
+	if (!enemies.empty()) {
+		for (int i = 0; i < enemies.size(); i++) {
+			enemy = enemies[i];
+			if (enemy != NULL) {
+				enemy->render();
+				glm::vec2 posEnemy = enemy->getPos();
+				if (!shooting && posEnemy.x < (right - 30)) {
+					shooting = true;
+					enemyShoot();
+				}
+			}
+		}
+	}
+
+}
+
+void MapScene::renderBossShoots()
+{
+	if (!bshoots.empty()) {
+		for (int i = 0; i < bshoots.size(); i++) {
+			bshoot = bshoots[i];
+			if (bshoot != NULL) {
+				bshoot->render();
+			}
+		}
+	}
 }
 
 void MapScene::enemyShoot()
@@ -770,6 +686,134 @@ void MapScene::doForce()
 			break;
 		}
 		if (rand() % 30 + 1 == 2) normalShootForce();
+	}
+}
+
+void MapScene::doGameOver()
+{
+
+	gameover = true;
+	++counter;
+	background->setPosition(glm::vec2(left, 0));
+
+	if (counter < 150) {
+		if (counter == 5) {
+			Music::instance().stop();
+			Music::instance().ultimaex();
+		}
+		background->changeAnimation(F);
+	}
+	else if (counter < 250) {
+		background->changeAnimation(T);
+		if (counter == 151) Music::instance().gameover();
+	}
+	else if (counter < 350) background->changeAnimation(G);
+	else {
+
+		Music::instance().stop();
+		Music::instance().musicaGame();
+		this->init();
+	}
+}
+
+bool MapScene::playerReachedForce()
+{
+	return (object != NULL && (player->getPos().y - 10 < object->getPos().y 
+		&& player->getPos().y + 20 > object->getPos().y)
+		&& (player->getPos().x  < object->getPos().x
+		&& player->getPos().x + 30 > object->getPos().x));
+}
+
+void MapScene::updateEnemies(int deltaTime)
+{
+	if (!enemies.empty()) {
+		for (int i = 0; i < enemies.size(); i++) {
+			enemy = enemies[i];
+			if (enemy != NULL) {
+				enemy->setRight(right);
+				enemy->setPlayerPosition(player->getPos());
+				enemy->update(deltaTime);
+
+				if (enemy->getPos().x < (left - 20)) {
+					enemies[i] = NULL;
+				}
+			}
+		}
+	}
+
+	relocateEnemies();
+}
+
+void MapScene::updateShoots(int deltaTime)
+{
+	if (!shoots.empty()) {
+		for (int i = 0; i < shoots.size(); i++) {
+			shoot = shoots[i];
+			if (shoot != NULL) {
+				shoot->setPlayerPos(player->getPos());
+				shoot->update(deltaTime);
+
+				if (shoot->getPos() > right || shoot->getPos() < (left - 20)) {
+					shoots[i] = NULL;
+				}
+			}
+		}
+	}
+	relocateShoots();
+}
+
+void MapScene::updateBossShoots(int deltaTime)
+{
+	if (!bshoots.empty()) {
+		for (int i = 0; i < bshoots.size(); i++) {
+			bshoot = bshoots[i];
+			if (bshoot != NULL) {
+				bshoot->setPlayerPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
+				bshoot->setNavePos(player->getPos());
+				bshoot->update(deltaTime);
+				if (bshoot->getPosx() < left) {
+					bshoots[i] = NULL;
+				}
+			}
+		}
+	}
+}
+
+void MapScene::bossAI()
+{
+	if (bosss->getlife() <= 0) {
+		++counter;
+		gameover = true;
+		for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
+		if (counter == 60) {
+			Music::instance().stop();
+			Music::instance().grito();
+		}
+		///si se quiere alguna animacion
+		if (counter == 170) {
+			Music::instance().stop();
+			Music::instance().ultimaex();
+		}
+		if (counter == 310) {
+			Game::instance().state.goCREDITS();
+			Music::instance().win();
+		}
+
+	}
+	else if (!right <= 3070 && !gameover) {
+		if (int(currentTime) % 200 == 10) bosss->power = true;
+		if (int(currentTime) % 30 == 10) bosss->normal = true;
+		if (right >= 3070) {
+			if (bosss->ispower()) {
+				powerBossShoot();
+				bosss->power = false;
+			}
+			if (bosss->isnormal()) {
+				normalBossShoot(false);
+				bosss->normal = false;
+			}
+
+		}
 	}
 }
 

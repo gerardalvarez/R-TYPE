@@ -25,9 +25,6 @@ void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(11 / 269.f, 12 / 505.f));
 
-
-
-
 	taken = false;
 	inscreen = false;
 	sprite->changeAnimation(NORMAL);

@@ -41,15 +41,25 @@ public:
 	void enemyShoot();
 	void powerBossShoot();
 	void charge();
-	void relocateShoots();
-	void relocateEnemies();
-	void createEnemy(int type, glm::vec2 pos);
 	void clear();
-	void initEnemiesOnMap();
-	void doForce();
+	
 
 private:
 	//void initShaders();
+	void doForce();
+	void doGameOver();
+	bool playerReachedForce();
+	void updateEnemies(int deltaTime);
+	void updateShoots(int deltaTime);
+	void updateBossShoots(int deltaTime);
+	void bossAI();
+	void relocateShoots();
+	void relocateEnemies();
+	void initEnemiesOnMap();
+	void createEnemy(int type, glm::vec2 pos);
+	void renderShoots();
+	void renderEnemies();
+	void renderBossShoots();
 
 private:
 	TileMap* map;
