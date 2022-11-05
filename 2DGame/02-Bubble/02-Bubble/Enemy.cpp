@@ -86,7 +86,6 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	walking = false;
 	isExploded = false;
 
-	life = vida;
 	Id = id;
 	sprite->setLoopAnimations(true);
  	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
@@ -239,11 +238,6 @@ void Enemy::move()
 	default:
 		break;
 	}
-}
-
-void Enemy::recieveDamage()
-{
-	life--;
 }
 
 glm::vec2 Enemy::getPos()

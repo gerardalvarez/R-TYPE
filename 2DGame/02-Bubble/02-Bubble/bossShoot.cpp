@@ -9,7 +9,7 @@
 
 enum BossShootAnims
 {
-	SMALL, POWER, CHARGING
+	NORMAL, POWER, CHARGING
 };
 
 
@@ -19,8 +19,8 @@ void BossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram,
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(2);
 
-	sprite->setAnimationSpeed(SMALL, 8);
-	sprite->addKeyframe(SMALL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
+	sprite->setAnimationSpeed(NORMAL, 8);
+	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
 
 	sprite->setAnimationSpeed(POWER, 8);
 	sprite->addKeyframe(POWER, glm::vec2(33 * 6 / 269.f, 25 * 3 / 269.f));
@@ -56,7 +56,7 @@ void BossShoot::calculateCollisions()
 			posbossShoot.y -= 1;
 		
 	}
-	if (sprite->animation() == SMALL) {
+	if (sprite->animation() == NORMAL) {
 		if (posbossShoot.x < lppos.x) {
 			if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
 			else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;

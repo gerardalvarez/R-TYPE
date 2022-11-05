@@ -9,7 +9,6 @@
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Shoot.cpp" />
@@ -33,7 +32,6 @@
     <ClInclude Include="MapScene.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Shoot.h" />

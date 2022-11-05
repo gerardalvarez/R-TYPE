@@ -26,7 +26,6 @@ public:
 	void setPlayerPosition(const glm::vec2& pos);
 	void setType(int t);
 	void move();
-	void recieveDamage();
 	glm::vec2 getPos();
 	void setRight(int r);
 	bool calculatePlayerCollisions();
@@ -56,7 +55,7 @@ private:
 	bool landed, walking;
 	int type;
 	bool direction;
-	int life, right;
+	int right;
 	int xMin, xMax, yMin, yMax;
 	int xMinE, xMaxE, yMinE, yMaxE;
 	int Id;

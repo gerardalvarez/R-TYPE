@@ -15,7 +15,6 @@ void Game::init()
 	timer = 0;
 	charging = false;
 
-
 }
 
 bool Game::update(int deltaTime)

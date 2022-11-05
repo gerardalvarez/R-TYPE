@@ -3,7 +3,7 @@
 
 enum bossAnims
 {
-	SMALL, HITTED
+	NORMAL, HITTED
 };
 
 void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
@@ -16,8 +16,8 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->setAnimationSpeed(HITTED, 8);
 	sprite->addKeyframe(HITTED, glm::vec2(468 / 908.f, 231 / 231.f));
-	sprite->setAnimationSpeed(SMALL, 8);
-	sprite->addKeyframe(SMALL, glm::vec2(12 / 908.f, 231 / 231.f));
+	sprite->setAnimationSpeed(NORMAL, 8);
+	sprite->addKeyframe(NORMAL, glm::vec2(12 / 908.f, 231 / 231.f));
 
 	bossHealth = bossMaxHealth = 30;
 	
@@ -31,7 +31,7 @@ void Boss::update(int deltaTime)
 {
 	if (sprite != NULL) {
 		sprite->update(deltaTime);
-		sprite->changeAnimation(SMALL);
+		sprite->changeAnimation(NORMAL);
 	}
 }
 

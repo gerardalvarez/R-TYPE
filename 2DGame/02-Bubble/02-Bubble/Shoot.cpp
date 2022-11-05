@@ -9,7 +9,7 @@
 
 enum ShootAnims
 {
-	SMALL, POWER, CHARGING, ENEMY, GONE
+	NORMAL, POWER, CHARGING, ENEMY, GONE
 };
 
 
@@ -20,9 +20,9 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(5);
 
-	sprite->setAnimationSpeed(SMALL, 2);
-	sprite->addKeyframe(SMALL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
-	sprite->addKeyframe(SMALL, glm::vec2(33 * 1 / 269.f, 25 * 3 / 269.f));
+	sprite->setAnimationSpeed(NORMAL, 2);
+	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(33 * 1 / 269.f, 25 * 3 / 269.f));
 
 	sprite->setAnimationSpeed(POWER, 8);
 	sprite->addKeyframe(POWER, glm::vec2(33 * 1 / 269.f, 25 * 4 / 269.f));

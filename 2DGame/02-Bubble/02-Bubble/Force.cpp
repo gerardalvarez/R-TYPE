@@ -11,7 +11,7 @@
 
 enum ForceAnims
 {
-	SMALL,VERTICALSHOOTS,DOUBLESHOOT
+	NORMAL,VERTICALSHOOTS,DOUBLESHOOT
 };
 
 
@@ -22,20 +22,20 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite = Sprite::createSprite(glm::ivec2(23, 20), glm::vec2(33 / 269.f, 25 / 505.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
-	sprite->setAnimationSpeed(SMALL, 8);
-	sprite->addKeyframe(SMALL, glm::vec2(10 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(10 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(43 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(43 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(76 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(76 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(109 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(SMALL, glm::vec2(109 / 269.f, 43 / 505.f));
+	sprite->setAnimationSpeed(NORMAL, 8);
+	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(43 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(43 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
+	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
 	sprite->setLoopAnimations(true),
 
 	taken = false;
 	inscreen = false;
-	sprite->changeAnimation(SMALL);
+	sprite->changeAnimation(NORMAL);
 	tileMapDispl = tileMapPos;
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posForce.x), float(tileMapDispl.y + posForce.y)));
