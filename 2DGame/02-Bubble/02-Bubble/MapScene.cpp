@@ -418,6 +418,8 @@ void MapScene::renderEnemies()
 			if (enemy != NULL) {
 				enemy->render();
 				glm::vec2 posEnemy = enemy->getPos();
+				
+				//RECALCULAR 
 				if (!shooting && posEnemy.x < (right - 30)) {
 					shooting = true;
 					enemyShoot();
@@ -452,21 +454,23 @@ void MapScene::checkVisibles()
 
 void MapScene::calculateShootCollisions()
 {
-	//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
-	//shoot->calculatePlayerCollisions();
+	if (!shoots.empty()){
+		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
+		//shoot->calculatePlayerCollisions();
 
-	//CALCULATE IF PLAYER SHOOTS HIT ENEMIES
-	for (int i = 0; i < visibleEnemies.size(); i++) {
-		enemy = visibleEnemies[i];
-		int xmin = enemy->getxMinE();
-		int xmax = enemy->getxMaxE();
-		int ymin = enemy->getyMinE();
-		int ymax = enemy->getyMaxE();
-		if (shoot->calculateEnemyCollisions(xmin, xmax, ymin, ymax)) {
-			//enemy explode
+		//CALCULATE IF PLAYER SHOOTS HIT ENEMIES
+		for (int i = 0; i < visibleEnemies.size(); i++) {
+			enemy = visibleEnemies[i];
+			int xmin = enemy->getxMinE();
+			int xmax = enemy->getxMaxE();
+			int ymin = enemy->getyMinE();
+			int ymax = enemy->getyMaxE();
+			if (shoot->calculateEnemyCollisions(xmin, xmax, ymin, ymax)) {
+				enemy->explode();
+				shoot->disapear();
+			}
 		}
 	}
-	
 }
 
 bool MapScene::isVisible()
@@ -481,6 +485,17 @@ bool MapScene::isVisible()
 	return false;
 }
 
+void MapScene::eliminateFromVisible(int id)
+{
+	for (int i = 0; i < visibleEnemies.size(); i++) {
+		Enemy* e = visibleEnemies[i];
+		if (id == e->getId()) {
+			visibleEnemies[i] = NULL;
+		}
+	}
+	relocateVisibleEnemies();
+}
+
 void MapScene::enemyShoot()
 {
 	shooting = true;
@@ -492,7 +507,7 @@ void MapScene::enemyShoot()
 	shoot->setPlayerPos(player->getPos());
 	shoot->setEnemyPos(posEnemy);
 	shoot->enemyShoot();
-	shoots.push_back(shoot);
+	//shoots.push_back(shoot);
 }
 
 
@@ -737,7 +752,6 @@ void MapScene::doForce()
 
 void MapScene::doGameOver()
 {
-
 	gameover = true;
 	++counter;
 	background->setPosition(glm::vec2(left, 0));
@@ -777,22 +791,30 @@ void MapScene::updateEnemies(int deltaTime)
 			enemy = enemies[i];
 			if (enemy != NULL) {
 				if ((right - 5) >= enemy->getPos().x) {
-					if (!isVisible()) {
-						visibleEnemies.push_back(enemy);
-					}	
-					enemy->setRight(right);
-					enemy->setPlayerCollisionBox(player->xMin, player->xMax, player->yMin, player->yMax);
-					enemy->setPlayerPosition(player->getPos());
+					if (!enemy->getisDead()) {
+						if (!isVisible()) {
+							visibleEnemies.push_back(enemy);
+						}
+						enemy->setRight(right);
+						enemy->setPlayerCollisionBox(player->xMin, player->xMax, player->yMin, player->yMax);
+						enemy->setPlayerPosition(player->getPos());
 
-					enemy->update(deltaTime);
+						enemy->update(deltaTime);
 
-					if (enemy->getPos().x < (right - 10)) {
-						if (enemy->calculatePlayerCollisions() && !player->getExplode()) {
-							player->setBoom();
+						if (enemy->getPos().x < (right - 10)) {
+							if (enemy->calculatePlayerCollisions() && !player->getExplode()) {
+								player->setBoom();
+							}
+						}
+
+						enemies[i] = enemy;
+
+						if (enemy->getPos().x < (left - 20)) {
+							enemies[i] = NULL;
 						}
 					}
-
-					if (enemy->getPos().x < (left - 20)) {
+					else {
+						eliminateFromVisible(enemy->getId());
 						enemies[i] = NULL;
 					}
 				}
@@ -821,6 +843,10 @@ void MapScene::updateShoots(int deltaTime)
 
 				if (shoot->getPos() > right || shoot->getPos() < (left - 20)) {
 					shoots[i] = NULL;
+				}
+
+				if (shoot->getGone()) {
+					shoot = NULL;
 				}
 			}
 		}

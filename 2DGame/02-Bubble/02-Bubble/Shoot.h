@@ -28,6 +28,8 @@ public:
 	void calculateXDirecection();
 	void calculateYDirecection();
 	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
+	bool getGone();
+	void disapear();
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -41,6 +43,7 @@ private:
 	int xDirection;
 	double yDirection;
 	int xMin, xMax, yMin, yMax;
+	int gone;
 };
 
 

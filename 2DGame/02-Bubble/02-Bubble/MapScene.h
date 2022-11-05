@@ -63,6 +63,7 @@ private:
 	void checkVisibles();
 	void calculateShootCollisions();
 	bool isVisible();
+	void eliminateFromVisible(int id);
 
 private:
 	TileMap* map;

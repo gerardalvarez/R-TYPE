@@ -21,7 +21,7 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 {
 	texProgram = shaderProgram;
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(13);
+	sprite->setNumberAnimations(14);
 
 	sprite->setAnimationSpeed(TYPE_1, 4);
 	sprite->addKeyframe(TYPE_1, glm::vec2(35 * 0 / 483.f, 35 * 0 / 1787.f));
@@ -72,6 +72,11 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	sprite->addKeyframe(TYPE_4, glm::vec2(35 * 1 / 483.f, 35 * 4 / 1787.f));
 	sprite->addKeyframe(TYPE_4, glm::vec2(35 * 2 / 483.f, 35 * 4 / 1787.f));
 
+	sprite->setAnimationSpeed(BOOM, 16);
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 0 / 483.f, 35 * 5 / 1787.f));
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 1 / 483.f, 35 * 5 / 1787.f));
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 2 / 483.f, 35 * 5 / 1787.f));
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 3 / 483.f, 35 * 5 / 1787.f));
 
  	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -79,6 +84,7 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	direction = false;
 	landed = false;
 	walking = false;
+	isExploded = false;
 
 	life = vida;
 	Id = id;
@@ -89,10 +95,18 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	/*if ((right-7) > posEnemy.x)
-		move();*/
-	calculatePlayerCollisions();
-	setEnemyCollisionBox();
+	if (!isExploded) {
+		/*if ((right-7) > posEnemy.x)
+			move();*/
+		calculatePlayerCollisions();
+		setEnemyCollisionBox();
+	}
+	else {
+		if (actionFinished()){
+			isDead = true;
+			isExploded = false;
+		}
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
@@ -313,4 +327,22 @@ int Enemy::getyMaxE()
 int Enemy::getId()
 {
 	return Id;
+}
+
+void Enemy::explode()
+{
+	if (!isExploded) {
+		isExploded = true;
+		sprite->changeAnimation(BOOM);
+	}
+}
+
+bool Enemy::actionFinished()
+{
+	return sprite->lastAnimation();
+}
+
+bool Enemy::getisDead()
+{
+	return isDead;
 }

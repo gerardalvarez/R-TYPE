@@ -38,6 +38,9 @@ public:
 	int getyMinE();
 	int getyMaxE();
 	int getId();
+	void explode();
+	bool actionFinished();
+	bool getisDead();
 
 private:
 	ShaderProgram texProgram;
@@ -57,6 +60,8 @@ private:
 	int xMin, xMax, yMin, yMax;
 	int xMinE, xMaxE, yMinE, yMaxE;
 	int Id;
+	bool isExploded;
+	bool isDead;
 };
 
 

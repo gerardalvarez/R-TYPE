@@ -89,7 +89,6 @@ void Game::keyPressed(int key)
         if (key == 27) {
 			Music::instance().stop();
             state.goMENU();
-			//mapScene.init();
 			Music::instance().musicaMenu();
 			Menuscene.init(0);
 			Music::instance().efectoMenuAtras();
