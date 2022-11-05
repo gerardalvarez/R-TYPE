@@ -109,10 +109,10 @@ void Game::keyPressed(int key)
 		if (key == 53) {		//tecla 5
 			mapScene.skip(5);
 		}
-		if (key == 103) {		//tecla g
+		if (key == 103 || key == 71) {		//tecla g o G
 			mapScene.godMode();
 		}
-		if (key == 122) {		//tecla z
+		if (key == 122 || key == 90) {		//tecla z
 			if (timer >= 2) {
 				if (!charging) {
 					mapScene.charge();
@@ -158,7 +158,7 @@ void Game::keyReleased(int key)
 {
 	switch (state.getState()) {
 	case State::State_enum::GAME:
-		if (key == 122) {		//tecla z
+		if (key == 122 || key == 90) {		//tecla z
 			if (!charging) {
 				mapScene.normalShoot();
 				timer = 0;
