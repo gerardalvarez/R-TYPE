@@ -17,7 +17,7 @@ enum EnemyAnims
 };
 
 //x35 y35
-void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida)
+void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida, int id)
 {
 	texProgram = shaderProgram;
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
@@ -81,6 +81,7 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	walking = false;
 
 	life = vida;
+	Id = id;
 	sprite->setLoopAnimations(true);
  	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
@@ -287,4 +288,29 @@ void Enemy::setBox(int xmin, int xmax, int ymin, int ymax)
 	xMaxE = posEnemy.x + xmax;
 	yMinE = posEnemy.y + ymin;
 	yMaxE = posEnemy.y + ymax;
+}
+
+int Enemy::getxMinE()
+{
+	return xMinE;
+}
+
+int Enemy::getxMaxE()
+{
+	return xMaxE;
+}
+
+int Enemy::getyMinE()
+{
+	return yMinE;
+}
+
+int Enemy::getyMaxE()
+{
+	return yMaxE;
+}
+
+int Enemy::getId()
+{
+	return Id;
 }

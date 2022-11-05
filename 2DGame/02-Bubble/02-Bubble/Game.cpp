@@ -11,7 +11,6 @@ void Game::init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	state.goMENU();
 	Menuscene.init(0);
-	mapScene.init();
 	Music::instance().musicaMenu();
 	timer = 0;
 	charging = false;
@@ -90,7 +89,7 @@ void Game::keyPressed(int key)
         if (key == 27) {
 			Music::instance().stop();
             state.goMENU();
-			mapScene.init();
+			//mapScene.init();
 			Music::instance().musicaMenu();
 			Menuscene.init(0);
 			Music::instance().efectoMenuAtras();

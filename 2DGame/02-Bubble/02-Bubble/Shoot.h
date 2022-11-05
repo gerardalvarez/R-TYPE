@@ -17,6 +17,7 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void calculateCollisions();
+	bool calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax);
 	float getPos();
 	void setPosition(const glm::vec2& pos);
 	void charge();
@@ -26,6 +27,7 @@ public:
 	void setEnemyPos(glm::vec2& pos);
 	void calculateXDirecection();
 	void calculateYDirecection();
+	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -38,6 +40,7 @@ private:
 	TileMap* map;
 	int xDirection;
 	double yDirection;
+	int xMin, xMax, yMin, yMax;
 };
 
 

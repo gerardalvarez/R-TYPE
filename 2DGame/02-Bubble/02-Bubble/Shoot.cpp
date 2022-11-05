@@ -62,6 +62,7 @@ void Shoot::render()
 void Shoot::calculateCollisions()
 {
 	if (sprite->animation() == ENEMY) {
+		//setCollisionBox(x,x,y,y);
 		posShoot.x += xDirection;
 		posShoot.y += yDirection;
 	}
@@ -69,9 +70,16 @@ void Shoot::calculateCollisions()
 		posShoot.x += 4;
 	}
 	else {
+		setCollisionBox(12,18, 14, 17);
 		posShoot.x = posPlayer.x + 22;
 		posShoot.y = posPlayer.y + 5;
 	}
+}
+
+bool Shoot::calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax)
+{
+	return ((xMin < xmax) && (xmin < xMax)
+		&& (yMin < ymax) && (ymin < yMax));
 }
 
 void Shoot::charge()
@@ -127,6 +135,14 @@ void Shoot::calculateYDirecection()
 	double y2 = posObjective.y;
 
 	yDirection = -((y2 - y1) / (x2 - x1));
+}
+
+void Shoot::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = posShoot.x + xmin;
+	xMax = posShoot.x + xmax;
+	yMin = posShoot.y + ymin;
+	yMax = posShoot.y + ymax;
 }
 
 void Shoot::setPosition(const glm::vec2& pos)

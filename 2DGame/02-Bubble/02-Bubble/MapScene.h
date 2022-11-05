@@ -23,7 +23,6 @@ class MapScene : public BaseScene
 
 public:
 	MapScene();
-	MapScene(int lvl);
 	~MapScene();
 
 	void init();
@@ -55,11 +54,15 @@ private:
 	void bossAI();
 	void relocateShoots();
 	void relocateEnemies();
+	void relocateVisibleEnemies();
 	void initEnemiesOnMap();
-	void createEnemy(int type, glm::vec2 pos);
+	void createEnemy(int type, glm::vec2 pos, int id);
 	void renderShoots();
 	void renderEnemies();
 	void renderBossShoots();
+	void checkVisibles();
+	void calculateShootCollisions();
+	bool isVisible();
 
 private:
 	TileMap* map;
@@ -73,6 +76,7 @@ private:
 	vector<Shoot*> shoots;
 
 	vector<Enemy*> enemies;
+	vector<Enemy*> visibleEnemies;
 
 	bossShoot* bshoot;
 	vector<bossShoot*> bshoots;
