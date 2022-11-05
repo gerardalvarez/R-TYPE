@@ -33,10 +33,6 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
 	sprite->setLoopAnimations(true),
 
-	
-
-
-
 	taken = false;
 	inscreen = false;
 	sprite->changeAnimation(NORMAL);
@@ -52,18 +48,12 @@ void Force::update(int deltaTime)
 		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posForce.x), float(tileMapDispl.y + posForce.y)));
 		sprite->update(deltaTime);
 	}
-		
 }
 
 
 bool Force::istaken()
 {
 	return taken;
-}
-
-bool Force::animationFinished()
-{
-	return sprite->lastAnimation();
 }
 
 glm::vec2 Force::getPos()
@@ -76,53 +66,6 @@ void Force::render()
 	sprite->render();
 }
 
-void Force::calculateCollisions()
-{
-	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP))					//MOVING RIGHT UP
-	{
-		rightCollisions();
-		upCollisions();
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))			//MOVING RIGHT DOWN
-	{
-		rightCollisions();
-		downCollisions();
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP))				//MOVING LEFT UP
-	{
-
-		leftCollisions();
-		upCollisions();
-
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_DOWN))			//MOVING LEFT DOWN
-	{
-		
-		leftCollisions();
-		downCollisions();
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))				//MOVING LEFT
-	{
-		leftCollisions();
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))			//MOVING RIGHT
-	{
-
-		rightCollisions();
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_UP))				//MOVING UP
-	{
-		upCollisions();
-	}
-	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))				//MOVING DOWN
-	{
-
-		downCollisions();
-	}
-
-
-}
-
 void Force::setTaken(bool b)
 {
 	taken = b;
@@ -133,54 +76,13 @@ void Force::setinscreen(bool b)
 	inscreen = b;
 }
 
-
-
-void Force::setTileMap(TileMap* tileMap)
-{
-	map = tileMap;
-}
-
 void Force::setPosition(const glm::vec2& pos)
 {
 	posForce = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posForce.x), float(tileMapDispl.y + posForce.y)));
 }
 
-
-void Force::sendcamera(float left, float right)
-{
-	cameraright = right;
-	cameraleft = left;
-}
-
 bool Force::inScreen()
 {
 	return inscreen;
 }
-
-void Force::rightCollisions()
-{
-	posForce.x += 2;
-	if (cameraright - 35 <= posForce.x) {
-		posForce.x = cameraright - 35;
-	}
-}
-
-void Force::leftCollisions()
-{
-	posForce.x -= 2;
-}
-
-void Force::upCollisions()
-{
-	posForce.y -= 2;
-}
-
-void Force::downCollisions()
-{
-	posForce.y += 2;
-}
-
-
-
-

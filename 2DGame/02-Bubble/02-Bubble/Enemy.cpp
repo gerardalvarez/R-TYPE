@@ -17,11 +17,11 @@ enum EnemyAnims
 };
 
 //x35 y35
-void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida)
+void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida, int id)
 {
 	texProgram = shaderProgram;
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(13);
+	sprite->setNumberAnimations(14);
 
 	sprite->setAnimationSpeed(TYPE_1, 4);
 	sprite->addKeyframe(TYPE_1, glm::vec2(35 * 0 / 483.f, 35 * 0 / 1787.f));
@@ -72,6 +72,11 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	sprite->addKeyframe(TYPE_4, glm::vec2(35 * 1 / 483.f, 35 * 4 / 1787.f));
 	sprite->addKeyframe(TYPE_4, glm::vec2(35 * 2 / 483.f, 35 * 4 / 1787.f));
 
+	sprite->setAnimationSpeed(BOOM, 16);
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 0 / 483.f, 35 * 5 / 1787.f));
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 1 / 483.f, 35 * 5 / 1787.f));
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 2 / 483.f, 35 * 5 / 1787.f));
+	sprite->addKeyframe(BOOM, glm::vec2(35 * 3 / 483.f, 35 * 5 / 1787.f));
 
  	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -79,8 +84,10 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	direction = false;
 	landed = false;
 	walking = false;
+	isExploded = false;
 
 	life = vida;
+	Id = id;
 	sprite->setLoopAnimations(true);
  	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
@@ -88,8 +95,18 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (right > posEnemy.x)
-		move();
+	if (!isExploded) {
+		/*if ((right-7) > posEnemy.x)
+			move();*/
+		calculatePlayerCollisions();
+		setEnemyCollisionBox();
+	}
+	else {
+		if (actionFinished()){
+			isDead = true;
+			isExploded = false;
+		}
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
@@ -237,4 +254,95 @@ glm::vec2 Enemy::getPos()
 void Enemy::setRight(int r)
 {
 	right = r;
+}
+
+bool Enemy::calculatePlayerCollisions()
+{
+	return ((xMin < xMaxE) && (xMinE < xMax) 
+		&& (yMin < yMaxE) && (yMinE < yMax));
+}
+
+void Enemy::setPlayerCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = xmin;
+	xMax = xmax;
+	yMin = ymin;
+	yMax = ymax;
+}
+
+void Enemy::setEnemyCollisionBox()
+{
+	switch (type) {
+	case 1:
+		setBox(6, 19, 7, 16);
+		break;
+	case 21:
+		setBox(9, 16, 14, 24);
+		break;
+	case 22:
+		setBox(9, 16, 2, 11);
+		break;
+	case 3:
+		if (walking)
+			setBox(4, 20, 6, 23);
+		else
+			setBox(6, 19, 2, 14);
+		break;
+	case 4:
+		setBox(5, 19, 6, 24);
+		break;
+	default:
+		break;
+	}
+}
+
+void Enemy::setBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMinE = posEnemy.x + xmin;
+	xMaxE = posEnemy.x + xmax;
+	yMinE = posEnemy.y + ymin;
+	yMaxE = posEnemy.y + ymax;
+}
+
+int Enemy::getxMinE()
+{
+	return xMinE;
+}
+
+int Enemy::getxMaxE()
+{
+	return xMaxE;
+}
+
+int Enemy::getyMinE()
+{
+	return yMinE;
+}
+
+int Enemy::getyMaxE()
+{
+	return yMaxE;
+}
+
+int Enemy::getId()
+{
+	return Id;
+}
+
+void Enemy::explode()
+{
+	if (!isExploded) {
+		isExploded = true;
+		sprite->changeAnimation(BOOM);
+	}
+}
+
+bool Enemy::actionFinished()
+{
+	return sprite->lastAnimation();
+}
+
+bool Enemy::getisDead()
+{
+	return isDead;
 }

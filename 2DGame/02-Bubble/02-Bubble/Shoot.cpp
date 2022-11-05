@@ -9,7 +9,7 @@
 
 enum ShootAnims
 {
-	NORMAL, POWER, CHARGING, ENEMY
+	NORMAL, POWER, CHARGING, ENEMY, GONE
 };
 
 
@@ -18,7 +18,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 {
 	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(4);
+	sprite->setNumberAnimations(5);
 
 	sprite->setAnimationSpeed(NORMAL, 2);
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
@@ -39,10 +39,14 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 	sprite->setAnimationSpeed(ENEMY, 2);
 	sprite->addKeyframe(ENEMY, glm::vec2(33 * 4 / 269.f, 25 * 4 / 269.f));
 
+	sprite->setAnimationSpeed(GONE, 2);
+	sprite->addKeyframe(GONE, glm::vec2(33 * 5 / 269.f, 25 * 4 / 269.f));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(pos.x), float(pos.y)));
 
+	gone = false;
 }
 
 void Shoot::update(int deltaTime)
@@ -62,16 +66,27 @@ void Shoot::render()
 void Shoot::calculateCollisions()
 {
 	if (sprite->animation() == ENEMY) {
+		//setCollisionBox(x,x,y,y);
 		posShoot.x += xDirection;
 		posShoot.y += yDirection;
 	}
 	else if (sprite->animation() != CHARGING){
+		setCollisionBox(12, 18, 14, 17);
 		posShoot.x += 4;
 	}
 	else {
 		posShoot.x = posPlayer.x + 22;
 		posShoot.y = posPlayer.y + 5;
 	}
+}
+
+bool Shoot::calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax)
+{
+	if (gone) {
+		return false;
+	}
+	return ((xMin < xmax) && (xmin < xMax)
+		&& (yMin < ymax) && (ymin < yMax));
 }
 
 void Shoot::charge()
@@ -127,6 +142,27 @@ void Shoot::calculateYDirecection()
 	double y2 = posObjective.y;
 
 	yDirection = -((y2 - y1) / (x2 - x1));
+}
+
+void Shoot::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = posShoot.x + xmin;
+	xMax = posShoot.x + xmax;
+	yMin = posShoot.y + ymin;
+	yMax = posShoot.y + ymax;
+}
+
+bool Shoot::getGone()
+{
+	return gone;
+}
+
+void Shoot::disapear()
+{
+	if (!gone) {
+		gone = true;
+		sprite->changeAnimation(GONE);
+	}
 }
 
 void Shoot::setPosition(const glm::vec2& pos)

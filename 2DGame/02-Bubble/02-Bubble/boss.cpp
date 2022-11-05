@@ -19,8 +19,6 @@ void boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(12 / 908.f, 231 / 231.f));
 
-	
-
 	bossHealth = bossMaxHealth = 30;
 	defeated = false;
 	phase1 = false;
@@ -48,7 +46,6 @@ void boss::render()
 int boss::getlife()
 {
 	return bossHealth;
-
 }
 
 void boss::hitted()
@@ -72,7 +69,6 @@ void boss::setPosition(const glm::vec2& pos)
 int boss::dispara(int deltaTime) {
 	if (deltaTime  == 0) return 0;
 	else return 2;
-	
 }
 
 bool boss::isnormal() {
