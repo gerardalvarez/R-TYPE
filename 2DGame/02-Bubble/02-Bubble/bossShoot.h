@@ -24,14 +24,14 @@ public:
 	glm::vec2 getNaveLastPos();
 	void charge();
 	void powerbossShoot();
+	void setBossPos(glm::vec2& pos);
 	void setPlayerPos(glm::vec2& pos);
-	void setNavePos(glm::vec2& pos);
 
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posbossShoot;
 	glm::vec2 posBoss;
-	glm::vec2 ppos;
+	glm::vec2 playerPos;
 	glm::vec2 lppos;
 	Texture spritesheet;
 	Sprite* sprite;

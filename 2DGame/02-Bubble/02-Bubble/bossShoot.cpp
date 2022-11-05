@@ -50,9 +50,9 @@ void BossShoot::calculateCollisions()
 
 		posbossShoot.x -= 1;
 
-		if (posbossShoot.y < ppos.y) 
+		if (posbossShoot.y < playerPos.y) 
 			posbossShoot.y += 1;
-		else if (posbossShoot.y > ppos.y) 
+		else if (posbossShoot.y > playerPos.y) 
 			posbossShoot.y -= 1;
 		
 	}
@@ -93,14 +93,14 @@ void BossShoot::powerbossShoot()
 	Music::instance().disparoboss2();
 }
 
-void BossShoot::setPlayerPos(glm::vec2& pos)
+void BossShoot::setBossPos(glm::vec2& pos)
 {
 	posBoss = pos;
 }
 
-void BossShoot::setNavePos(glm::vec2& pos)
+void BossShoot::setPlayerPos(glm::vec2& pos)
 {
-	ppos = pos;
+	playerPos = pos;
 }
 
 void BossShoot::setPosition(const glm::vec2& pos)

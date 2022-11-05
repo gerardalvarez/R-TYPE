@@ -860,8 +860,8 @@ void MapScene::updateBossShoots(int deltaTime)
 		for (int i = 0; i < bshoots.size(); i++) {
 			bshoot = bshoots[i];
 			if (bshoot != NULL) {
-				bshoot->setPlayerPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
-				bshoot->setNavePos(player->getPos());
+				bshoot->setBossPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
+				bshoot->setPlayerPos(player->getPos());
 				bshoot->update(deltaTime);
 				if (bshoot->getPosx() < left) {
 					bshoots[i] = NULL;
