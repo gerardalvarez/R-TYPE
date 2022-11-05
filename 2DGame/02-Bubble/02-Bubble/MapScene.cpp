@@ -28,6 +28,7 @@ MapScene::MapScene()
 	map = NULL;
 	player = new Player();
 	enemy = new Enemy();
+	
 }
 
 MapScene::~MapScene()
@@ -123,10 +124,9 @@ void MapScene::initlevel(int level)
 	bshoot = NULL;
 
 	//BOSS
-	bosss = new boss();
-	bosss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
-	bosss->setTileMap(map);
+	boss = new Boss();
+	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	boss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
 
 	//BACKGROUND QUAD CREATION
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
@@ -202,7 +202,7 @@ void MapScene::update(int deltaTime)
 
 		//BOSS
 		if (int(right) >= 3030) {
-			bosss->update(deltaTime);
+			boss->update(deltaTime);
 			//AI BOSS
 			bossAI();
 			updateBossShoots(deltaTime);
@@ -248,7 +248,7 @@ void MapScene::render()
 	renderBossShoots();
 	renderEnemies();
 	
-	bosss->render();
+	boss->render();
 	renderShoots();
 
 
@@ -308,7 +308,7 @@ void MapScene::normalShootForce() {
 
 
 void MapScene::normalBossShoot(bool t) {
-	bshoot = new bossShoot();
+	bshoot = new BossShoot();
 
 	glm::vec2 posBoss = glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 48);
 	bshoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posBoss);
@@ -838,7 +838,7 @@ void MapScene::updateShoots(int deltaTime)
 				calculateShootCollisions();
 
 				if (int(right) >= 3030 && shoot->getPos() >= 2980) {
-					bosss->hitted();
+					boss->hitted();
 				}
 
 				if (shoot->getPos() > right || shoot->getPos() < (left - 20)) {
@@ -873,7 +873,7 @@ void MapScene::updateBossShoots(int deltaTime)
 
 void MapScene::bossAI()
 {
-	if (bosss->getlife() <= 0) {
+	if (boss->getlife() <= 0) {
 		++counter;
 		gameover = true;
 		for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
@@ -893,16 +893,16 @@ void MapScene::bossAI()
 
 	}
 	else if (!right <= 3070 && !gameover) {
-		if (int(currentTime) % 200 == 10) bosss->power = true;
-		if (int(currentTime) % 30 == 10) bosss->normal = true;
+		if (int(currentTime) % 200 == 10) boss->power = true;
+		if (int(currentTime) % 30 == 10) boss->normal = true;
 		if (right >= 3070) {
-			if (bosss->ispower()) {
+			if (boss->ispower()) {
 				powerBossShoot();
-				bosss->power = false;
+				boss->power = false;
 			}
-			if (bosss->isnormal()) {
+			if (boss->isnormal()) {
 				normalBossShoot(false);
-				bosss->normal = false;
+				boss->normal = false;
 			}
 
 		}

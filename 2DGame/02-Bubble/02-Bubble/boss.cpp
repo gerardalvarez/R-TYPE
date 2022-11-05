@@ -1,12 +1,12 @@
-#include "boss.h"
+#include "Boss.h"
 
 
 enum bossAnims
 {
-	NORMAL, HITTED
+	SMALL, HITTED
 };
 
-void boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	posEnemy.x = 192;
 	posEnemy.y = 192;
@@ -16,65 +16,60 @@ void boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->setAnimationSpeed(HITTED, 8);
 	sprite->addKeyframe(HITTED, glm::vec2(468 / 908.f, 231 / 231.f));
-	sprite->setAnimationSpeed(NORMAL, 8);
-	sprite->addKeyframe(NORMAL, glm::vec2(12 / 908.f, 231 / 231.f));
+	sprite->setAnimationSpeed(SMALL, 8);
+	sprite->addKeyframe(SMALL, glm::vec2(12 / 908.f, 231 / 231.f));
 
 	bossHealth = bossMaxHealth = 30;
-	defeated = false;
-	phase1 = false;
+	
 	tileMapDispl = tileMapPos;
 	sprite->changeAnimation(0);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 	normal = power = false;
 }
 
-void boss::update(int deltaTime)
+void Boss::update(int deltaTime)
 {
 	if (sprite != NULL) {
 		sprite->update(deltaTime);
-		sprite->changeAnimation(NORMAL);
+		sprite->changeAnimation(SMALL);
 	}
-
 }
 
-void boss::render()
+void Boss::render()
 {
 	sprite->render();
 	
 }
 
-int boss::getlife()
+int Boss::getlife()
 {
 	return bossHealth;
 }
 
-void boss::hitted()
+void Boss::hitted()
 {
-	//spritesheet.loadFromFile("images/boss3-hitt.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite->changeAnimation(HITTED);
 	--bossHealth;
 }
 
-void boss::setTileMap(TileMap* tileMap)
-{
-	map = tileMap;
-}
-
-void boss::setPosition(const glm::vec2& pos)
+void Boss::setPosition(const glm::vec2& pos)
 {
 	posEnemy = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
 }
 
-int boss::dispara(int deltaTime) {
-	if (deltaTime  == 0) return 0;
-	else return 2;
+int Boss::dispara(int deltaTime) {
+	
+	if (deltaTime  == 0) 
+		return 0;
+	
+	return 2;
 }
 
-bool boss::isnormal() {
+bool Boss::isnormal() {
 	return normal;
 }
 
-bool boss::ispower() {
+bool Boss::ispower() {
 	return power;
 }

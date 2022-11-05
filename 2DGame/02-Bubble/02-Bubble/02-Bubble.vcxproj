@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
-    <ClInclude Include="boss.h" />
-    <ClInclude Include="bossShoot.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossShoot.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Force.h" />
     <ClInclude Include="MenuScene.h" />
@@ -44,8 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
-    <ClCompile Include="boss.cpp" />
-    <ClCompile Include="bossShoot.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossShoot.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Force.cpp" />
     <ClCompile Include="Game.cpp" />

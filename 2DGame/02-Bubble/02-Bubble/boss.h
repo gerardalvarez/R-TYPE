@@ -11,26 +11,23 @@
 // all properties it needs to track its movement and collisions.
 
 
-class boss
+class Boss
 {
 
 public:
 
-
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void render();
-
 	int getlife();
-
 	void hitted();
-
-	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	bool isnormal();
 	bool ispower();
 	int dispara(int deltaTime);
-	bool invincible, defeated, phase1, normal, power;
+	bool normal, power;
+
+
 private:
 	
 	glm::ivec2 tileMapDispl;

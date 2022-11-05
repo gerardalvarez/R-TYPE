@@ -9,7 +9,7 @@
 
 enum ObjectAnims
 {
-	NORMAL
+	SMALL
 };
 
 //la nau fa 33px de x i 25px de y en la spritesheet, el quad sera de 33x 30y
@@ -19,12 +19,12 @@ void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite = Sprite::createSprite(glm::ivec2(10, 10), glm::vec2(20 / 269.f, 20 / 505.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
-	sprite->setAnimationSpeed(NORMAL, 8);
-	sprite->addKeyframe(NORMAL, glm::vec2(11 / 269.f, 12 / 505.f));
+	sprite->setAnimationSpeed(SMALL, 8);
+	sprite->addKeyframe(SMALL, glm::vec2(11 / 269.f, 12 / 505.f));
 
 	taken = false;
 	inscreen = false;
-	sprite->changeAnimation(NORMAL);
+	sprite->changeAnimation(SMALL);
 	tileMapDispl = tileMapPos;
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posObject.x), float(tileMapDispl.y + posObject.y)));

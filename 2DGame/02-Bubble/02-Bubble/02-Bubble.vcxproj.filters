@@ -19,8 +19,8 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedQuad.cpp" />
     <ClCompile Include="TileMap.cpp" />
-    <ClCompile Include="boss.cpp" />
-    <ClCompile Include="bossShoot.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossShoot.cpp" />
     <ClCompile Include="Force.cpp" />
     <ClCompile Include="Object.cpp" />
   </ItemGroup>
@@ -43,8 +43,8 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedQuad.h" />
     <ClInclude Include="TileMap.h" />
-    <ClInclude Include="boss.h" />
-    <ClInclude Include="bossShoot.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossShoot.h" />
     <ClInclude Include="Force.h" />
     <ClInclude Include="Object.h" />
   </ItemGroup>

@@ -69,7 +69,7 @@ private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
-	boss* bosss;
+	Boss* boss;
 	Force* force;
 	Shoot* shoot;
 	Shoot* shoot2;
@@ -79,8 +79,8 @@ private:
 	vector<Enemy*> enemies;
 	vector<Enemy*> visibleEnemies;
 
-	bossShoot* bshoot;
-	vector<bossShoot*> bshoots;
+	BossShoot* bshoot;
+	vector<BossShoot*> bshoots;
 	vector<glm::vec2> plastpos;
 
 	Texture texs[1];

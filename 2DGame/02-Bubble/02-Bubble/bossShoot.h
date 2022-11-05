@@ -7,7 +7,7 @@
 #include "TileMap.h"
 
 
-class bossShoot
+class BossShoot
 {
 
 public:
