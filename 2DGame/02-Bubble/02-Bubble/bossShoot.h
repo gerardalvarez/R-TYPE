@@ -29,6 +29,11 @@ public:
 	void calculateYDirecection();
 	void calculateTrajectory();
 
+	bool calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax);
+	void disapear();
+
+	bool getGone();
+
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posbossShoot;
@@ -43,6 +48,8 @@ private:
 	int xDirection;
 	double yDirection;
 	glm::vec2 posObjective;
+
+	bool gone;
 };
 
 

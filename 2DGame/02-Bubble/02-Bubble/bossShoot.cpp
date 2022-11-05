@@ -9,15 +9,15 @@
 
 enum BossShootAnims
 {
-	NORMAL, POWER, CHARGING
+	NORMAL, POWER, GONE
 };
 
 
 void BossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, const glm::vec2& pos)
 {
 	spritesheet.loadFromFile("images/aaa3.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(2);
+	sprite = Sprite::createSprite(glm::ivec2(33, 25), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(3);
 
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
@@ -25,15 +25,27 @@ void BossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram,
 	sprite->setAnimationSpeed(POWER, 8);
 	sprite->addKeyframe(POWER, glm::vec2(33 * 6 / 269.f, 25 * 3 / 269.f));
 
+	sprite->setAnimationSpeed(GONE, 2);
+	sprite->addKeyframe(GONE, glm::vec2(33 * 7 / 269.f, 25 * 3 / 269.f));
+
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(pos.x), float(pos.y)));
+
+	gone = false;
 
 }
 
 void BossShoot::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	if (sprite->animation() == NORMAL) {
+		setCollisionBox(10, 16, 9, 16);
+	}
+	else {
+		setCollisionBox(4, 16, 5, 19);
+	}
 	calculateTrajectory();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posbossShoot.x), float(tileMapDispl.y + posbossShoot.y)));
 
@@ -107,6 +119,28 @@ void BossShoot::calculateTrajectory()
 {
 	posbossShoot.x += xDirection;
 	posbossShoot.y += yDirection;
+}
+
+bool BossShoot::calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax)
+{
+	if (gone) {
+		return false;
+	}
+	return ((xMin < xmax) && (xmin < xMax)
+		&& (yMin < ymax) && (ymin < yMax));
+}
+
+void BossShoot::disapear()
+{
+	if (!gone) {
+		gone = true;
+		sprite->changeAnimation(GONE);
+	}
+}
+
+bool BossShoot::getGone()
+{
+	return gone;
 }
 
 void BossShoot::setPosition(const glm::vec2& pos)

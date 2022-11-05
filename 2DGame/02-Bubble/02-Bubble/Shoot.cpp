@@ -66,7 +66,6 @@ void Shoot::render()
 void Shoot::calculateCollisions()
 {
 	if (sprite->animation() == ENEMY) {
-		//setCollisionBox(x,x,y,y);
 		posShoot.x += xDirection;
 		posShoot.y += yDirection;
 	}

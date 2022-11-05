@@ -62,6 +62,7 @@ private:
 	void renderBossShoots();
 	void checkVisibles();
 	void calculateShootCollisions();
+	void calculateBossShootCollisions();
 	bool isVisible();
 	void eliminateFromVisible(int id);
 

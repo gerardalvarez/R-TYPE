@@ -481,6 +481,22 @@ void MapScene::calculateShootCollisions()
 	}
 }
 
+void MapScene::calculateBossShootCollisions()
+{
+	if (!bshoots.empty()) {
+
+		int xmin = player->getxMin();
+		int xmax = player->getxMax();
+		int ymin = player->getyMin();
+		int ymax = player->getyMax();
+		if (bshoot->calculatePlayerCollisions(xmin, xmax, ymin, ymax)) {
+			player->setBoom();
+			bshoot->disapear();
+		}
+		
+	}
+}
+
 bool MapScene::isVisible()
 {
 	Enemy* enemy2 = new Enemy();
@@ -804,7 +820,7 @@ void MapScene::updateEnemies(int deltaTime)
 							visibleEnemies.push_back(enemy);
 						}
 						enemy->setRight(right);
-						enemy->setPlayerCollisionBox(player->xMin, player->xMax, player->yMin, player->yMax);
+						enemy->setPlayerCollisionBox(player->getxMin(), player->getxMax(), player->getyMin(), player->getyMax());
 						enemy->setPlayerPosition(player->getPos());
 
 						enemy->update(deltaTime);
@@ -871,8 +887,15 @@ void MapScene::updateBossShoots(int deltaTime)
 				bshoot->setBossPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
 				bshoot->setPlayerPos(player->getPos());
 				bshoot->update(deltaTime);
+
+				calculateBossShootCollisions();
+
 				if (bshoot->getPosx() < left) {
 					bshoots[i] = NULL;
+				}
+
+				if (bshoot->getGone()) {
+					bshoot = NULL;
 				}
 			}
 		}
