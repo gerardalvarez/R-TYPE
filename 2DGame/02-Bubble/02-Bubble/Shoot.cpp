@@ -82,6 +82,9 @@ void Shoot::calculateCollisions()
 
 bool Shoot::calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax)
 {
+	if (gone) {
+		return false;
+	}
 	return ((xMin < xmax) && (xmin < xMax)
 		&& (yMin < ymax) && (ymin < yMax));
 }
