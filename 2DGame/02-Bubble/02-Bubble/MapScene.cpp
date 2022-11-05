@@ -264,7 +264,8 @@ void MapScene::render()
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 }
 
-void MapScene::normalShoot() {
+void MapScene::normalShoot() 
+{
 	
 
 	if (force->istaken()) {
@@ -295,7 +296,8 @@ void MapScene::normalShoot() {
 
 }
 
-void MapScene::normalShootForce() {
+void MapScene::normalShootForce() 
+{
 
 	shoot = new Shoot();
 
@@ -307,15 +309,21 @@ void MapScene::normalShootForce() {
 }
 
 
-void MapScene::normalBossShoot(bool t) {
+void MapScene::normalBossShoot(bool t) 
+{
 	bshoot = new BossShoot();
 
 	glm::vec2 posBoss = glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 48);
 	bshoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posBoss);
-	if (!t) bshoot->setPosition(glm::vec2((posBoss.x - 7), (posBoss.y + 55)));
-	else bshoot->setPosition(glm::vec2((posBoss.x + 33), (posBoss.y + 125)));
-	bshoot->setTileMap(map);
-	bshoot->setNaveLastPos(player->getPos());
+	//decideix des don surten els trets
+	if (!t) {
+		bshoot->setPosition(glm::vec2((posBoss.x - 7), (posBoss.y + 55)));
+	}
+	else {
+		bshoot->setPosition(glm::vec2((posBoss.x + 33), (posBoss.y + 125)));
+	}
+	bshoot->setPlayerPos(player->getPos());
+	bshoot->normalBossShoot();
 	bshoots.push_back(bshoot);
 	Music::instance().disparoboss();
 }
@@ -507,7 +515,7 @@ void MapScene::enemyShoot()
 	shoot->setPlayerPos(player->getPos());
 	shoot->setEnemyPos(posEnemy);
 	shoot->enemyShoot();
-	//shoots.push_back(shoot);
+	shoots.push_back(shoot);
 }
 
 
@@ -873,6 +881,7 @@ void MapScene::updateBossShoots(int deltaTime)
 
 void MapScene::bossAI()
 {
+	//BOSS IS DEAD
 	if (boss->getlife() <= 0) {
 		++counter;
 		gameover = true;
@@ -892,9 +901,17 @@ void MapScene::bossAI()
 		}
 
 	}
-	else if (!right <= 3070 && !gameover) {
-		if (int(currentTime) % 200 == 10) boss->power = true;
-		if (int(currentTime) % 30 == 10) boss->normal = true;
+	//BOSS IS ALIVE
+	else if (!right <= 3070 && !gameover) { 
+		//shooting frequency
+		if (int(currentTime) % 200 == 10) {
+			boss->power = true;
+		}
+		if (int(currentTime) % 40 == 10) {
+			boss->normal = true;
+		}
+
+
 		if (right >= 3070) {
 			if (boss->ispower()) {
 				powerBossShoot();

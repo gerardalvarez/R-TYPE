@@ -34,7 +34,7 @@ void BossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram,
 void BossShoot::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	calculateCollisions();
+	calculateTrajectory();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posbossShoot.x), float(tileMapDispl.y + posbossShoot.y)));
 
 }
@@ -44,53 +44,22 @@ void BossShoot::render()
 	sprite->render();
 }
 
-void BossShoot::calculateCollisions()
-{
-	if (sprite->animation() == POWER) {
-
-		posbossShoot.x -= 1;
-
-		if (posbossShoot.y < playerPos.y) 
-			posbossShoot.y += 1;
-		else if (posbossShoot.y > playerPos.y) 
-			posbossShoot.y -= 1;
-		
-	}
-	if (sprite->animation() == NORMAL) {
-		if (posbossShoot.x < lppos.x) {
-			if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-			else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-			posbossShoot.x -= 1;
-		}
-		else
-			if (abs(posbossShoot.y - lppos.y) > abs(posbossShoot.x - lppos.x)) {
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-				posbossShoot.x -= 0.2;
-			}
-			else if (abs(posbossShoot.y - lppos.y) < abs(posbossShoot.x - lppos.x)) {
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 0.2;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 0.2;
-				posbossShoot.x -= 1;
-			}
-			else {
-				posbossShoot.x -= 1;
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-			}
-	}
-}
-
-void BossShoot::charge()
-{
-	sprite->changeAnimation(CHARGING);
-	Music::instance().disparo_charge();
-}
-
 void BossShoot::powerbossShoot()
 {
 	sprite->changeAnimation(POWER);
+	posObjective.x = playerPos.x;
+	posObjective.y = playerPos.y - 5;
+	calculateXDirecection();
+	calculateYDirecection();
 	Music::instance().disparoboss2();
+}
+
+void BossShoot::normalBossShoot()
+{
+	posObjective.x = playerPos.x + 5;
+	posObjective.y = playerPos.y;
+	calculateXDirecection();
+	calculateYDirecection();
 }
 
 void BossShoot::setBossPos(glm::vec2& pos)
@@ -103,33 +72,50 @@ void BossShoot::setPlayerPos(glm::vec2& pos)
 	playerPos = pos;
 }
 
+void BossShoot::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = posbossShoot.x + xmin;
+	xMax = posbossShoot.x + xmax;
+	yMin = posbossShoot.y + ymin;
+	yMax = posbossShoot.y + ymax;
+}
+
+void BossShoot::calculateXDirecection()
+{
+	if (posObjective.x < posbossShoot.x) {
+		xDirection = -1;
+	}
+	else if (posObjective.x > posbossShoot.x) {
+		xDirection = 1;
+	}
+	else {
+		xDirection = 0;
+	}
+}
+
+void BossShoot::calculateYDirecection()
+{
+	double x1 = posbossShoot.x;
+	double x2 = posObjective.x;
+	double y1 = posbossShoot.y;
+	double y2 = posObjective.y;
+
+	yDirection = -((y2 - y1) / (x2 - x1));
+}
+
+void BossShoot::calculateTrajectory()
+{
+	posbossShoot.x += xDirection;
+	posbossShoot.y += yDirection;
+}
+
 void BossShoot::setPosition(const glm::vec2& pos)
 {
 	posbossShoot = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posbossShoot.x), float(tileMapDispl.y + posbossShoot.y)));
 }
 
-void BossShoot::setNaveLastPos(glm::vec2& pos)
-{
-	lppos = pos;
-}
-
-glm::vec2 BossShoot::getNaveLastPos()
-{
-	return lppos;
-}
-
-
 float BossShoot::getPosx()
 {
 	return posbossShoot.x;
-}
-float BossShoot::getPosy()
-{
-	return posbossShoot.x;
-}
-
-void BossShoot::setTileMap(TileMap* tileMap)
-{
-	map = tileMap;
 }
