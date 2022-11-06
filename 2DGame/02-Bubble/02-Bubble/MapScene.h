@@ -75,7 +75,7 @@ private:
 	Boss* boss;
 	Force* force;
 	Shoot* shoot;
-	Shoot* shoot2;
+	
 	Object* object;
 	vector<Shoot*> shoots;
 

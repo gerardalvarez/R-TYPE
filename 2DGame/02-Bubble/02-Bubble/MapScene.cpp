@@ -160,7 +160,7 @@ void MapScene::update(int deltaTime)
 
 	//PLAYER IS DEAD
 	if (player->getIsDead()) {
-		
+		putforce();
 		if ((player->getlives() <= 1 )) {
 			doGameOver();
 		}
@@ -333,15 +333,12 @@ void MapScene::powerShoot()
 	relocateShoots();
 	normalShoot();
 	shoot->powerShoot();
-	if (force->istaken()) shoot2->powerShoot();
-
 }
 
 void MapScene::powerBossShoot()
 {
 	normalBossShoot(true);
 	bshoot->powerbossShoot();
-
 }
 
 void MapScene::charge() {
@@ -462,8 +459,7 @@ void MapScene::calculateShootCollisions()
 		int ymin = shoot->getyMin();
 		int ymax = shoot->getyMax();
 		//CALCULATE IF ENEMIES SHOOTS HIT FORCE
-		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax)
-			&& shoot->isEnemy()) {
+		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax) && shoot->isEnemy()) {
 			shoot->disapear();
 		}
 		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
