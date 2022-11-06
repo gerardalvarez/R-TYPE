@@ -264,15 +264,17 @@ void MapScene::update(int deltaTime)
 			Music::instance().bm();
 		}
 
-			if (!player->getIsDead() && int(right) <= 3070) {
+		if (!player->getIsDead() && int(right) <= 3070) {
 		
 		left += 0.4;
 		right += 0.4;
-		vida1->setPosition(glm::vec2(right - 15 + 0.4, vida1->getPos().y));
-		vida2->setPosition(glm::vec2(right - 30 + 0.4, vida2->getPos().y));		
-		vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
-
+		if (vida1 != NULL && vida2 != NULL && vida3 != NULL) {
+			vida1->setPosition(glm::vec2(right - 15 + 0.4, vida1->getPos().y));
+			vida2->setPosition(glm::vec2(right - 30 + 0.4, vida2->getPos().y));
+			vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
+		}
 	}
+		projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
 
 void MapScene::render()

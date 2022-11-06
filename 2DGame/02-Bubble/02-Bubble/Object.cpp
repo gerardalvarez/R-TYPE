@@ -90,4 +90,3 @@ void Object::setvida()
 	sprite->changeAnimation(VIDA);
 }
 
-}
