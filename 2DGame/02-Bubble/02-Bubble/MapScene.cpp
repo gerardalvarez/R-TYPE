@@ -160,7 +160,9 @@ void MapScene::update(int deltaTime)
 
 	//PLAYER IS DEAD
 	if (player->getIsDead()) {
-		putforce();
+		if (force->inScreen()) {
+			putforce();
+		}
 		if ((player->getlives() <= 1 )) {
 			doGameOver();
 		}
