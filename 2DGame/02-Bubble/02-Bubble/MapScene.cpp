@@ -579,9 +579,6 @@ void MapScene::clear()
 
 void MapScene::initEnemiesOnMap()
 {
-
-	createEnemy(3, glm::vec2(50, 10), 27, false);
-
 	//1a orde
 	createEnemy(1, glm::vec2(83, 14), 1, false);
 	createEnemy(1, glm::vec2(86, 10), 2, true);
