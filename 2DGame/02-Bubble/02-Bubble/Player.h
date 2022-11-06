@@ -39,7 +39,11 @@ public:
 	void setBoom();
 	bool getExplode();
 	glm::vec2 getPos();
-	int xMin, xMax, yMin, yMax;
+
+	int getxMin();
+	int getxMax();
+	int getyMin();
+	int getyMax();
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -54,7 +58,7 @@ private:
 	float cameraright;
 	int lives;
 	bool explode;
-	
+	int xMin, xMax, yMin, yMax;
 };
 
 

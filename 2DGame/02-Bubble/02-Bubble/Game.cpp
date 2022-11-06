@@ -15,7 +15,6 @@ void Game::init()
 	timer = 0;
 	charging = false;
 
-
 }
 
 bool Game::update(int deltaTime)
@@ -109,10 +108,13 @@ void Game::keyPressed(int key)
 		if (key == 53) {		//tecla 5
 			mapScene.skip(5);
 		}
+		if (key == 70 || key == 102) {		//tecla f o F
+			mapScene.putforce();
+		}
 		if (key == 103 || key == 71) {		//tecla g o G
 			mapScene.godMode();
 		}
-		if (key == 122 || key == 90) {		//tecla z
+		if (key == 122 || key == 90) {		//tecla z o Z
 			if (timer >= 2) {
 				if (!charging) {
 					mapScene.charge();
@@ -158,7 +160,7 @@ void Game::keyReleased(int key)
 {
 	switch (state.getState()) {
 	case State::State_enum::GAME:
-		if (key == 122 || key == 90) {		//tecla z
+		if (key == 122 || key == 90) {		//tecla z o Z
 			if (!charging) {
 				mapScene.normalShoot();
 				timer = 0;
@@ -168,11 +170,7 @@ void Game::keyReleased(int key)
 				mapScene.powerShoot();
  				charging = false;
 				timer = 0;
-				
 			}
-		}
-		if (key == 102) {
-			mapScene.putforce();
 		}
 		break;
 	default:

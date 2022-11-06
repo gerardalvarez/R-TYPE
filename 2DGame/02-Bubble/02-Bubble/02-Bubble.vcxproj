@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
-    <ClInclude Include="boss.h" />
-    <ClInclude Include="bossShoot.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossShoot.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Force.h" />
     <ClInclude Include="MenuScene.h" />
@@ -31,7 +31,6 @@
     <ClInclude Include="Music.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Shoot.h" />
@@ -44,8 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
-    <ClCompile Include="boss.cpp" />
-    <ClCompile Include="bossShoot.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossShoot.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Force.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -55,7 +54,6 @@
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Shoot.cpp" />

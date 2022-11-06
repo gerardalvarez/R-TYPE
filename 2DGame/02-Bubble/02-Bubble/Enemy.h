@@ -17,7 +17,7 @@ class Enemy
 {
 
 public:
-	void init(Texture &spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida, int id);
+	void init(Texture &spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida, int id, int cShoot);
 	void update(int deltaTime);
 	void render();
 
@@ -26,7 +26,6 @@ public:
 	void setPlayerPosition(const glm::vec2& pos);
 	void setType(int t);
 	void move();
-	void recieveDamage();
 	glm::vec2 getPos();
 	void setRight(int r);
 	bool calculatePlayerCollisions();
@@ -42,6 +41,12 @@ public:
 	bool actionFinished();
 	bool getisDead();
 
+	bool getCanShoot();
+	bool getisShooting();
+	void setisShooting(bool s);
+
+	int getType();
+
 private:
 	ShaderProgram texProgram;
 	glm::ivec2 tileMapDispl;
@@ -56,12 +61,15 @@ private:
 	bool landed, walking;
 	int type;
 	bool direction;
-	int life, right;
+	int right;
 	int xMin, xMax, yMin, yMax;
 	int xMinE, xMaxE, yMinE, yMaxE;
 	int Id;
 	bool isExploded;
 	bool isDead;
+
+	bool canShoot;
+	bool isShooting;
 };
 
 
