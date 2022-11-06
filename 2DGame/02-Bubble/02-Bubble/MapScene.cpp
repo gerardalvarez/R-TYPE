@@ -294,10 +294,11 @@ void MapScene::render()
 
 	//map->render();
 	
-	renderBossShoots();
+	
 	renderEnemies();
 	
 	boss->render();
+	renderBossShoots();
 	renderShoots();
 
 

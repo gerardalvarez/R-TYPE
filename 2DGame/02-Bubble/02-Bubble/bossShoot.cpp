@@ -117,8 +117,18 @@ void BossShoot::calculateYDirecection()
 
 void BossShoot::calculateTrajectory()
 {
-	posbossShoot.x += xDirection;
-	posbossShoot.y += yDirection;
+	
+	if (sprite->animation() == POWER) {
+		if (posbossShoot.x >= playerPos.x) {
+			if (posbossShoot.y < playerPos.y) posbossShoot.y += 0.4;
+			else if (posbossShoot.y > playerPos.y) posbossShoot.y -= 0.4;
+		}
+		posbossShoot.x -= 0.4;
+	}
+	else {
+		posbossShoot.x += xDirection;
+		posbossShoot.y += yDirection;
+	}
 }
 
 bool BossShoot::calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax)
