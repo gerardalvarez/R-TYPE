@@ -105,12 +105,6 @@ void MapScene::initlevel(int level)
 	force->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
 
-
-	//object
-	object = new Object();
-	object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	object->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+208, INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
-
 	//SHOOT
 	shoot = NULL;
 
@@ -197,20 +191,26 @@ void MapScene::update(int deltaTime)
 	}
 	else if (player != NULL) {
 		player->sendcamera(left, right);
+		
 		if (playerReachedForce()) 
 		{
-			force->setinscreen(true);
+			if (force->inScreen()) {
+				force->upgrade();
+			}
+			else {
+				force->setinscreen(true);
+				force->setPosition(glm::vec2(left - 20, 30));
+				Music::instance().force();
+			}
 			object = NULL;
-			force->setPosition(glm::vec2(left-20, 30));
-			Music::instance().force();
 		}
 
 		player->update(deltaTime);
 	
 		if (force->inScreen()) {
 			doForce();
+			force->update(deltaTime);
 		}
-		force->update(deltaTime);
 
 		updateEnemies(deltaTime);
 
@@ -266,9 +266,11 @@ void MapScene::render()
 	renderShoots();
 
 
-	if (force->inScreen()) force->render();
+	if (force->inScreen()) 
+		force->render();
 	
-	if (object != NULL) object->render();
+	if (object != NULL) 
+		object->render();
 	
 	player->render();
 	
@@ -445,7 +447,8 @@ void MapScene::calculateShootCollisions()
 		int ymin = shoot->getyMin();
 		int ymax = shoot->getyMax();
 		//CALCULATE IF ENEMIES SHOOTS HIT FORCE
-		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax)) {
+		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax)
+			&& shoot->isEnemy()) {
 			shoot->disapear();
 		}
 		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
@@ -461,6 +464,12 @@ void MapScene::calculateShootCollisions()
 			int ymin = enemy->getyMinE();
 			int ymax = enemy->getyMaxE();
 			if (shoot->calculateEnemyCollisions(xmin, xmax, ymin, ymax)) {
+				if (enemy->getType() == 3) {
+					object = new Object();
+					object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+					object->setPosition(glm::vec2(enemy->getPos().x, enemy->getPos().y));
+				}
+				
 				enemy->explode();
 				if (shoot->getDamage() == 1) {
 					shoot->disapear();
@@ -849,6 +858,11 @@ void MapScene::updateEnemies(int deltaTime)
 									int ymin = enemy->getyMinE();
 									int ymax = enemy->getyMaxE();
 									if (force->calculateCollisions(xmin, xmax, ymin, ymax)) {
+										if (enemy->getType() == 3) {
+											object = new Object();
+											object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+											object->setPosition(glm::vec2(enemy->getPos().x, enemy->getPos().y));
+										}
 										enemy->explode();
 									}
 								}

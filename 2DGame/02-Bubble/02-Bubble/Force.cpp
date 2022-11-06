@@ -115,3 +115,13 @@ void Force::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
 	yMin = posForce.y + ymin;
 	yMax = posForce.y + ymax;
 }
+
+void Force::upgrade()
+{
+	if (sprite->animation() == FIRST) {
+		sprite->changeAnimation(FIRST);
+	}
+	else if (sprite->animation() == SECOND) {
+		sprite->changeAnimation(THIRD);
+	}
+}

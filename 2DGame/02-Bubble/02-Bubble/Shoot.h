@@ -35,6 +35,7 @@ public:
 	bool getBossHitted();
 	int getDamage();
 	bool isCharge();
+	bool isEnemy();
 
 
 	int getxMin();

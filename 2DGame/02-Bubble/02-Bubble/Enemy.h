@@ -45,6 +45,8 @@ public:
 	bool getisShooting();
 	void setisShooting(bool s);
 
+	int getType();
+
 private:
 	ShaderProgram texProgram;
 	glm::ivec2 tileMapDispl;

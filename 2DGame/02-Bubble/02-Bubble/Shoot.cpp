@@ -226,6 +226,11 @@ bool Shoot::isCharge()
 	return (sprite->animation() == CHARGING);
 }
 
+bool Shoot::isEnemy()
+{
+	return (sprite->animation() == ENEMY);
+}
+
 void Shoot::setPosition(const glm::vec2& pos)
 {
 	posShoot = pos;

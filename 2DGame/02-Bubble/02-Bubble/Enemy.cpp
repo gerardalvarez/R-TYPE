@@ -361,3 +361,8 @@ void Enemy::setisShooting(bool s)
 {
 	isShooting = s;
 }
+
+int Enemy::getType()
+{
+	return type;
+}
