@@ -21,6 +21,8 @@ public:
 	void setinscreen(bool b);
 	bool inScreen();
 
+	void setvida();
+
 	bool istaken();
 	glm::vec2 getPos();
 

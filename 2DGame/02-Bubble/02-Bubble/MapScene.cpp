@@ -71,10 +71,14 @@ void MapScene::skip(int part)
 		break;
 	default:
 		left = 3072 - SCREEN_WIDTH;
+		
 		break;
 	}
 	right = left + SCREEN_WIDTH - 1;
 	player->setPosition(glm::vec2(left, (192 / 2)));
+	vida1->setPosition(glm::vec2(right - 15 + 0.4, vida1->getPos().y));
+	vida2->setPosition(glm::vec2(right - 30 + 0.4, vida2->getPos().y));
+	vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
 
 }
 
@@ -127,6 +131,21 @@ void MapScene::initlevel(int level)
 	bosss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
 	bosss->setTileMap(map);
+
+	//VIDAS
+	vida1 = new Object();
+	vida1->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	vida1->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 10, INIT_PLAYER_Y_TILES * map->getTileSize() +1));
+	vida1->setvida();
+	vida2 = new Object();
+	vida2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	vida2->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 25, INIT_PLAYER_Y_TILES * map->getTileSize() + 1));
+	vida2->setvida();
+	vida3 = new Object();
+	vida3->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	vida3->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 40, INIT_PLAYER_Y_TILES * map->getTileSize() + 1));
+	vida3->setvida();
+
 
 	//BACKGROUND QUAD CREATION
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
@@ -183,20 +202,22 @@ void MapScene::update(int deltaTime)
 	player->sendcamera(left, right);
   
 	if (player != NULL && !gameover) {
-		if (playerReachedForce()) 
+		if (playerReachedForce())
 		{
 			force->setinscreen(true);
 			object = NULL;
-			force->setPosition(glm::vec2(left-20, INIT_PLAYER_Y_TILES * map->getTileSize() + 30));
+			force->setPosition(glm::vec2(left - 20, INIT_PLAYER_Y_TILES * map->getTileSize() + 30));
 			Music::instance().force();
 		}
 
 		player->update(deltaTime);
-	
-		if (force->inScreen()) {
-			doForce();
-		}
+
+		if (force != NULL){
+			if (force->inScreen()) {
+				doForce();
+			}
 		force->update(deltaTime);
+	}
 
 		updateEnemies(deltaTime);
 
@@ -224,6 +245,9 @@ void MapScene::update(int deltaTime)
 		
 		left += 0.4;
 		right += 0.4;
+		vida1->setPosition(glm::vec2(right - 15 + 0.4, vida1->getPos().y));
+		vida2->setPosition(glm::vec2(right - 30 + 0.4, vida2->getPos().y));		
+		vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
 	}
 	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
@@ -258,6 +282,16 @@ void MapScene::render()
 	
 	player->render();
 	
+	if (player->getlives() == 3) {
+		vida1->render();
+		vida2->render();
+		vida3->render();
+	}
+	else if (player->getlives() == 2) {
+		vida1->render();
+		vida2->render();
+	} else vida1->render();
+
 	if (gameover) {
 		background->render();
 	}
