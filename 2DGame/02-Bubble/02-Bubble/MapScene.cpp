@@ -863,6 +863,7 @@ void MapScene::updateShoots(int deltaTime)
 
 				if (int(right) >= 3030 && shoot->getPos() >= 2980) {
 					boss->hitted();
+
 				}
 
 				if (shoot->getPos() > right || shoot->getPos() < (left - 20)) {
