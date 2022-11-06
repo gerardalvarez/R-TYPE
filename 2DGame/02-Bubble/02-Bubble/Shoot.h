@@ -32,6 +32,7 @@ public:
 	void disapear();
 	void hitBoss();
 	bool getBossHitted();
+	int getDamage();
 
 private:
 	glm::ivec2 tileMapDispl;

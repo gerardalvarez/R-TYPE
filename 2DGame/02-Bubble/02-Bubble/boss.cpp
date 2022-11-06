@@ -46,10 +46,10 @@ int Boss::getlife()
 	return bossHealth;
 }
 
-void Boss::hitted()
+void Boss::hitted(int damage)
 {
 	sprite->changeAnimation(HITTED);
-	--bossHealth;
+	bossHealth -= damage;
 }
 
 void Boss::setPosition(const glm::vec2& pos)

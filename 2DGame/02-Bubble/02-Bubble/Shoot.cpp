@@ -195,6 +195,16 @@ bool Shoot::getBossHitted()
 	return bossHitted;
 }
 
+int Shoot::getDamage()
+{
+	if (sprite->animation() == BOSSHIT) {
+		return 1;
+	}
+	else if (sprite->animation() == BOSSHITHARD) {
+		return 2;
+	}
+}
+
 void Shoot::setPosition(const glm::vec2& pos)
 {
 	posShoot = pos;

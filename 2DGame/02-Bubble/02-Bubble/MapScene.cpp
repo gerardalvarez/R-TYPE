@@ -178,11 +178,24 @@ void MapScene::update(int deltaTime)
 			}
 		}
 	}
-	
 	//PLAYER IS ALIVE
-	player->sendcamera(left, right);
-  
-	if (player != NULL && !gameover) {
+	else if (gameover) {
+		++counter;
+
+		if (counter == 1) {
+			Music::instance().ultimaex();
+			for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
+		}
+		else if (counter == 2) {
+			Music::instance().stop();
+		}
+		else if (counter == 5) {
+			Game::instance().state.goCREDITS();	//canviar per pantalla de win + score
+			Music::instance().win();
+		}
+	}
+	else if (player != NULL) {
+		player->sendcamera(left, right);
 		if (playerReachedForce()) 
 		{
 			force->setinscreen(true);
@@ -210,22 +223,22 @@ void MapScene::update(int deltaTime)
 		
 		
 		if (object != NULL) object->update(deltaTime);
-	}
 
-	updateShoots(deltaTime);
-	
+		updateShoots(deltaTime);
 
-	if (int(right) == 3030) {
-		Music::instance().stop();
-		Music::instance().bm();
-	}
 
-	if (!player->getIsDead() && int(right) <= 3070) {
-		
-		left += 0.4;
-		right += 0.4;
+		if (int(right) == 3030) {
+			Music::instance().stop();
+			Music::instance().bm();
+		}
+
+		if (!player->getIsDead() && int(right) <= 3070) {
+
+			left += 0.4;
+			right += 0.4;
+		}
+		projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	}
-	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
 
 void MapScene::render()
@@ -863,8 +876,11 @@ void MapScene::updateShoots(int deltaTime)
 
 				if (int(right) >= 3030 && int(shoot->getPos()) >= 2975) {
 					if (!shoot->getBossHitted()) {
-						boss->hitted();
 						shoot->hitBoss();
+						if (boss->getlife() == 14 || boss->getlife() == 15) {
+							Music::instance().grito();
+						}	
+						boss->hitted(shoot->getDamage());
 					}
 				}
 
@@ -909,26 +925,11 @@ void MapScene::bossAI()
 {
 	//BOSS IS DEAD
 	if (boss->getlife() <= 0) {
-		++counter;
 		gameover = true;
-		for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
-		if (counter == 60) {
-			Music::instance().stop();
-			Music::instance().grito();
-		}
-		///si se quiere alguna animacion
-		if (counter == 170) {
-			Music::instance().stop();
-			Music::instance().ultimaex();
-		}
-		if (counter == 310) {
-			Game::instance().state.goCREDITS();
-			Music::instance().win();
-		}
-
 	}
 	//BOSS IS ALIVE
 	else if (!right <= 3070 && !gameover) { 
+	
 		//shooting frequency
 		if (int(currentTime) % 200 == 10) {
 			boss->power = true;

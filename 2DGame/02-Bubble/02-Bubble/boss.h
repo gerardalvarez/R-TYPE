@@ -20,7 +20,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	int getlife();
-	void hitted();
+	void hitted(int damage);
 	void setPosition(const glm::vec2& pos);
 	bool isnormal();
 	bool ispower();
