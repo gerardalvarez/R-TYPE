@@ -98,8 +98,8 @@ void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	if (!isExploded) {
-		/*if ((right-5) > posEnemy.x)
-			move();*/
+		if ((right-5) > posEnemy.x)
+			move();
 		calculatePlayerCollisions();
 		setEnemyCollisionBox();
 	}
@@ -162,14 +162,14 @@ void Enemy::move()
 {
 	switch (type) {
 	case 1:											//ocells
-		posEnemy.x -= 0.5f;
+		posEnemy.x -= 0.4f;
 		if (direction) {
 			posEnemy.y -= 0.5f;
 		}
 		else {
 			posEnemy.y += 0.5f;
 		}
-		if (posEnemy.y == (startY + 10) || posEnemy.y == (startY - 10)) {
+		if (posEnemy.y == (startY + 8) || posEnemy.y == (startY - 8)) {
 			direction = !direction;
 		}
 		break;
@@ -217,24 +217,27 @@ void Enemy::move()
 		}
 		break;
 	case 4:											//cap llarg
-		posEnemy.x -= 0.8;
+		posEnemy.x -= 0.4;
 		if (posEnemy.y < (posPlayer.y - 5) || posEnemy.y > (posPlayer.y + 5)) {
 			if (posPlayer.y > posEnemy.y) {
-				posEnemy.y += 0.8;
+				posEnemy.y += 0.5;
 			}
 			else if (posPlayer.y < posEnemy.y) {
-				posEnemy.y -= 0.8;
+				posEnemy.y -= 0.5;
 			}
 		}
 		if (map->collisionMoveLeft(posEnemy, glm::ivec2(6, 6)) == 1) {
-			posEnemy.x += 0.8;
+			posEnemy.x += 0.4;
+			if (map->collisionMoveUp(posEnemy, glm::ivec2(25, 7)) == 1) {
+				posEnemy.x -= 0.4;
+			}
 		}
 
 		if (map->collisionMoveUp(posEnemy, glm::ivec2(25, 7)) == 1) {
-			posEnemy.y += 1;
+			posEnemy.y += 0.5;
 		}
 		else if (map->collisionMoveDown(posEnemy, glm::ivec2(25, 25)) == 1) {
-			posEnemy.y -= 1;
+			posEnemy.y -= 0.5;
 		}
 		sprite->changeAnimation(TYPE_4);
 		break;

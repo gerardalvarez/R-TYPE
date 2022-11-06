@@ -568,40 +568,40 @@ void MapScene::initEnemiesOnMap()
 {
 	//1a orde
 	createEnemy(1, glm::vec2(83, 14), 1, false);
-	createEnemy(1, glm::vec2(89, 10), 2, true);
-	createEnemy(1, glm::vec2(92, 15), 3, false);
-	createEnemy(1, glm::vec2(99, 11), 4, false);
+	createEnemy(1, glm::vec2(86, 10), 2, true);
+	createEnemy(1, glm::vec2(89, 15), 3, false);
+	createEnemy(1, glm::vec2(92, 11), 4, false);
 	
 	//2a orde
 	createEnemy(1, glm::vec2(104, 31), 5, false);
 	createEnemy(1, glm::vec2(107, 34), 6, false);
-	createEnemy(1, glm::vec2(112, 34), 7, true);
-	createEnemy(1, glm::vec2(117, 31), 8, false);
+	createEnemy(1, glm::vec2(110, 34), 7, true);
+	createEnemy(1, glm::vec2(113, 31), 8, false);
 	
 	//3a orde
 	createEnemy(1, glm::vec2(126, 20), 9, false);
-	createEnemy(1, glm::vec2(131, 21), 10, false);
-	createEnemy(1, glm::vec2(136, 17), 11, false);
-	createEnemy(1, glm::vec2(141, 23), 12, false);
-	createEnemy(1, glm::vec2(144, 19), 13, false);
+	createEnemy(1, glm::vec2(129, 21), 10, false);
+	createEnemy(1, glm::vec2(132, 17), 11, false);
+	createEnemy(1, glm::vec2(135, 23), 12, false);
+	createEnemy(1, glm::vec2(139, 19), 13, false);
 	
 	//4ta orde
 	createEnemy(1, glm::vec2(159, 20), 14, false);
 	createEnemy(1, glm::vec2(162, 15), 15, true);
-	createEnemy(1, glm::vec2(166, 14), 16, false);
-	createEnemy(1, glm::vec2(171, 15), 17, true);
+	createEnemy(1, glm::vec2(165, 14), 16, false);
+	createEnemy(1, glm::vec2(168, 15), 17, true);
 	
 	//5a orde
-	createEnemy(1, glm::vec2(168, 4), 18, false);
+	createEnemy(1, glm::vec2(169, 4), 18, false);
 	createEnemy(1, glm::vec2(172, 6), 19, true);
-	createEnemy(1, glm::vec2(176, 4), 20, false);
-	createEnemy(1, glm::vec2(180, 6), 21, false);
-	createEnemy(1, glm::vec2(184, 4), 22, false);
+	createEnemy(1, glm::vec2(175, 4), 20, false);
+	createEnemy(1, glm::vec2(178, 6), 21, false);
+	createEnemy(1, glm::vec2(181, 4), 22, false);
 
 	//6a orde
-	createEnemy(1, glm::vec2(168, 25), 23, false);
-	createEnemy(1, glm::vec2(172, 29), 24, false);
-	createEnemy(1, glm::vec2(177, 29), 25, true);
+	createEnemy(1, glm::vec2(170, 25), 23, false);
+	createEnemy(1, glm::vec2(173, 29), 24, false);
+	createEnemy(1, glm::vec2(176, 29), 25, true);
 
 	//1a orde torreta terra
 	createEnemy(21, glm::vec2(174, 40), 26, true);
@@ -611,34 +611,34 @@ void MapScene::initEnemiesOnMap()
 	
 	//7a orde
 	createEnemy(1, glm::vec2(189, 17), 28, false);
-	createEnemy(1, glm::vec2(193, 14), 29, false);
+	createEnemy(1, glm::vec2(192, 14), 29, false);
 	createEnemy(1, glm::vec2(195, 17), 30, false);
-	createEnemy(1, glm::vec2(196, 34), 31, false);
-	createEnemy(1, glm::vec2(204, 34), 32, false);
+	createEnemy(1, glm::vec2(198, 34), 31, false);
+	createEnemy(1, glm::vec2(201, 34), 32, false);
 	
 	//8a orde
 	createEnemy(1, glm::vec2(226, 19), 33, false);
-	createEnemy(1, glm::vec2(232, 24), 34, false);
+	createEnemy(1, glm::vec2(229, 24), 34, false);
 
 	//2a orde torreta terra
 	createEnemy(21, glm::vec2(238, 40) ,35, true);
 	createEnemy(21, glm::vec2(266, 40), 36, true);
 	
 	//1a orde cap llarg
-	createEnemy(4, glm::vec2(257, 13), 37, false);
-	createEnemy(4, glm::vec2(270, 24), 38, false);
-	createEnemy(4, glm::vec2(285, 22), 39, false);
-	createEnemy(4, glm::vec2(299, 24), 40, true);
-	createEnemy(4, glm::vec2(306, 17), 41, false);
-	createEnemy(4, glm::vec2(315, 8),  42, false);
-	createEnemy(4, glm::vec2(307, 39), 43, false);
-	createEnemy(4, glm::vec2(311, 33), 44, false);
-	createEnemy(4, glm::vec2(322, 39), 45, true);
+	createEnemy(4, glm::vec2(270, 13), 37, false);
+	createEnemy(4, glm::vec2(284, 24), 38, false);
+	createEnemy(4, glm::vec2(288, 22), 39, false);
+	createEnemy(4, glm::vec2(305, 24), 40, true);
+	createEnemy(4, glm::vec2(310, 17), 41, false);
+	createEnemy(4, glm::vec2(320, 8),  42, false);
+	createEnemy(4, glm::vec2(310, 39), 43, false);
+	createEnemy(4, glm::vec2(319, 33), 44, false);
+	createEnemy(4, glm::vec2(325, 39), 45, true);
 	createEnemy(4, glm::vec2(327, 19), 46, true);
 	
 	//9a orde
 	createEnemy(1, glm::vec2(332, 32), 47, false);
-	createEnemy(1, glm::vec2(338, 30), 48, true);
+	createEnemy(1, glm::vec2(335, 30), 48, true);
 
 	//3a orde torreta terra
 	createEnemy(21, glm::vec2(334, 36), 49, true);				
@@ -658,8 +658,8 @@ void MapScene::initEnemiesOnMap()
 
 	//10a orde
 	createEnemy(1, glm::vec2(370, 11), 61, false);
-	createEnemy(1, glm::vec2(374, 11), 62, false);
-	createEnemy(1, glm::vec2(378, 14), 63, true);
+	createEnemy(1, glm::vec2(373, 11), 62, false);
+	createEnemy(1, glm::vec2(376, 14), 63, true);
 
 	//2a orde rodo
 	createEnemy(3, glm::vec2(376, 24), 64, false);
@@ -685,21 +685,21 @@ void MapScene::initEnemiesOnMap()
 
 	//12a orde
 	createEnemy(1, glm::vec2(430, 36), 78, false);
-	createEnemy(1, glm::vec2(436, 35), 79, false);
-	createEnemy(1, glm::vec2(439, 16), 80, false);
-	createEnemy(1, glm::vec2(445, 15), 81, false);
+	createEnemy(1, glm::vec2(433, 35), 79, false);
+	createEnemy(1, glm::vec2(436, 16), 80, false);
+	createEnemy(1, glm::vec2(439, 15), 81, false);
 
 	//13a orde
 	createEnemy(1, glm::vec2(455, 35), 82, false);
-	createEnemy(1, glm::vec2(460, 34), 83, true);
-	createEnemy(1, glm::vec2(463, 17), 84, true);
-	createEnemy(1, glm::vec2(468, 16), 85, false);
+	createEnemy(1, glm::vec2(458, 34), 83, true);
+	createEnemy(1, glm::vec2(461, 17), 84, true);
+	createEnemy(1, glm::vec2(464, 16), 85, false);
 	createEnemy(1, glm::vec2(473, 17), 86, false);
-	createEnemy(1, glm::vec2(478, 16), 87, false);
+	createEnemy(1, glm::vec2(475, 16), 87, false);
 
 	//14a orde
 	createEnemy(1, glm::vec2(480, 34), 88, false);
-	createEnemy(1, glm::vec2(487, 32), 89, true);
+	createEnemy(1, glm::vec2(483, 32), 89, true);
 
 	//3a orde torreta sostre
 	createEnemy(22, glm::vec2(467, 5), 90, true);
@@ -710,8 +710,8 @@ void MapScene::initEnemiesOnMap()
 	
 	//15a orde
 	createEnemy(1, glm::vec2(495, 9), 95, false);
-	createEnemy(1, glm::vec2(500, 8), 96, false);
-	createEnemy(1, glm::vec2(504, 12), 97, false);
+	createEnemy(1, glm::vec2(498, 8), 96, false);
+	createEnemy(1, glm::vec2(501, 12), 97, false);
 
 	//3a orde rodo
 	createEnemy(3, glm::vec2(525, 20), 98, false);
@@ -721,15 +721,15 @@ void MapScene::initEnemiesOnMap()
 	createEnemy(21, glm::vec2(519, 36), 100, true);
 
 	//2a orde cap llarg
-	createEnemy(4, glm::vec2(537, 31), 101, true);
+	createEnemy(4, glm::vec2(539, 31), 101, true);
 	createEnemy(4, glm::vec2(545, 22), 102, false);
-	createEnemy(4, glm::vec2(563, 24), 103, false);
+	createEnemy(4, glm::vec2(566, 26), 103, false);
 	createEnemy(4, glm::vec2(582, 25), 104, true);
 	createEnemy(4, glm::vec2(590, 26), 105, false);
 	createEnemy(4, glm::vec2(590, 11), 106, false);
-	createEnemy(4, glm::vec2(590, 39), 107, true);
-	createEnemy(4, glm::vec2(600, 14), 108, true);
-	createEnemy(4, glm::vec2(600, 34), 109, false);
+	createEnemy(4, glm::vec2(590, 32), 107, true);
+	createEnemy(4, glm::vec2(605, 14), 108, true);
+	createEnemy(4, glm::vec2(605, 34), 109, false);
 	createEnemy(4, glm::vec2(608, 24), 110, false);
 	
 	//4a orde torreta sostre
@@ -744,11 +744,11 @@ void MapScene::initEnemiesOnMap()
 	
 	//16a orde
 	createEnemy(1, glm::vec2(632, 17), 117, false);
-	createEnemy(1, glm::vec2(639, 13), 118, false);
+	createEnemy(1, glm::vec2(635, 13), 118, false);
 	createEnemy(1, glm::vec2(647, 12), 119, true);
 	createEnemy(1, glm::vec2(639, 35), 120, false);
 	createEnemy(1, glm::vec2(645, 38), 121, false);
-	createEnemy(1, glm::vec2(652, 34), 122, true);
+	createEnemy(1, glm::vec2(648, 34), 122, true);
 
 	//4a orde rodo
 	createEnemy(3, glm::vec2(662, 31), 123, false);

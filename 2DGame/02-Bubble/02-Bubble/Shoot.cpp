@@ -134,7 +134,7 @@ void Shoot::powerShoot()
 void Shoot::enemyShoot()
 {
 	sprite->changeAnimation(ENEMY);
-	posObjective.x = posPlayer.x + 20;
+	posObjective.x = posPlayer.x + 50;
 	posObjective.y = posPlayer.y + 2;
 	calculateXDirecection();
 	calculateYDirecection();
