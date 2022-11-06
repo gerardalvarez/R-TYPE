@@ -9,7 +9,7 @@
 
 enum ShootAnims
 {
-	NORMAL, POWER, CHARGING, ENEMY, GONE
+	NORMAL, POWER, CHARGING, ENEMY, GONE, BOSSHIT, BOSSHITHARD
 };
 
 
@@ -18,7 +18,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 {
 	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(5);
+	sprite->setNumberAnimations(7);
 
 	sprite->setAnimationSpeed(NORMAL, 2);
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
@@ -42,11 +42,21 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 	sprite->setAnimationSpeed(GONE, 2);
 	sprite->addKeyframe(GONE, glm::vec2(33 * 5 / 269.f, 25 * 4 / 269.f));
 
+	sprite->setAnimationSpeed(BOSSHIT, 8);
+	sprite->addKeyframe(BOSSHIT, glm::vec2(33 * 0 / 269.f, 25 * 5 / 269.f));
+	sprite->addKeyframe(BOSSHIT, glm::vec2(33 * 2 / 269.f, 25 * 5 / 269.f));
+	sprite->addKeyframe(BOSSHIT, glm::vec2(33 * 3 / 269.f, 25 * 5 / 269.f));
+
+	sprite->setAnimationSpeed(BOSSHITHARD, 8);
+	sprite->addKeyframe(BOSSHITHARD, glm::vec2(33 * 4 / 269.f, 25 * 5 / 269.f));
+	sprite->addKeyframe(BOSSHITHARD, glm::vec2(33 * 4 / 269.f, 25 * 5 / 269.f));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(pos.x), float(pos.y)));
 
 	gone = false;
+	bossHitted = false;
 }
 
 void Shoot::update(int deltaTime)
@@ -68,6 +78,11 @@ void Shoot::calculateCollisions()
 	if (sprite->animation() == ENEMY) {
 		posShoot.x += xDirection;
 		posShoot.y += yDirection;
+	}
+	else if (sprite->animation() == BOSSHIT || sprite->animation() == BOSSHITHARD) {
+		if (sprite->lastAnimation()) {
+			disapear();
+		}
 	}
 	else if (sprite->animation() != CHARGING){
 		setCollisionBox(12, 18, 14, 17);
@@ -162,6 +177,22 @@ void Shoot::disapear()
 		gone = true;
 		sprite->changeAnimation(GONE);
 	}
+}
+
+void Shoot::hitBoss()
+{
+	bossHitted = true;
+	if (sprite->animation() == POWER) {
+		sprite->changeAnimation(BOSSHITHARD);
+	}
+	else if (sprite->animation() == NORMAL) {
+		sprite->changeAnimation(BOSSHIT);
+	}
+}
+
+bool Shoot::getBossHitted()
+{
+	return bossHitted;
 }
 
 void Shoot::setPosition(const glm::vec2& pos)

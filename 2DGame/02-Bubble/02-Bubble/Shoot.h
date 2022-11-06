@@ -30,6 +30,8 @@ public:
 	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 	bool getGone();
 	void disapear();
+	void hitBoss();
+	bool getBossHitted();
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -44,6 +46,7 @@ private:
 	double yDirection;
 	int xMin, xMax, yMin, yMax;
 	int gone;
+	bool bossHitted;
 };
 
 

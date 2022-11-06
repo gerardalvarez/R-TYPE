@@ -861,9 +861,11 @@ void MapScene::updateShoots(int deltaTime)
 				//calcula colisions amb els enemics
 				calculateShootCollisions();
 
-				if (int(right) >= 3030 && shoot->getPos() >= 2980) {
-					boss->hitted();
-
+				if (int(right) >= 3030 && int(shoot->getPos()) >= 2975) {
+					if (!shoot->getBossHitted()) {
+						boss->hitted();
+						shoot->hitBoss();
+					}
 				}
 
 				if (shoot->getPos() > right || shoot->getPos() < (left - 20)) {
