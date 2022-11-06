@@ -76,6 +76,7 @@ void Shoot::render()
 void Shoot::calculateCollisions()
 {
 	if (sprite->animation() == ENEMY) {
+		setCollisionBox(12, 15, 12, 16);
 		posShoot.x += xDirection;
 		posShoot.y += yDirection;
 	}
@@ -96,6 +97,21 @@ void Shoot::calculateCollisions()
 
 bool Shoot::calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax)
 {
+	if (sprite->animation() == ENEMY) {
+		return false;
+	}
+	if (gone) {
+		return false;
+	}
+	return ((xMin < xmax) && (xmin < xMax)
+		&& (yMin < ymax) && (ymin < yMax));
+}
+
+bool Shoot::calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax)
+{
+	if (sprite->animation() != ENEMY) {
+		return false;
+	}
 	if (gone) {
 		return false;
 	}
@@ -118,8 +134,8 @@ void Shoot::powerShoot()
 void Shoot::enemyShoot()
 {
 	sprite->changeAnimation(ENEMY);
-	posObjective.x = posPlayer.x + 5;
-	posObjective.y = posPlayer.y;
+	posObjective.x = posPlayer.x + 20;
+	posObjective.y = posPlayer.y + 2;
 	calculateXDirecection();
 	calculateYDirecection();
 	
@@ -197,10 +213,10 @@ bool Shoot::getBossHitted()
 
 int Shoot::getDamage()
 {
-	if (sprite->animation() == BOSSHIT) {
+	if (sprite->animation() == BOSSHIT || sprite->animation() == NORMAL) {
 		return 1;
 	}
-	else if (sprite->animation() == BOSSHITHARD) {
+	else if (sprite->animation() == BOSSHITHARD || sprite->animation() == POWER) {
 		return 2;
 	}
 }

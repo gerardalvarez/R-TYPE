@@ -18,6 +18,7 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void calculateCollisions();
 	bool calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax);
+	bool calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax);
 	float getPos();
 	void setPosition(const glm::vec2& pos);
 	void charge();

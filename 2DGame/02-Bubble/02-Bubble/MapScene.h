@@ -65,6 +65,7 @@ private:
 	void calculateBossShootCollisions();
 	bool isVisible();
 	void eliminateFromVisible(int id);
+	void calculatePlayerHitBox();
 
 private:
 	TileMap* map;
@@ -95,5 +96,5 @@ private:
 	Texture enemySpritesheet;
 	int counter;
 	int num;
-
+	int xMin, xMax, yMin, yMax;
 };

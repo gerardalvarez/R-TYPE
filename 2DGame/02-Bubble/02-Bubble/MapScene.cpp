@@ -176,6 +176,9 @@ void MapScene::update(int deltaTime)
 				Music::instance().explosion_player();
 				player->revive();
 			}
+			else {
+				player->update(deltaTime);
+			}
 		}
 	}
 	//PLAYER IS ALIVE
@@ -477,7 +480,10 @@ void MapScene::calculateShootCollisions()
 {
 	if (!shoots.empty()){
 		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
-		//shoot->calculatePlayerCollisions();
+		if (shoot->calculatePlayerCollisions(xMin, xMax, yMin, yMax)) {
+			player->setBoom();
+			shoot->disapear();
+		}
 
 		//CALCULATE IF PLAYER SHOOTS HIT ENEMIES
 		for (int i = 0; i < visibleEnemies.size(); i++) {
@@ -488,7 +494,9 @@ void MapScene::calculateShootCollisions()
 			int ymax = enemy->getyMaxE();
 			if (shoot->calculateEnemyCollisions(xmin, xmax, ymin, ymax)) {
 				enemy->explode();
-				shoot->disapear();
+				if (shoot->getDamage() == 1) {
+					shoot->disapear();
+				}
 			}
 		}
 	}
@@ -531,6 +539,14 @@ void MapScene::eliminateFromVisible(int id)
 		}
 	}
 	relocateVisibleEnemies();
+}
+
+void MapScene::calculatePlayerHitBox()
+{
+	xMin = player->getxMin();
+	xMax = player->getxMax();
+	yMin = player->getyMin();
+	yMax = player->getyMax();
 }
 
 void MapScene::enemyShoot()
@@ -866,6 +882,7 @@ void MapScene::updateEnemies(int deltaTime)
 void MapScene::updateShoots(int deltaTime)
 {
 	if (!shoots.empty()) {
+		calculatePlayerHitBox();
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
 			if (shoot != NULL) {
