@@ -17,7 +17,7 @@ enum EnemyAnims
 };
 
 //x35 y35
-void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida, int id)
+void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int vida, int id, int cShoot)
 {
 	texProgram = shaderProgram;
 	sprite = Sprite::createSprite(glm::ivec2(25, 25), glm::vec2(35/483.f, 35/1787.f), &spritesheet, &shaderProgram);
@@ -86,6 +86,9 @@ void Enemy::init(Texture& spritesheet, const glm::ivec2& tileMapPos, ShaderProgr
 	walking = false;
 	isExploded = false;
 
+	canShoot = cShoot;
+	isShooting = false;
+
 	Id = id;
 	sprite->setLoopAnimations(true);
  	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
@@ -95,7 +98,7 @@ void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	if (!isExploded) {
-		/*if ((right-7) > posEnemy.x)
+		/*if ((right-5) > posEnemy.x)
 			move();*/
 		calculatePlayerCollisions();
 		setEnemyCollisionBox();
@@ -339,4 +342,19 @@ bool Enemy::actionFinished()
 bool Enemy::getisDead()
 {
 	return isDead;
+}
+
+bool Enemy::getCanShoot()
+{
+	return canShoot;
+}
+
+bool Enemy::getisShooting()
+{
+	return isShooting;
+}
+
+void Enemy::setisShooting(bool s)
+{
+	isShooting = s;
 }

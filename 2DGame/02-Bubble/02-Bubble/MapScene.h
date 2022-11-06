@@ -56,7 +56,7 @@ private:
 	void relocateEnemies();
 	void relocateVisibleEnemies();
 	void initEnemiesOnMap();
-	void createEnemy(int type, glm::vec2 pos, int id);
+	void createEnemy(int type, glm::vec2 pos, int id, bool canShoot);
 	void renderShoots();
 	void renderEnemies();
 	void renderBossShoots();
@@ -92,7 +92,6 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
-	bool shooting;
 	Texture enemySpritesheet;
 	int counter;
 	int num;
