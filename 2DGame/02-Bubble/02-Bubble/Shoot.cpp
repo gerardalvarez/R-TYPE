@@ -236,6 +236,9 @@ void Shoot::hitBoss()
 	else if (sprite->animation() == NORMAL) {
 		sprite->changeAnimation(BOSSHIT);
 	}
+	else if (sprite->animation() == FORCE1 || sprite->animation() == FORCE2 || sprite->animation() == FORCE3 ) {
+		sprite->changeAnimation(BOSSHIT);
+	}
 }
 
 bool Shoot::getBossHitted()

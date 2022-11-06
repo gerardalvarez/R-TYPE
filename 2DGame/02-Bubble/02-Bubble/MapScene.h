@@ -75,6 +75,7 @@ private:
 	Boss* boss;
 	Force* force;
 	Shoot* shoot;
+	Shoot* shoot2;
 	
 	Object* object;
 	Object* vida1;

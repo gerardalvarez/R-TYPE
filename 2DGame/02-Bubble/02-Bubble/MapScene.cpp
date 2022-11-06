@@ -328,14 +328,34 @@ void MapScene::render()
 
 void MapScene::normalShoot()
 {
-	shoot = new Shoot();
+	if (force->istaken() && force->getType()==2) {
 
-	glm::vec2 posPlayer = player->getPos();
-	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
-	shoot->setTileMap(map);
-	shoots.push_back(shoot);
+		shoot = new Shoot();
+
+		glm::vec2 posPlayer = player->getPos();
+		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 10)));
+		shoot->setTileMap(map);
+
+		shoots.push_back(shoot);
+
+		shoot2 = new Shoot();
+		shoot2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y - 1)));
+		shoot2->setTileMap(map);
+		shoots.push_back(shoot2);
+	}
+	else {
+		shoot = new Shoot();
+
+		glm::vec2 posPlayer = player->getPos();
+		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+		shoot->setTileMap(map);
+		shoots.push_back(shoot);
+	}
 }
+
 
 void MapScene::normalShootForce(int type)
 {
@@ -378,6 +398,7 @@ void MapScene::powerShoot()
 	relocateShoots();
 	normalShoot();
 	shoot->powerShoot();
+	if (force->istaken() && force->getType()==2) shoot2->powerShoot();
 }
 
 void MapScene::powerBossShoot()
@@ -853,9 +874,9 @@ void MapScene::doForce()
 			break;
 		}
 	}
-	if (force->getType() == 2) {
+	if (force->getType() == 3) {
 		forceCounter++;
-		if (forceCounter % 30 == 0) {
+		if (forceCounter % 100 == 0) {
 			for (int i = 0; i < 3; i++) {
 				normalShootForce(i);
 			}
@@ -1064,6 +1085,9 @@ float MapScene::getLeft()
 
 
 void MapScene::putforce() {
+	if (force->istaken())force->upgrade();
 	force->setinscreen(!force->inScreen());
 	force->setTaken(!force->istaken());
+	
+	
 }

@@ -120,6 +120,8 @@ void Force::upgrade()
 {
 	if (sprite->animation() == FIRST) {
 		sprite->changeAnimation(SECOND);
+	} else if (sprite->animation() == SECOND) {
+		sprite->changeAnimation(THIRD);
 	}
 }
 

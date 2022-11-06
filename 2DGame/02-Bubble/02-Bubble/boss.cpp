@@ -19,7 +19,7 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(12 / 908.f, 231 / 231.f));
 
-	bossHealth = bossMaxHealth = 30;
+	bossHealth = bossMaxHealth = 130;
 	
 	tileMapDispl = tileMapPos;
 	sprite->changeAnimation(0);
