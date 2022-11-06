@@ -281,7 +281,6 @@ void MapScene::render()
 
 void MapScene::normalShoot() 
 {
-	
 
 	if (force->istaken()) {
 		shoot = new Shoot();
@@ -345,7 +344,8 @@ void MapScene::normalBossShoot(bool t)
 
 void MapScene::powerShoot()
 {
-	shoots[shoots.size() - 1] = NULL;
+	eliminateChargeShoot();
+	relocateShoots();
 	normalShoot();
 	shoot->powerShoot();
 	if (force->istaken()) shoot2->powerShoot();
@@ -539,6 +539,19 @@ void MapScene::calculatePlayerHitBox()
 	xMax = player->getxMax();
 	yMin = player->getyMin();
 	yMax = player->getyMax();
+}
+
+void MapScene::eliminateChargeShoot()
+{
+	for (int i = 0; i < shoots.size(); i++)
+	{
+		Shoot* s = shoots[i];
+		if (s != NULL) {
+			if (s->isCharge()) {
+				shoots[i] = NULL;
+			}
+		}
+	}
 }
 
 void MapScene::enemyShoot()

@@ -34,6 +34,7 @@ public:
 	void hitBoss();
 	bool getBossHitted();
 	int getDamage();
+	bool isCharge();
 
 private:
 	glm::ivec2 tileMapDispl;

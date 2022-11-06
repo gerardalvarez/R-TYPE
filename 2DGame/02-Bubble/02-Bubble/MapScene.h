@@ -66,6 +66,7 @@ private:
 	bool isVisible();
 	void eliminateFromVisible(int id);
 	void calculatePlayerHitBox();
+	void eliminateChargeShoot();
 
 private:
 	TileMap* map;

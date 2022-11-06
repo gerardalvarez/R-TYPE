@@ -167,7 +167,6 @@ void Game::keyReleased(int key)
 				mapScene.powerShoot();
  				charging = false;
 				timer = 0;
-				
 			}
 		}
 		if (key == 102) {
