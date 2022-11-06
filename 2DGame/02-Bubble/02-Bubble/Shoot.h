@@ -18,6 +18,7 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void calculateCollisions();
 	bool calculateEnemyCollisions(int xmin, int xmax, int ymin, int ymax);
+	bool calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax);
 	float getPos();
 	void setPosition(const glm::vec2& pos);
 	void charge();
@@ -27,9 +28,23 @@ public:
 	void setEnemyPos(glm::vec2& pos);
 	void calculateXDirecection();
 	void calculateYDirecection();
+
+	void calculateForceYDirecection(int r);
+
 	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 	bool getGone();
 	void disapear();
+	void hitBoss();
+	bool getBossHitted();
+	int getDamage();
+	bool isCharge();
+	bool isEnemy();
+	void force(int type);
+
+	int getxMin();
+	int getxMax();
+	int getyMin();
+	int getyMax();
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -44,6 +59,7 @@ private:
 	double yDirection;
 	int xMin, xMax, yMin, yMax;
 	int gone;
+	bool bossHitted;
 };
 
 

@@ -7,7 +7,7 @@
 #include "TileMap.h"
 
 
-class bossShoot
+class BossShoot
 {
 
 public:
@@ -15,27 +15,41 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void setTileMap(TileMap* tileMap);
-	void calculateCollisions();
 	float getPosx();
-	float getPosy();
+	
 	void setPosition(const glm::vec2& pos);
-	void setNaveLastPos(glm::vec2& pos);
-	glm::vec2 getNaveLastPos();
-	void charge();
+	
 	void powerbossShoot();
+	void normalBossShoot();
+	void setBossPos(glm::vec2& pos);
 	void setPlayerPos(glm::vec2& pos);
-	void setNavePos(glm::vec2& pos);
+
+	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
+	void calculateXDirecection();
+	void calculateYDirecection();
+	void calculateTrajectory();
+
+	bool calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax);
+	void disapear();
+
+	bool getGone();
 
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posbossShoot;
 	glm::vec2 posBoss;
-	glm::vec2 ppos;
+	glm::vec2 playerPos;
 	glm::vec2 lppos;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+
+	int xMin, xMax, yMin, yMax;
+	int xDirection;
+	double yDirection;
+	glm::vec2 posObjective;
+
+	bool gone;
 };
 
 

@@ -28,6 +28,7 @@ MapScene::MapScene()
 	map = NULL;
 	player = new Player();
 	enemy = new Enemy();
+	
 }
 
 MapScene::~MapScene()
@@ -103,30 +104,22 @@ void MapScene::initlevel(int level)
 	force = new Force();
 	force->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
-
-
-	//object
-	object = new Object();
-	object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	object->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+208, INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
+	forceCounter = 0;
 
 	//SHOOT
 	shoot = NULL;
 
-
 	//ENEMIES
 	enemySpritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	initEnemiesOnMap();
-	shooting = false;
   
 	//BOSSSHOOT
 	bshoot = NULL;
 
 	//BOSS
-	bosss = new boss();
-	bosss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	bosss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
-	bosss->setTileMap(map);
+	boss = new Boss();
+	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	boss->setPosition(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize()+2770, INIT_ENEMY_Y_TILES * map->getTileSize()-48));
 
 	//BACKGROUND QUAD CREATION
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
@@ -167,7 +160,7 @@ void MapScene::update(int deltaTime)
 
 	//PLAYER IS DEAD
 	if (player->getIsDead()) {
-		
+		putforce();
 		if ((player->getlives() <= 1 )) {
 			doGameOver();
 		}
@@ -176,33 +169,55 @@ void MapScene::update(int deltaTime)
 				Music::instance().explosion_player();
 				player->revive();
 			}
+			else {
+				player->update(deltaTime);
+			}
 		}
 	}
-	
 	//PLAYER IS ALIVE
-	player->sendcamera(left, right);
-  
-	if (player != NULL && !gameover) {
+	else if (gameover) {
+		++counter;
+
+		if (counter == 1) {
+			Music::instance().ultimaex();
+			for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
+		}
+		else if (counter == 2) {
+			Music::instance().stop();
+		}
+		else if (counter == 5) {
+			Game::instance().state.goCREDITS();	//canviar per pantalla de win + score
+			Music::instance().win();
+		}
+	}
+	else if (player != NULL) {
+		player->sendcamera(left, right);
+		
 		if (playerReachedForce()) 
 		{
-			force->setinscreen(true);
+			if (force->inScreen()) {
+				force->upgrade();
+			}
+			else {
+				force->setinscreen(true);
+				force->setPosition(glm::vec2(left - 20, 30));
+				Music::instance().force();
+			}
 			object = NULL;
-			force->setPosition(glm::vec2(left-20, INIT_PLAYER_Y_TILES * map->getTileSize() + 30));
-			Music::instance().force();
 		}
 
 		player->update(deltaTime);
 	
 		if (force->inScreen()) {
 			doForce();
+			force->update(deltaTime);
 		}
-		force->update(deltaTime);
 
 		updateEnemies(deltaTime);
 
 		//BOSS
 		if (int(right) >= 3030) {
-			bosss->update(deltaTime);
+			boss->update(deltaTime);
 			//AI BOSS
 			bossAI();
 			updateBossShoots(deltaTime);
@@ -210,22 +225,22 @@ void MapScene::update(int deltaTime)
 		
 		
 		if (object != NULL) object->update(deltaTime);
-	}
 
-	updateShoots(deltaTime);
-	
+		updateShoots(deltaTime);
 
-	if (int(right) == 3030) {
-		Music::instance().stop();
-		Music::instance().bm();
-	}
 
-	if (!player->getIsDead() && int(right) <= 3070) {
-		
-		left += 0.4;
-		right += 0.4;
+		if (int(right) == 3030) {
+			Music::instance().stop();
+			Music::instance().bm();
+		}
+
+		if (!player->getIsDead() && int(right) <= 3070) {
+
+			left += 0.4;
+			right += 0.4;
+		}
+		projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	}
-	projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 }
 
 void MapScene::render()
@@ -248,13 +263,15 @@ void MapScene::render()
 	renderBossShoots();
 	renderEnemies();
 	
-	bosss->render();
+	boss->render();
 	renderShoots();
 
 
-	if (force->inScreen()) force->render();
+	if (force->inScreen()) 
+		force->render();
 	
-	if (object != NULL) object->render();
+	if (object != NULL) 
+		object->render();
 	
 	player->render();
 	
@@ -264,76 +281,64 @@ void MapScene::render()
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 }
 
-void MapScene::normalShoot() {
-	
-
-	if (force->istaken()) {
-		shoot = new Shoot();
-
-		glm::vec2 posPlayer = player->getPos();
-		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 10)));
-		shoot->setTileMap(map);
-
-		shoots.push_back(shoot);
-
-		shoot2 = new Shoot();
-		shoot2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y - 1)));
-		shoot2->setTileMap(map);
-		shoots.push_back(shoot2);
-	}
-	else {
-		shoot = new Shoot();
-
-		glm::vec2 posPlayer = player->getPos();
-		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
-		shoot->setTileMap(map);
-		shoots.push_back(shoot);
-	}
-
-}
-
-void MapScene::normalShootForce() {
-
+void MapScene::normalShoot()
+{
 	shoot = new Shoot();
 
-	glm::vec2 posPlayer = force->getPos();
+	glm::vec2 posPlayer = player->getPos();
 	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-	shoot->setPosition(glm::vec2((posPlayer.x ), (posPlayer.y -5 )));
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
 	shoot->setTileMap(map);
 	shoots.push_back(shoot);
 }
 
+void MapScene::normalShootForce(int type)
+{
+	shoot = new Shoot();
 
-void MapScene::normalBossShoot(bool t) {
-	bshoot = new bossShoot();
+	glm::vec2 posPlayer = player->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+	shoot->setTileMap(map);
+	shoot->force(type+1);
+	shoot->setPlayerPos(player->getPos());
+	shoot->calculateForceYDirecection(right);
+	shoots.push_back(shoot);
+}
+
+
+void MapScene::normalBossShoot(bool t) 
+{
+	bshoot = new BossShoot();
 
 	glm::vec2 posBoss = glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 48);
 	bshoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posBoss);
-	if (!t) bshoot->setPosition(glm::vec2((posBoss.x - 7), (posBoss.y + 55)));
-	else bshoot->setPosition(glm::vec2((posBoss.x + 33), (posBoss.y + 125)));
-	bshoot->setTileMap(map);
-	bshoot->setNaveLastPos(player->getPos());
+
+	//decideix des don surten els trets
+	if (!t) {
+		bshoot->setPosition(glm::vec2((posBoss.x - 7), (posBoss.y + 55)));
+	}
+	else {
+		bshoot->setPosition(glm::vec2((posBoss.x + 33), (posBoss.y + 125)));
+	}
+	bshoot->setPlayerPos(player->getPos());
+	bshoot->normalBossShoot();
 	bshoots.push_back(bshoot);
 	Music::instance().disparoboss();
 }
 
 void MapScene::powerShoot()
 {
-	shoots[shoots.size() - 1] = NULL;
+	eliminateChargeShoot();
+	relocateShoots();
 	normalShoot();
 	shoot->powerShoot();
-	if (force->istaken()) shoot2->powerShoot();
-
 }
 
 void MapScene::powerBossShoot()
 {
 	normalBossShoot(true);
 	bshoot->powerbossShoot();
-
 }
 
 void MapScene::charge() {
@@ -387,11 +392,11 @@ void MapScene::relocateVisibleEnemies()
 	}
 }
 
-void MapScene::createEnemy(int type, glm::vec2 pos, int id)
+void MapScene::createEnemy(int type, glm::vec2 pos, int id, bool canShoot)
 {
 	enemy = new Enemy();
 	int mapSize = map->getTileSize();
-	enemy->init(enemySpritesheet, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1, id);
+	enemy->init(enemySpritesheet, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, 1, id, canShoot);
 	enemy->setPosition(glm::vec2(pos.x * mapSize, pos.y * mapSize));
 	enemy->setTileMap(map);
 	enemy->setType(type);
@@ -417,13 +422,6 @@ void MapScene::renderEnemies()
 			enemy = enemies[i];
 			if (enemy != NULL) {
 				enemy->render();
-				glm::vec2 posEnemy = enemy->getPos();
-				
-				//RECALCULAR 
-				if (!shooting && posEnemy.x < (right - 30)) {
-					shooting = true;
-					enemyShoot();
-				}
 			}
 		}
 	}
@@ -455,9 +453,20 @@ void MapScene::checkVisibles()
 void MapScene::calculateShootCollisions()
 {
 	if (!shoots.empty()){
-		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
-		//shoot->calculatePlayerCollisions();
 
+		int xmin = shoot->getxMin();
+		int xmax = shoot->getxMax();
+		int ymin = shoot->getyMin();
+		int ymax = shoot->getyMax();
+		//CALCULATE IF ENEMIES SHOOTS HIT FORCE
+		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax) && shoot->isEnemy()) {
+			shoot->disapear();
+		}
+		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
+		else if (shoot->calculatePlayerCollisions(xMin, xMax, yMin, yMax)) {
+				player->setBoom();
+				shoot->disapear();
+		}
 		//CALCULATE IF PLAYER SHOOTS HIT ENEMIES
 		for (int i = 0; i < visibleEnemies.size(); i++) {
 			enemy = visibleEnemies[i];
@@ -466,10 +475,34 @@ void MapScene::calculateShootCollisions()
 			int ymin = enemy->getyMinE();
 			int ymax = enemy->getyMaxE();
 			if (shoot->calculateEnemyCollisions(xmin, xmax, ymin, ymax)) {
+				if (enemy->getType() == 3) {
+					object = new Object();
+					object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+					object->setPosition(glm::vec2(enemy->getPos().x, enemy->getPos().y));
+				}
+				
 				enemy->explode();
-				shoot->disapear();
+				if (shoot->getDamage() == 1) {
+					shoot->disapear();
+				}
 			}
 		}
+	}
+}
+
+void MapScene::calculateBossShootCollisions()
+{
+	if (!bshoots.empty()) {
+
+		int xmin = player->getxMin();
+		int xmax = player->getxMax();
+		int ymin = player->getyMin();
+		int ymax = player->getyMax();
+		if (bshoot->calculatePlayerCollisions(xmin, xmax, ymin, ymax)) {
+			player->setBoom();
+			bshoot->disapear();
+		}
+		
 	}
 }
 
@@ -496,9 +529,29 @@ void MapScene::eliminateFromVisible(int id)
 	relocateVisibleEnemies();
 }
 
+void MapScene::calculatePlayerHitBox()
+{
+	xMin = player->getxMin();
+	xMax = player->getxMax();
+	yMin = player->getyMin();
+	yMax = player->getyMax();
+}
+
+void MapScene::eliminateChargeShoot()
+{
+	for (int i = 0; i < shoots.size(); i++)
+	{
+		Shoot* s = shoots[i];
+		if (s != NULL) {
+			if (s->isCharge()) {
+				shoots[i] = NULL;
+			}
+		}
+	}
+}
+
 void MapScene::enemyShoot()
 {
-	shooting = true;
 	shoot = new Shoot();
 	glm::vec2 posEnemy = enemy->getPos();
 	shoot->init(glm::ivec2(0, 0), texProgram, posEnemy);
@@ -507,7 +560,7 @@ void MapScene::enemyShoot()
 	shoot->setPlayerPos(player->getPos());
 	shoot->setEnemyPos(posEnemy);
 	shoot->enemyShoot();
-	//shoots.push_back(shoot);
+	shoots.push_back(shoot);
 }
 
 
@@ -523,211 +576,219 @@ void MapScene::clear()
 void MapScene::initEnemiesOnMap()
 {
 	//1a orde
-	createEnemy(1, glm::vec2(83, 14), 1);
-	createEnemy(1, glm::vec2(89, 10), 2);
-	createEnemy(1, glm::vec2(92, 15), 3);
-	createEnemy(1, glm::vec2(99, 11), 4);
+	createEnemy(1, glm::vec2(83, 14), 1, false);
+	createEnemy(1, glm::vec2(86, 10), 2, true);
+	createEnemy(1, glm::vec2(89, 15), 3, false);
+	createEnemy(1, glm::vec2(92, 11), 4, false);
 	
 	//2a orde
-	createEnemy(1, glm::vec2(104, 31), 5);
-	createEnemy(1, glm::vec2(107, 34), 6);
-	createEnemy(1, glm::vec2(112, 34), 7);
-	createEnemy(1, glm::vec2(117, 31), 8);
+	createEnemy(1, glm::vec2(104, 31), 5, false);
+	createEnemy(1, glm::vec2(107, 34), 6, false);
+	createEnemy(1, glm::vec2(110, 34), 7, true);
+	createEnemy(1, glm::vec2(113, 31), 8, false);
 	
 	//3a orde
-	createEnemy(1, glm::vec2(126, 20), 9);
-	createEnemy(1, glm::vec2(131, 21), 10);
-	createEnemy(1, glm::vec2(136, 17), 11);
-	createEnemy(1, glm::vec2(141, 23), 12);
-	createEnemy(1, glm::vec2(144, 19), 13);
+	createEnemy(1, glm::vec2(126, 20), 9, false);
+	createEnemy(1, glm::vec2(129, 21), 10, false);
+	createEnemy(1, glm::vec2(132, 17), 11, false);
+	createEnemy(1, glm::vec2(135, 23), 12, false);
+	createEnemy(1, glm::vec2(139, 19), 13, false);
 	
 	//4ta orde
-	createEnemy(1, glm::vec2(159, 20), 14);
-	createEnemy(1, glm::vec2(162, 15), 15);
-	createEnemy(1, glm::vec2(166, 14), 16);
-	createEnemy(1, glm::vec2(171, 15), 17);
+	createEnemy(1, glm::vec2(159, 20), 14, false);
+	createEnemy(1, glm::vec2(162, 15), 15, true);
+	createEnemy(1, glm::vec2(165, 14), 16, false);
+	createEnemy(1, glm::vec2(168, 15), 17, true);
 	
 	//5a orde
-	createEnemy(1, glm::vec2(168, 4), 18);
-	createEnemy(1, glm::vec2(172, 6), 19);
-	createEnemy(1, glm::vec2(176, 4), 20);
-	createEnemy(1, glm::vec2(180, 6), 21);
-	createEnemy(1, glm::vec2(184, 4), 22);
+	createEnemy(1, glm::vec2(169, 4), 18, false);
+	createEnemy(1, glm::vec2(172, 6), 19, true);
+	createEnemy(1, glm::vec2(175, 4), 20, false);
+	createEnemy(1, glm::vec2(178, 6), 21, false);
+	createEnemy(1, glm::vec2(181, 4), 22, false);
+
 	//6a orde
-	createEnemy(1, glm::vec2(168, 25), 23);
-	createEnemy(1, glm::vec2(172, 29), 24);
-	createEnemy(1, glm::vec2(177, 29), 25);
+	createEnemy(1, glm::vec2(170, 25), 23, false);
+	createEnemy(1, glm::vec2(173, 29), 24, false);
+	createEnemy(1, glm::vec2(176, 29), 25, true);
 
 	//1a orde torreta terra
-	createEnemy(21, glm::vec2(174, 40), 26);
+	createEnemy(21, glm::vec2(174, 40), 26, true);
 	
 	//1a rodo
-	createEnemy(3, glm::vec2(180, 20), 27);
+	createEnemy(3, glm::vec2(180, 20), 27, false);
 	
 	//7a orde
-	createEnemy(1, glm::vec2(189, 17), 28);
-	createEnemy(1, glm::vec2(193, 14), 29);
-	createEnemy(1, glm::vec2(195, 17), 30);
-	createEnemy(1, glm::vec2(196, 34), 31);
-	createEnemy(1, glm::vec2(204, 34), 32);
+	createEnemy(1, glm::vec2(189, 17), 28, false);
+	createEnemy(1, glm::vec2(192, 14), 29, false);
+	createEnemy(1, glm::vec2(195, 17), 30, false);
+	createEnemy(1, glm::vec2(198, 34), 31, false);
+	createEnemy(1, glm::vec2(201, 34), 32, false);
 	
 	//8a orde
-	createEnemy(1, glm::vec2(226, 19), 33);
-	createEnemy(1, glm::vec2(232, 24), 34);
+	createEnemy(1, glm::vec2(226, 19), 33, false);
+	createEnemy(1, glm::vec2(229, 24), 34, false);
 
 	//2a orde torreta terra
-	createEnemy(21, glm::vec2(238, 40) ,35);
-	createEnemy(21, glm::vec2(266, 40), 36);
+	createEnemy(21, glm::vec2(238, 40) ,35, true);
+	createEnemy(21, glm::vec2(266, 40), 36, true);
 	
 	//1a orde cap llarg
-	createEnemy(4, glm::vec2(257, 13), 37);
-	createEnemy(4, glm::vec2(270, 24), 38);
-	createEnemy(4, glm::vec2(285, 22), 39);
-	createEnemy(4, glm::vec2(299, 24), 40);
-	createEnemy(4, glm::vec2(306, 17), 41);
-	createEnemy(4, glm::vec2(315, 8),  42);
-	createEnemy(4, glm::vec2(307, 39), 43);
-	createEnemy(4, glm::vec2(311, 33), 44);
-	createEnemy(4, glm::vec2(322, 39), 45);
-	createEnemy(4, glm::vec2(327, 19), 46);
+	createEnemy(4, glm::vec2(270, 13), 37, false);
+	createEnemy(4, glm::vec2(284, 24), 38, false);
+	createEnemy(4, glm::vec2(288, 22), 39, false);
+	createEnemy(4, glm::vec2(305, 24), 40, true);
+	createEnemy(4, glm::vec2(310, 17), 41, false);
+	createEnemy(4, glm::vec2(320, 8),  42, false);
+	createEnemy(4, glm::vec2(310, 39), 43, false);
+	createEnemy(4, glm::vec2(319, 33), 44, false);
+	createEnemy(4, glm::vec2(325, 39), 45, true);
+	createEnemy(4, glm::vec2(327, 19), 46, true);
 	
 	//9a orde
-	createEnemy(1, glm::vec2(332, 32), 47);
-	createEnemy(1, glm::vec2(338, 30), 48);
+	createEnemy(1, glm::vec2(332, 32), 47, false);
+	createEnemy(1, glm::vec2(335, 30), 48, true);
 
 	//3a orde torreta terra
-	createEnemy(21, glm::vec2(334, 36), 49);				
-	createEnemy(21, glm::vec2(337, 36), 50);
-	createEnemy(21, glm::vec2(340, 36), 51);
-	createEnemy(21, glm::vec2(345, 32), 52);
-	createEnemy(21, glm::vec2(348, 32), 53);
-	createEnemy(21, glm::vec2(351, 32), 54);
+	createEnemy(21, glm::vec2(334, 36), 49, true);				
+	createEnemy(21, glm::vec2(337, 36), 50, true);
+	createEnemy(21, glm::vec2(340, 36), 51, true);
+	createEnemy(21, glm::vec2(345, 32), 52, true);
+	createEnemy(21, glm::vec2(348, 32), 53, true);
+	createEnemy(21, glm::vec2(351, 32), 54, true);
 
 	//1a orde torreta sostre
-	createEnemy(22, glm::vec2(334, 5), 55);
-	createEnemy(22, glm::vec2(337, 5), 56);
-	createEnemy(22, glm::vec2(340, 5), 57);
-	createEnemy(22, glm::vec2(345, 10), 58);
-	createEnemy(22, glm::vec2(348, 10), 59);
-	createEnemy(22, glm::vec2(351, 10), 60);
+	createEnemy(22, glm::vec2(334, 5), 55, true);
+	createEnemy(22, glm::vec2(337, 5), 56, true);
+	createEnemy(22, glm::vec2(340, 5), 57, true);
+	createEnemy(22, glm::vec2(345, 10), 58, true);
+	createEnemy(22, glm::vec2(348, 10), 59, true);
+	createEnemy(22, glm::vec2(351, 10), 60, true);
 
 	//10a orde
-	createEnemy(1, glm::vec2(370, 11), 61);
-	createEnemy(1, glm::vec2(374, 11), 62);
-	createEnemy(1, glm::vec2(378, 14), 63);
+	createEnemy(1, glm::vec2(370, 11), 61, false);
+	createEnemy(1, glm::vec2(373, 11), 62, false);
+	createEnemy(1, glm::vec2(376, 14), 63, true);
 
 	//2a orde rodo
-	createEnemy(3, glm::vec2(376, 24), 64);
-	createEnemy(3, glm::vec2(398, 33), 65);
+	createEnemy(3, glm::vec2(376, 24), 64, false);
+	createEnemy(3, glm::vec2(398, 33), 65, false);
 
 	//11a orde
-	createEnemy(1, glm::vec2(384, 39), 66);
-	createEnemy(1, glm::vec2(390, 38), 67);
+	createEnemy(1, glm::vec2(384, 39), 66, false);
+	createEnemy(1, glm::vec2(390, 38), 67, false);
 
 	//3a orde torreta terra
-	createEnemy(21, glm::vec2(404, 35), 68);
-	createEnemy(21, glm::vec2(419, 40), 69);
-	createEnemy(21, glm::vec2(422, 40), 70);
-	createEnemy(21, glm::vec2(437, 35), 71);
+	createEnemy(21, glm::vec2(404, 35), 68, true);
+	createEnemy(21, glm::vec2(419, 40), 69, true);
+	createEnemy(21, glm::vec2(422, 40), 70, true);
+	createEnemy(21, glm::vec2(437, 35), 71, true);
 
 	//2a orde torreta sostre
-	createEnemy(22, glm::vec2(395, 2), 72);
-	createEnemy(22, glm::vec2(398, 2), 73);
-	createEnemy(22, glm::vec2(404, 7), 74);
-	createEnemy(22, glm::vec2(419, 2), 75);
-	createEnemy(22, glm::vec2(422, 2), 76);
-	createEnemy(22, glm::vec2(437, 7), 77);
+	createEnemy(22, glm::vec2(395, 2), 72, true);
+	createEnemy(22, glm::vec2(398, 2), 73, true);
+	createEnemy(22, glm::vec2(404, 7), 74, true);
+	createEnemy(22, glm::vec2(419, 2), 75, true);
+	createEnemy(22, glm::vec2(422, 2), 76, true);
+	createEnemy(22, glm::vec2(437, 7), 77, true);
 
 	//12a orde
-	createEnemy(1, glm::vec2(430, 36), 78);
-	createEnemy(1, glm::vec2(436, 35), 79);
-	createEnemy(1, glm::vec2(439, 16), 80);
-	createEnemy(1, glm::vec2(445, 15), 81);
+	createEnemy(1, glm::vec2(430, 36), 78, false);
+	createEnemy(1, glm::vec2(433, 35), 79, false);
+	createEnemy(1, glm::vec2(436, 16), 80, false);
+	createEnemy(1, glm::vec2(439, 15), 81, false);
 
 	//13a orde
-	createEnemy(1, glm::vec2(455, 35), 82);
-	createEnemy(1, glm::vec2(460, 34), 83);
-	createEnemy(1, glm::vec2(463, 17), 84);
-	createEnemy(1, glm::vec2(468, 16), 85);
-	createEnemy(1, glm::vec2(473, 17), 86);
-	createEnemy(1, glm::vec2(478, 16), 87);
+	createEnemy(1, glm::vec2(455, 35), 82, false);
+	createEnemy(1, glm::vec2(458, 34), 83, true);
+	createEnemy(1, glm::vec2(461, 17), 84, true);
+	createEnemy(1, glm::vec2(464, 16), 85, false);
+	createEnemy(1, glm::vec2(473, 17), 86, false);
+	createEnemy(1, glm::vec2(475, 16), 87, false);
 
 	//14a orde
-	createEnemy(1, glm::vec2(480, 34), 88);
-	createEnemy(1, glm::vec2(487, 32), 89);
+	createEnemy(1, glm::vec2(480, 34), 88, false);
+	createEnemy(1, glm::vec2(483, 32), 89, true);
 
 	//3a orde torreta sostre
-	createEnemy(22, glm::vec2(467, 5), 90);
-	createEnemy(22, glm::vec2(470, 5), 91);
-	createEnemy(22, glm::vec2(525, 9), 92);
-	createEnemy(22, glm::vec2(528, 9), 93);
-	createEnemy(22, glm::vec2(531, 9), 94);
+	createEnemy(22, glm::vec2(467, 5), 90, true);
+	createEnemy(22, glm::vec2(470, 5), 91, true);
+	createEnemy(22, glm::vec2(525, 9), 92, true);
+	createEnemy(22, glm::vec2(528, 9), 93, true);
+	createEnemy(22, glm::vec2(531, 9), 94, true);
 	
 	//15a orde
-	createEnemy(1, glm::vec2(495, 9), 95);
-	createEnemy(1, glm::vec2(500, 8), 96);
-	createEnemy(1, glm::vec2(504, 12), 97);
+	createEnemy(1, glm::vec2(495, 9), 95, false);
+	createEnemy(1, glm::vec2(498, 8), 96, false);
+	createEnemy(1, glm::vec2(501, 12), 97, false);
 
 	//3a orde rodo
-	createEnemy(3, glm::vec2(525, 20), 98);
+	createEnemy(3, glm::vec2(525, 20), 98, false);
 
 	//4a orde torreta terra
-	createEnemy(21, glm::vec2(516, 36), 99);
-	createEnemy(21, glm::vec2(519, 36), 100);
+	createEnemy(21, glm::vec2(516, 36), 99, true);
+	createEnemy(21, glm::vec2(519, 36), 100, true);
 
 	//2a orde cap llarg
-	createEnemy(4, glm::vec2(537, 31), 101);
-	createEnemy(4, glm::vec2(545, 22), 102);
-	createEnemy(4, glm::vec2(563, 24), 103);
-	createEnemy(4, glm::vec2(582, 25), 104);
-	createEnemy(4, glm::vec2(590, 26), 105);
-	createEnemy(4, glm::vec2(590, 11), 106);
-	createEnemy(4, glm::vec2(590, 39), 107);
-	createEnemy(4, glm::vec2(600, 14), 108);
-	createEnemy(4, glm::vec2(600, 34), 109);
-	createEnemy(4, glm::vec2(608, 24), 110);
+	createEnemy(4, glm::vec2(539, 31), 101, true);
+	createEnemy(4, glm::vec2(545, 22), 102, false);
+	createEnemy(4, glm::vec2(566, 26), 103, false);
+	createEnemy(4, glm::vec2(582, 25), 104, true);
+	createEnemy(4, glm::vec2(590, 26), 105, false);
+	createEnemy(4, glm::vec2(590, 11), 106, false);
+	createEnemy(4, glm::vec2(590, 32), 107, true);
+	createEnemy(4, glm::vec2(605, 14), 108, true);
+	createEnemy(4, glm::vec2(605, 34), 109, false);
+	createEnemy(4, glm::vec2(608, 24), 110, false);
 	
 	//4a orde torreta sostre
-	createEnemy(22, glm::vec2(609, 5), 111);
-	createEnemy(22, glm::vec2(612, 5), 112);
-	createEnemy(22, glm::vec2(615, 5), 113);
-	
+	createEnemy(22, glm::vec2(609, 5), 111, true);
+	createEnemy(22, glm::vec2(612, 5), 112, true);
+	createEnemy(22, glm::vec2(615, 5), 113, true);
 
 	//5a orde torreta terra
-	createEnemy(21, glm::vec2(609, 36), 114);
-	createEnemy(21, glm::vec2(612, 36), 115);
-	createEnemy(21, glm::vec2(615, 36), 116);
+	createEnemy(21, glm::vec2(609, 36), 114, true);
+	createEnemy(21, glm::vec2(612, 36), 115, true);
+	createEnemy(21, glm::vec2(615, 36), 116, true);
 	
 	//16a orde
-	createEnemy(1, glm::vec2(632, 17), 117);
-	createEnemy(1, glm::vec2(639, 13), 118);
-	createEnemy(1, glm::vec2(647, 12), 119);
-	createEnemy(1, glm::vec2(639, 35), 120);
-	createEnemy(1, glm::vec2(645, 38), 121);
-	createEnemy(1, glm::vec2(652, 34), 122);
+	createEnemy(1, glm::vec2(632, 17), 117, false);
+	createEnemy(1, glm::vec2(635, 13), 118, false);
+	createEnemy(1, glm::vec2(647, 12), 119, true);
+	createEnemy(1, glm::vec2(639, 35), 120, false);
+	createEnemy(1, glm::vec2(645, 38), 121, false);
+	createEnemy(1, glm::vec2(648, 34), 122, true);
 
 	//4a orde rodo
-	createEnemy(3, glm::vec2(662, 31), 123);
+	createEnemy(3, glm::vec2(662, 31), 123, false);
 
 	//16a orde
-	createEnemy(1, glm::vec2(676, 19), 124);
-	createEnemy(1, glm::vec2(681, 21), 125);
+	createEnemy(1, glm::vec2(676, 19), 124, false);
+	createEnemy(1, glm::vec2(681, 21), 125, true);
 
 	//5a orde torreta sostre
-	createEnemy(22, glm::vec2(672, 5), 126);
-	createEnemy(22, glm::vec2(675, 5), 127);
+	createEnemy(22, glm::vec2(672, 5), 126, true);
+	createEnemy(22, glm::vec2(675, 5), 127, true);
 
 	//6a orde torreta terra
-	createEnemy(21, glm::vec2(672, 36), 128);
-	createEnemy(21, glm::vec2(675, 36), 129);
+	createEnemy(21, glm::vec2(672, 36), 128, true);
+	createEnemy(21, glm::vec2(675, 36), 129, true);
 }
 
 void MapScene::doForce()
 {
-	if ((player->getPos().y - 10 < force->getPos().y && player->getPos().y + 20 > force->getPos().y) && (player->getPos().x  < force->getPos().x && player->getPos().x + 30 > force->getPos().x)) force->setTaken(true);
-	if (force->istaken()) force->setPosition(glm::vec2(player->getPos().x + 28, player->getPos().y + 11));
+	int xmin = player->getxMin();
+	int xmax = player->getxMax();
+	int ymin = player->getyMin();
+	int ymax = player->getyMax();
+	if (force->calculateCollisions(xmin, xmax, ymin, ymax)) {
+		force->setTaken(true);
+	}
+		
+	if (force->istaken()) {
+		force->setPosition(glm::vec2(player->getPos().x + 24, player->getPos().y + 11));
+	}
 	else {
-
 		switch (num) {
 		case 1:
 			force->setPosition(glm::vec2(force->getPos().x + 1, force->getPos().y));
@@ -746,8 +807,18 @@ void MapScene::doForce()
 			if (force->getPos().y > 160) num = rand() % 4 + 1;
 			break;
 		}
-		if (rand() % 30 + 1 == 2) normalShootForce();
 	}
+	if (force->getType() == 2) {
+		forceCounter++;
+		if (forceCounter % 30 == 0) {
+			for (int i = 0; i < 3; i++) {
+				normalShootForce(i);
+			}
+		}	
+	}
+	//else if (force->getType() == 3) {
+	//	//shootwave
+	//}
 }
 
 void MapScene::doGameOver()
@@ -795,23 +866,46 @@ void MapScene::updateEnemies(int deltaTime)
 						if (!isVisible()) {
 							visibleEnemies.push_back(enemy);
 						}
-						enemy->setRight(right);
-						enemy->setPlayerCollisionBox(player->xMin, player->xMax, player->yMin, player->yMax);
-						enemy->setPlayerPosition(player->getPos());
+						else {
+							enemy->setRight(right);
+							enemy->setPlayerCollisionBox(player->getxMin(), player->getxMax(), player->getyMin(), player->getyMax());
+							enemy->setPlayerPosition(player->getPos());
 
-						enemy->update(deltaTime);
+							enemy->update(deltaTime);
 
-						if (enemy->getPos().x < (right - 10)) {
-							if (enemy->calculatePlayerCollisions() && !player->getExplode()) {
-								player->setBoom();
+							if (enemy->getPos().x < (right - 10)) {
+								if (force->inScreen()) {
+									int xmin = enemy->getxMinE();
+									int xmax = enemy->getxMaxE();
+									int ymin = enemy->getyMinE();
+									int ymax = enemy->getyMaxE();
+									if (force->calculateCollisions(xmin, xmax, ymin, ymax)) {
+										if (enemy->getType() == 3) {
+											object = new Object();
+											object->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+											object->setPosition(glm::vec2(enemy->getPos().x, enemy->getPos().y));
+										}
+										enemy->explode();
+									}
+								}
+								if (enemy->calculatePlayerCollisions() && !player->getExplode()) {
+									player->setBoom();
+								}
 							}
-						}
 
-						enemies[i] = enemy;
+							enemies[i] = enemy;
 
-						if (enemy->getPos().x < (left - 20)) {
-							enemies[i] = NULL;
+							if (enemy->getPos().x < (left - 20)) {
+								enemies[i] = NULL;
+							}
+							
+							if (enemy->getCanShoot() && !enemy->getisShooting()) {
+								enemyShoot();
+								enemy->setisShooting(true);
+							}
+
 						}
+						
 					}
 					else {
 						eliminateFromVisible(enemy->getId());
@@ -829,16 +923,24 @@ void MapScene::updateEnemies(int deltaTime)
 void MapScene::updateShoots(int deltaTime)
 {
 	if (!shoots.empty()) {
+		calculatePlayerHitBox();
 		for (int i = 0; i < shoots.size(); i++) {
 			shoot = shoots[i];
 			if (shoot != NULL) {
 				shoot->setPlayerPos(player->getPos());
 				shoot->update(deltaTime);
+				
 				//calcula colisions amb els enemics
 				calculateShootCollisions();
 
-				if (int(right) >= 3030 && shoot->getPos() >= 2980) {
-					bosss->hitted();
+				if (int(right) >= 3030 && int(shoot->getPos()) >= 2975) {
+					if (!shoot->getBossHitted()) {
+						shoot->hitBoss();
+						if (boss->getlife() == 14 || boss->getlife() == 15) {
+							Music::instance().grito();
+						}	
+						boss->hitted(shoot->getDamage());
+					}
 				}
 
 				if (shoot->getPos() > right || shoot->getPos() < (left - 20)) {
@@ -860,11 +962,18 @@ void MapScene::updateBossShoots(int deltaTime)
 		for (int i = 0; i < bshoots.size(); i++) {
 			bshoot = bshoots[i];
 			if (bshoot != NULL) {
-				bshoot->setPlayerPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
-				bshoot->setNavePos(player->getPos());
+				bshoot->setBossPos(glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 98));
+				bshoot->setPlayerPos(player->getPos());
 				bshoot->update(deltaTime);
+
+				calculateBossShootCollisions();
+
 				if (bshoot->getPosx() < left) {
 					bshoots[i] = NULL;
+				}
+
+				if (bshoot->getGone()) {
+					bshoot = NULL;
 				}
 			}
 		}
@@ -873,36 +982,30 @@ void MapScene::updateBossShoots(int deltaTime)
 
 void MapScene::bossAI()
 {
-	if (bosss->getlife() <= 0) {
-		++counter;
+	//BOSS IS DEAD
+	if (boss->getlife() <= 0) {
 		gameover = true;
-		for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
-		if (counter == 60) {
-			Music::instance().stop();
-			Music::instance().grito();
+	}
+	//BOSS IS ALIVE
+	else if (!right <= 3070 && !gameover) { 
+	
+		//shooting frequency
+		if (int(currentTime) % 200 == 10) {
+			boss->power = true;
 		}
-		///si se quiere alguna animacion
-		if (counter == 170) {
-			Music::instance().stop();
-			Music::instance().ultimaex();
-		}
-		if (counter == 310) {
-			Game::instance().state.goCREDITS();
-			Music::instance().win();
+		if (int(currentTime) % 40 == 10) {
+			boss->normal = true;
 		}
 
-	}
-	else if (!right <= 3070 && !gameover) {
-		if (int(currentTime) % 200 == 10) bosss->power = true;
-		if (int(currentTime) % 30 == 10) bosss->normal = true;
+
 		if (right >= 3070) {
-			if (bosss->ispower()) {
+			if (boss->ispower()) {
 				powerBossShoot();
-				bosss->power = false;
+				boss->power = false;
 			}
-			if (bosss->isnormal()) {
+			if (boss->isnormal()) {
 				normalBossShoot(false);
-				bosss->normal = false;
+				boss->normal = false;
 			}
 
 		}
@@ -918,5 +1021,4 @@ float MapScene::getLeft()
 void MapScene::putforce() {
 	force->setinscreen(!force->inScreen());
 	force->setTaken(!force->istaken());
-	
 }

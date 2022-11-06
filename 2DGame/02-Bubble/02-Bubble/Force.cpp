@@ -11,7 +11,7 @@
 
 enum ForceAnims
 {
-	NORMAL,VERTICALSHOOTS,DOUBLESHOOT
+	FIRST, SECOND, THIRD
 };
 
 
@@ -20,22 +20,36 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/force.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(23, 20), glm::vec2(33 / 269.f, 25 / 505.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	sprite->setNumberAnimations(3);
 
-	sprite->setAnimationSpeed(NORMAL, 8);
-	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(10 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(43 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(43 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(76 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
-	sprite->addKeyframe(NORMAL, glm::vec2(109 / 269.f, 43 / 505.f));
+	sprite->setAnimationSpeed(FIRST, 4);
+	sprite->addKeyframe(FIRST, glm::vec2(33 * 0 / 269.f, 25 * 0 / 505.f));
+	sprite->addKeyframe(FIRST, glm::vec2(33 * 1 / 269.f, 25 * 0 / 505.f));
+	sprite->addKeyframe(FIRST, glm::vec2(33 * 2 / 269.f, 25 * 0 / 505.f));
+	sprite->addKeyframe(FIRST, glm::vec2(33 * 3 / 269.f, 25 * 0 / 505.f));
+	sprite->addKeyframe(FIRST, glm::vec2(33 * 4 / 269.f, 25 * 0 / 505.f));
+	sprite->addKeyframe(FIRST, glm::vec2(33 * 5 / 269.f, 25 * 0 / 505.f));
+
+	sprite->setAnimationSpeed(SECOND, 4);
+	sprite->addKeyframe(SECOND, glm::vec2(33 * 0 / 269.f, 25 * 1 / 505.f));
+	sprite->addKeyframe(SECOND, glm::vec2(33 * 1 / 269.f, 25 * 1 / 505.f));
+	sprite->addKeyframe(SECOND, glm::vec2(33 * 2 / 269.f, 25 * 1 / 505.f));
+	sprite->addKeyframe(SECOND, glm::vec2(33 * 3 / 269.f, 25 * 1 / 505.f));
+	sprite->addKeyframe(SECOND, glm::vec2(33 * 4 / 269.f, 25 * 1 / 505.f));
+	sprite->addKeyframe(SECOND, glm::vec2(33 * 5 / 269.f, 25 * 1 / 505.f));
+
+	sprite->setAnimationSpeed(THIRD, 4);
+	sprite->addKeyframe(THIRD, glm::vec2(33 * 0 / 269.f, 25 * 2 / 505.f));
+	sprite->addKeyframe(THIRD, glm::vec2(33 * 1 / 269.f, 25 * 2 / 505.f));
+	sprite->addKeyframe(THIRD, glm::vec2(33 * 2 / 269.f, 25 * 2 / 505.f));
+	sprite->addKeyframe(THIRD, glm::vec2(33 * 3 / 269.f, 25 * 2 / 505.f));
+
 	sprite->setLoopAnimations(true),
 
 	taken = false;
 	inscreen = false;
-	sprite->changeAnimation(NORMAL);
+
+	sprite->changeAnimation(FIRST);
 	tileMapDispl = tileMapPos;
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posForce.x), float(tileMapDispl.y + posForce.y)));
@@ -45,6 +59,7 @@ void Force::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Force::update(int deltaTime)
 {
 	if (sprite != NULL) {
+		setCollisionBox(6, 17, 2, 12);
 		sprite->setPosition(glm::vec2(float(tileMapDispl.x + posForce.x), float(tileMapDispl.y + posForce.y)));
 		sprite->update(deltaTime);
 	}
@@ -85,4 +100,36 @@ void Force::setPosition(const glm::vec2& pos)
 bool Force::inScreen()
 {
 	return inscreen;
+}
+
+bool Force::calculateCollisions(int xmin, int xmax, int ymin, int ymax)
+{
+	return ((xMin < xmax) && (xmin < xMax)
+		&& (yMin < ymax) && (ymin < yMax));
+}
+
+void Force::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = posForce.x + xmin;
+	xMax = posForce.x + xmax;
+	yMin = posForce.y + ymin;
+	yMax = posForce.y + ymax;
+}
+
+void Force::upgrade()
+{
+	if (sprite->animation() == FIRST) {
+		sprite->changeAnimation(SECOND);
+	}
+}
+
+int Force::getType()
+{
+	if (sprite->animation() == FIRST) {
+		return 1;
+	}
+	else if (sprite->animation() == SECOND) {
+		return 2;
+	}
+	return 3;
 }

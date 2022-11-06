@@ -34,7 +34,7 @@ public:
 	float getLeft();
 	void putforce();
 	void normalShoot();
-	void normalShootForce();
+	void normalShootForce(int type);
 	void normalBossShoot(bool t);
 	void powerShoot();
 	void enemyShoot();
@@ -56,31 +56,34 @@ private:
 	void relocateEnemies();
 	void relocateVisibleEnemies();
 	void initEnemiesOnMap();
-	void createEnemy(int type, glm::vec2 pos, int id);
+	void createEnemy(int type, glm::vec2 pos, int id, bool canShoot);
 	void renderShoots();
 	void renderEnemies();
 	void renderBossShoots();
 	void checkVisibles();
 	void calculateShootCollisions();
+	void calculateBossShootCollisions();
 	bool isVisible();
 	void eliminateFromVisible(int id);
+	void calculatePlayerHitBox();
+	void eliminateChargeShoot();
 
 private:
 	TileMap* map;
 	Player* player;
 	Enemy* enemy;
-	boss* bosss;
+	Boss* boss;
 	Force* force;
 	Shoot* shoot;
-	Shoot* shoot2;
+	
 	Object* object;
 	vector<Shoot*> shoots;
 
 	vector<Enemy*> enemies;
 	vector<Enemy*> visibleEnemies;
 
-	bossShoot* bshoot;
-	vector<bossShoot*> bshoots;
+	BossShoot* bshoot;
+	vector<BossShoot*> bshoots;
 	vector<glm::vec2> plastpos;
 
 	Texture texs[1];
@@ -90,9 +93,9 @@ private:
 	bool godModeActive;
 	Text text;
 	bool gameover;
-	bool shooting;
 	Texture enemySpritesheet;
 	int counter;
 	int num;
-
+	int xMin, xMax, yMin, yMax;
+	int forceCounter;
 };

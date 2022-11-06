@@ -24,7 +24,11 @@ public:
 	bool inScreen();
 	bool istaken();
 	glm::vec2 getPos();
+	bool calculateCollisions(int xmin, int xmax, int ymin, int ymax);
+	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 
+	void upgrade();
+	int getType();
 
 private:
 	glm::ivec2 tileMapDispl;
@@ -33,6 +37,8 @@ private:
 	Sprite* sprite;
 	bool taken;
 	bool inscreen;
+
+	int xMin, xMax, yMin, yMax;
 };
 
 

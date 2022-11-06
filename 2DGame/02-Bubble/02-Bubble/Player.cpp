@@ -344,3 +344,23 @@ bool Player::getIsDead()
 void Player::setGodMode(bool godModeActive){
 	godMode = godModeActive;
 }
+
+int Player::getxMin()
+{
+	return xMin;
+}
+
+int Player::getxMax()
+{
+	return xMax;
+}
+
+int Player::getyMin()
+{
+	return yMin;
+}
+
+int Player::getyMax()
+{
+	return yMax;
+}

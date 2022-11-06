@@ -2,161 +2,154 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/glut.h>
-#include "bossShoot.h"
+#include "BossShoot.h"
 #include "Game.h"
 #include "Music.h"
 #include <cmath>
 
-enum bossShootAnims
+enum BossShootAnims
 {
-	NORMAL, POWER, CHARGING
+	NORMAL, POWER, GONE
 };
 
 
-//la nau fa 33px  de x i 25px de y en la spritesheet, el quad sera de 33x 30y
-void bossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, const glm::vec2& pos)
+void BossShoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, const glm::vec2& pos)
 {
 	spritesheet.loadFromFile("images/aaa3.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(33, 25), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(3);
 
 	sprite->setAnimationSpeed(NORMAL, 8);
-
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
 
 	sprite->setAnimationSpeed(POWER, 8);
 	sprite->addKeyframe(POWER, glm::vec2(33 * 6 / 269.f, 25 * 3 / 269.f));
 
-	sprite->setAnimationSpeed(CHARGING, 4);
-	sprite->addKeyframe(CHARGING, glm::vec2(33 * 2 / 269.f, 25 * 3 / 269.f));
-	sprite->addKeyframe(CHARGING, glm::vec2(33 * 3 / 269.f, 25 * 3 / 269.f));
-	sprite->addKeyframe(CHARGING, glm::vec2(33 * 4 / 269.f, 25 * 3 / 269.f));
-	sprite->addKeyframe(CHARGING, glm::vec2(33 * 5 / 269.f, 25 * 3 / 269.f));
-	sprite->addKeyframe(CHARGING, glm::vec2(33 * 0 / 269.f, 25 * 4 / 269.f));
+	sprite->setAnimationSpeed(GONE, 2);
+	sprite->addKeyframe(GONE, glm::vec2(33 * 7 / 269.f, 25 * 3 / 269.f));
+
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(pos.x), float(pos.y)));
 
+	gone = false;
+
 }
 
-void bossShoot::update(int deltaTime)
+void BossShoot::update(int deltaTime)
 {
-	//sprite->setCharge(sprite->animation() == CHARGING);
 	sprite->update(deltaTime);
-	calculateCollisions();
+	if (sprite->animation() == NORMAL) {
+		setCollisionBox(10, 16, 9, 16);
+	}
+	else {
+		setCollisionBox(4, 16, 5, 19);
+	}
+	calculateTrajectory();
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posbossShoot.x), float(tileMapDispl.y + posbossShoot.y)));
 
 }
 
-void bossShoot::render()
+void BossShoot::render()
 {
 	sprite->render();
 }
-//
-//void bossShoot::destroy() {
-//	delete sprite;
-//	posbossShoot.x = 0;
-//	posbossShoot.y = 0;
-//}
 
-void bossShoot::calculateCollisions()
-{
-	if (sprite->animation() != CHARGING) {
-		if (sprite->animation() == POWER) {
-			if (posbossShoot.y < ppos.y) posbossShoot.y += 1;
-			else if (posbossShoot.y > ppos.y) posbossShoot.y -= 1;
-		    posbossShoot.x -= 1;
-				
-			
-		}
-		if (sprite->animation() == NORMAL) {
-			if (posbossShoot.x < lppos.x) {
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-				posbossShoot.x -= 1;
-			}
-			else
-			 if (abs(posbossShoot.y - lppos.y) > abs(posbossShoot.x - lppos.x)) {
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-				posbossShoot.x -= 0.2;
-			}
-			else if (abs(posbossShoot.y - lppos.y) < abs(posbossShoot.x - lppos.x)) {
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 0.2;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 0.2;
-				posbossShoot.x -= 1;
-			}
-			else {
-				posbossShoot.x -= 1;
-				if (posbossShoot.y < lppos.y) posbossShoot.y += 1;
-				else if (posbossShoot.y > lppos.y) posbossShoot.y -= 1;
-			}
-		}
-	}
-	else {
-		posbossShoot.x = posBoss.x + 22;
-		posbossShoot.y = posBoss.y + 5;
-	}
-	switch (map->collisionMoveLeft(posbossShoot, glm::ivec2(28, 15)))
-	{
-	case 1:
-		break;
-	default:
-		//sprite->changeAnimation(POWER);
-		break;
-	}
-}
-
-void bossShoot::charge()
-{
-	sprite->changeAnimation(CHARGING);
-	Music::instance().disparo_charge();
-}
-
-void bossShoot::powerbossShoot()
+void BossShoot::powerbossShoot()
 {
 	sprite->changeAnimation(POWER);
+	posObjective.x = playerPos.x;
+	posObjective.y = playerPos.y - 5;
+	calculateXDirecection();
+	calculateYDirecection();
 	Music::instance().disparoboss2();
 }
 
-void bossShoot::setPlayerPos(glm::vec2& pos)
+void BossShoot::normalBossShoot()
+{
+	posObjective.x = playerPos.x + 5;
+	posObjective.y = playerPos.y;
+	calculateXDirecection();
+	calculateYDirecection();
+}
+
+void BossShoot::setBossPos(glm::vec2& pos)
 {
 	posBoss = pos;
 }
 
-void bossShoot::setNavePos(glm::vec2& pos)
+void BossShoot::setPlayerPos(glm::vec2& pos)
 {
-	ppos = pos;
+	playerPos = pos;
 }
 
-void bossShoot::setPosition(const glm::vec2& pos)
+void BossShoot::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
+{
+	xMin = posbossShoot.x + xmin;
+	xMax = posbossShoot.x + xmax;
+	yMin = posbossShoot.y + ymin;
+	yMax = posbossShoot.y + ymax;
+}
+
+void BossShoot::calculateXDirecection()
+{
+	if (posObjective.x < posbossShoot.x) {
+		xDirection = -1;
+	}
+	else if (posObjective.x > posbossShoot.x) {
+		xDirection = 1;
+	}
+	else {
+		xDirection = 0;
+	}
+}
+
+void BossShoot::calculateYDirecection()
+{
+	double x1 = posbossShoot.x;
+	double x2 = posObjective.x;
+	double y1 = posbossShoot.y;
+	double y2 = posObjective.y;
+
+	yDirection = -((y2 - y1) / (x2 - x1));
+}
+
+void BossShoot::calculateTrajectory()
+{
+	posbossShoot.x += xDirection;
+	posbossShoot.y += yDirection;
+}
+
+bool BossShoot::calculatePlayerCollisions(int xmin, int xmax, int ymin, int ymax)
+{
+	if (gone) {
+		return false;
+	}
+	return ((xMin < xmax) && (xmin < xMax)
+		&& (yMin < ymax) && (ymin < yMax));
+}
+
+void BossShoot::disapear()
+{
+	if (!gone) {
+		gone = true;
+		sprite->changeAnimation(GONE);
+	}
+}
+
+bool BossShoot::getGone()
+{
+	return gone;
+}
+
+void BossShoot::setPosition(const glm::vec2& pos)
 {
 	posbossShoot = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posbossShoot.x), float(tileMapDispl.y + posbossShoot.y)));
 }
 
-void bossShoot::setNaveLastPos(glm::vec2& pos)
-{
-	lppos = pos;
-}
-
-glm::vec2 bossShoot::getNaveLastPos()
-{
-	return lppos;
-}
-
-
-float bossShoot::getPosx()
+float BossShoot::getPosx()
 {
 	return posbossShoot.x;
-}
-float bossShoot::getPosy()
-{
-	return posbossShoot.x;
-}
-
-void bossShoot::setTileMap(TileMap* tileMap)
-{
-	map = tileMap;
 }
