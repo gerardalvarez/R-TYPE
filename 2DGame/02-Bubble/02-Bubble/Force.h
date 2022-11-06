@@ -24,6 +24,8 @@ public:
 	bool inScreen();
 	bool istaken();
 	glm::vec2 getPos();
+	bool calculateCollisions(int xmin, int xmax, int ymin, int ymax);
+	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 
 
 private:
@@ -33,6 +35,8 @@ private:
 	Sprite* sprite;
 	bool taken;
 	bool inscreen;
+
+	int xMin, xMax, yMin, yMax;
 };
 
 

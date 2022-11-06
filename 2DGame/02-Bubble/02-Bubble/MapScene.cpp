@@ -114,7 +114,6 @@ void MapScene::initlevel(int level)
 	//SHOOT
 	shoot = NULL;
 
-
 	//ENEMIES
 	enemySpritesheet.loadFromFile("images/Enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	initEnemiesOnMap();
@@ -202,7 +201,7 @@ void MapScene::update(int deltaTime)
 		{
 			force->setinscreen(true);
 			object = NULL;
-			force->setPosition(glm::vec2(left-20, INIT_PLAYER_Y_TILES * map->getTileSize() + 30));
+			force->setPosition(glm::vec2(left-20, 30));
 			Music::instance().force();
 		}
 
@@ -279,45 +278,13 @@ void MapScene::render()
 	//text.render("Videogames!!!", glm::vec2(10,20), 32, glm::vec4(1, 1, 1, 1));
 }
 
-void MapScene::normalShoot() 
+void MapScene::normalShoot()
 {
-
-	if (force->istaken()) {
-		shoot = new Shoot();
-
-		glm::vec2 posPlayer = player->getPos();
-		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 10)));
-		shoot->setTileMap(map);
-
-		shoots.push_back(shoot);
-
-		shoot2 = new Shoot();
-		shoot2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y - 1)));
-		shoot2->setTileMap(map);
-		shoots.push_back(shoot2);
-	}
-	else {
-		shoot = new Shoot();
-
-		glm::vec2 posPlayer = player->getPos();
-		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
-		shoot->setTileMap(map);
-		shoots.push_back(shoot);
-	}
-
-}
-
-void MapScene::normalShootForce() 
-{
-
 	shoot = new Shoot();
 
-	glm::vec2 posPlayer = force->getPos();
+	glm::vec2 posPlayer = player->getPos();
 	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-	shoot->setPosition(glm::vec2((posPlayer.x ), (posPlayer.y -5 )));
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
 	shoot->setTileMap(map);
 	shoots.push_back(shoot);
 }
@@ -329,6 +296,7 @@ void MapScene::normalBossShoot(bool t)
 
 	glm::vec2 posBoss = glm::vec2(INIT_ENEMY_X_TILES * map->getTileSize() + 2760, INIT_ENEMY_Y_TILES * map->getTileSize() - 48);
 	bshoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posBoss);
+
 	//decideix des don surten els trets
 	if (!t) {
 		bshoot->setPosition(glm::vec2((posBoss.x - 7), (posBoss.y + 55)));
@@ -471,12 +439,20 @@ void MapScene::checkVisibles()
 void MapScene::calculateShootCollisions()
 {
 	if (!shoots.empty()){
-		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
-		if (shoot->calculatePlayerCollisions(xMin, xMax, yMin, yMax)) {
-			player->setBoom();
+
+		int xmin = shoot->getxMin();
+		int xmax = shoot->getxMax();
+		int ymin = shoot->getyMin();
+		int ymax = shoot->getyMax();
+		//CALCULATE IF ENEMIES SHOOTS HIT FORCE
+		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax)) {
 			shoot->disapear();
 		}
-
+		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
+		else if (shoot->calculatePlayerCollisions(xMin, xMax, yMin, yMax)) {
+				player->setBoom();
+				shoot->disapear();
+		}
 		//CALCULATE IF PLAYER SHOOTS HIT ENEMIES
 		for (int i = 0; i < visibleEnemies.size(); i++) {
 			enemy = visibleEnemies[i];
@@ -781,10 +757,18 @@ void MapScene::initEnemiesOnMap()
 
 void MapScene::doForce()
 {
-	if ((player->getPos().y - 10 < force->getPos().y && player->getPos().y + 20 > force->getPos().y) && (player->getPos().x  < force->getPos().x && player->getPos().x + 30 > force->getPos().x)) force->setTaken(true);
-	if (force->istaken()) force->setPosition(glm::vec2(player->getPos().x + 28, player->getPos().y + 11));
+	int xmin = player->getxMin();
+	int xmax = player->getxMax();
+	int ymin = player->getyMin();
+	int ymax = player->getyMax();
+	if (force->calculateCollisions(xmin, xmax, ymin, ymax)) {
+		force->setTaken(true);
+	}
+		
+	if (force->istaken()) {
+		force->setPosition(glm::vec2(player->getPos().x + 24, player->getPos().y + 11));
+	}
 	else {
-
 		switch (num) {
 		case 1:
 			force->setPosition(glm::vec2(force->getPos().x + 1, force->getPos().y));
@@ -803,7 +787,6 @@ void MapScene::doForce()
 			if (force->getPos().y > 160) num = rand() % 4 + 1;
 			break;
 		}
-		if (rand() % 30 + 1 == 2) normalShootForce();
 	}
 }
 
@@ -860,6 +843,15 @@ void MapScene::updateEnemies(int deltaTime)
 							enemy->update(deltaTime);
 
 							if (enemy->getPos().x < (right - 10)) {
+								if (force->inScreen()) {
+									int xmin = enemy->getxMinE();
+									int xmax = enemy->getxMaxE();
+									int ymin = enemy->getyMinE();
+									int ymax = enemy->getyMaxE();
+									if (force->calculateCollisions(xmin, xmax, ymin, ymax)) {
+										enemy->explode();
+									}
+								}
 								if (enemy->calculatePlayerCollisions() && !player->getExplode()) {
 									player->setBoom();
 								}
@@ -993,5 +985,4 @@ float MapScene::getLeft()
 void MapScene::putforce() {
 	force->setinscreen(!force->inScreen());
 	force->setTaken(!force->istaken());
-	
 }

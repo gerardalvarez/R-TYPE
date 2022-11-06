@@ -36,6 +36,12 @@ public:
 	int getDamage();
 	bool isCharge();
 
+
+	int getxMin();
+	int getxMax();
+	int getyMin();
+	int getyMax();
+
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posShoot;

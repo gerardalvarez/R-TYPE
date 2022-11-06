@@ -241,3 +241,23 @@ void Shoot::setTileMap(TileMap* tileMap)
 {
 	map = tileMap;
 }
+
+int Shoot::getxMin()
+{
+	return xMin;
+}
+
+int Shoot::getxMax()
+{
+	return xMax;
+}
+
+int Shoot::getyMin()
+{
+	return yMin;
+}
+
+int Shoot::getyMax()
+{
+	return yMax;
+}
