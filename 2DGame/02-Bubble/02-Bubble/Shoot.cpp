@@ -9,7 +9,7 @@
 
 enum ShootAnims
 {
-	NORMAL, POWER, CHARGING, ENEMY, GONE, BOSSHIT, BOSSHITHARD
+	NORMAL, POWER, CHARGING, ENEMY, GONE, BOSSHIT, BOSSHITHARD, FORCE1, FORCE2, FORCE3
 };
 
 
@@ -18,7 +18,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 {
 	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(7);
+	sprite->setNumberAnimations(10);
 
 	sprite->setAnimationSpeed(NORMAL, 2);
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
@@ -50,6 +50,15 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 	sprite->setAnimationSpeed(BOSSHITHARD, 8);
 	sprite->addKeyframe(BOSSHITHARD, glm::vec2(33 * 4 / 269.f, 25 * 5 / 269.f));
 	sprite->addKeyframe(BOSSHITHARD, glm::vec2(33 * 4 / 269.f, 25 * 5 / 269.f));
+
+	sprite->setAnimationSpeed(FORCE1, 2);
+	sprite->addKeyframe(FORCE1, glm::vec2(33 * 0 / 269.f, 25 * 7 / 269.f));
+
+	sprite->setAnimationSpeed(FORCE2, 2);
+	sprite->addKeyframe(FORCE2, glm::vec2(33 * 1 / 269.f, 25 * 7 / 269.f));
+
+	sprite->setAnimationSpeed(FORCE3, 2);
+	sprite->addKeyframe(FORCE3, glm::vec2(33 * 2 / 269.f, 25 * 7 / 269.f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -84,6 +93,15 @@ void Shoot::calculateCollisions()
 		if (sprite->lastAnimation()) {
 			disapear();
 		}
+	}
+	else if (sprite->animation() == FORCE1) {
+		setCollisionBox(7, 22, 16, 17);
+		posShoot.x += 4;
+	}
+	else if (sprite->animation() == FORCE2 || sprite->animation() == FORCE3) {
+		setCollisionBox(14, 20, 11, 17);
+		posShoot.x += 4;
+		posShoot.y += yDirection;
 	}
 	else if (sprite->animation() != CHARGING){
 		setCollisionBox(12, 18, 14, 17);
@@ -174,6 +192,20 @@ void Shoot::calculateYDirecection()
 	yDirection = -((y2 - y1) / (x2 - x1));
 }
 
+void Shoot::calculateForceYDirecection(int r)
+{
+	double x1 = posPlayer.x;
+	double x2 = r;
+	double y1 = posPlayer.y;
+	double y2 = 0;
+	if (sprite->animation() == FORCE2) {
+		yDirection = -1;
+	}
+	else {
+		yDirection = 1;
+	}
+}
+
 void Shoot::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
 {
 	xMin = posShoot.x + xmin;
@@ -229,6 +261,19 @@ bool Shoot::isCharge()
 bool Shoot::isEnemy()
 {
 	return (sprite->animation() == ENEMY);
+}
+
+void Shoot::force(int type)
+{
+	if (type == 1) {
+		sprite->changeAnimation(FORCE1);
+	}
+	else if (type == 2) {
+		sprite->changeAnimation(FORCE2);
+	}
+	else{
+		sprite->changeAnimation(FORCE3);
+	}
 }
 
 void Shoot::setPosition(const glm::vec2& pos)

@@ -28,6 +28,9 @@ public:
 	void setEnemyPos(glm::vec2& pos);
 	void calculateXDirecection();
 	void calculateYDirecection();
+
+	void calculateForceYDirecection(int r);
+
 	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 	bool getGone();
 	void disapear();
@@ -36,7 +39,7 @@ public:
 	int getDamage();
 	bool isCharge();
 	bool isEnemy();
-
+	void force(int type);
 
 	int getxMin();
 	int getxMax();

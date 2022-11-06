@@ -28,7 +28,7 @@ public:
 	void setCollisionBox(int xmin, int xmax, int ymin, int ymax);
 
 	void upgrade();
-
+	int getType();
 
 private:
 	glm::ivec2 tileMapDispl;

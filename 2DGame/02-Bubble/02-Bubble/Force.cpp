@@ -119,9 +119,17 @@ void Force::setCollisionBox(int xmin, int xmax, int ymin, int ymax)
 void Force::upgrade()
 {
 	if (sprite->animation() == FIRST) {
-		sprite->changeAnimation(FIRST);
+		sprite->changeAnimation(SECOND);
+	}
+}
+
+int Force::getType()
+{
+	if (sprite->animation() == FIRST) {
+		return 1;
 	}
 	else if (sprite->animation() == SECOND) {
-		sprite->changeAnimation(THIRD);
+		return 2;
 	}
+	return 3;
 }

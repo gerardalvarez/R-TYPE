@@ -34,7 +34,7 @@ public:
 	float getLeft();
 	void putforce();
 	void normalShoot();
-	void normalShootForce();
+	void normalShootForce(int type);
 	void normalBossShoot(bool t);
 	void powerShoot();
 	void enemyShoot();
@@ -97,4 +97,5 @@ private:
 	int counter;
 	int num;
 	int xMin, xMax, yMin, yMax;
+	int forceCounter;
 };

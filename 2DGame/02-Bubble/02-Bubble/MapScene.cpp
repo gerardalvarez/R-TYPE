@@ -104,6 +104,7 @@ void MapScene::initlevel(int level)
 	force = new Force();
 	force->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
+	forceCounter = 0;
 
 	//SHOOT
 	shoot = NULL;
@@ -288,6 +289,20 @@ void MapScene::normalShoot()
 	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
 	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
 	shoot->setTileMap(map);
+	shoots.push_back(shoot);
+}
+
+void MapScene::normalShootForce(int type)
+{
+	shoot = new Shoot();
+
+	glm::vec2 posPlayer = player->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+	shoot->setTileMap(map);
+	shoot->force(type+1);
+	shoot->setPlayerPos(player->getPos());
+	shoot->calculateForceYDirecection(right);
 	shoots.push_back(shoot);
 }
 
@@ -564,6 +579,9 @@ void MapScene::clear()
 
 void MapScene::initEnemiesOnMap()
 {
+
+	createEnemy(3, glm::vec2(50, 10), 27, false);
+
 	//1a orde
 	createEnemy(1, glm::vec2(83, 14), 1, false);
 	createEnemy(1, glm::vec2(86, 10), 2, true);
@@ -797,6 +815,17 @@ void MapScene::doForce()
 			break;
 		}
 	}
+	if (force->getType() == 2) {
+		forceCounter++;
+		if (forceCounter % 30 == 0) {
+			for (int i = 0; i < 3; i++) {
+				normalShootForce(i);
+			}
+		}	
+	}
+	//else if (force->getType() == 3) {
+	//	//shootwave
+	//}
 }
 
 void MapScene::doGameOver()
