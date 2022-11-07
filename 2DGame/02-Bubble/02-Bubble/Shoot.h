@@ -40,6 +40,9 @@ public:
 	bool isCharge();
 	bool isEnemy();
 	void force(int type);
+	void waveShoot();
+
+	bool mapCollisions();
 
 	int getxMin();
 	int getxMax();

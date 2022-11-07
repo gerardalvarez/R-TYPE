@@ -9,7 +9,7 @@
 
 enum ShootAnims
 {
-	NORMAL, POWER, CHARGING, ENEMY, GONE, BOSSHIT, BOSSHITHARD, FORCE1, FORCE2, FORCE3
+	NORMAL, POWER, CHARGING, ENEMY, GONE, BOSSHIT, BOSSHITHARD, FORCE1, FORCE2, FORCE3, WAVESHOOT1, WAVESHOOT2
 };
 
 
@@ -18,7 +18,7 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 {
 	spritesheet.loadFromFile("images/AAA.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(33, 30), glm::vec2(33 / 269.f, 25 / 269.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(10);
+	sprite->setNumberAnimations(12);
 
 	sprite->setAnimationSpeed(NORMAL, 2);
 	sprite->addKeyframe(NORMAL, glm::vec2(33 * 0 / 269.f, 25 * 3 / 269.f));
@@ -60,6 +60,13 @@ void Shoot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, con
 	sprite->setAnimationSpeed(FORCE3, 2);
 	sprite->addKeyframe(FORCE3, glm::vec2(33 * 2 / 269.f, 25 * 7 / 269.f));
 
+	sprite->setAnimationSpeed(WAVESHOOT1, 2);
+	sprite->addKeyframe(WAVESHOOT1, glm::vec2(33 * 0 / 269.f, 25 * 8 / 269.f));
+
+	sprite->setAnimationSpeed(WAVESHOOT2, 2);
+	sprite->addKeyframe(WAVESHOOT2, glm::vec2(33 * 1 / 269.f, 25 * 8 / 269.f));
+	sprite->addKeyframe(WAVESHOOT2, glm::vec2(33 * 2 / 269.f, 25 * 8 / 269.f));
+
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(pos.x), float(pos.y)));
@@ -89,6 +96,16 @@ void Shoot::calculateCollisions()
 		posShoot.x += xDirection;
 		posShoot.y += yDirection;
 	}
+	else if (sprite->animation() == WAVESHOOT1) {
+		setCollisionBox(1, 31, 6, 23);
+		sprite->changeAnimation(WAVESHOOT2);
+		sprite->setLoopAnimations(true);
+		posShoot.x += 4;
+	}
+	else if (sprite->animation() == WAVESHOOT2) {
+		setCollisionBox(1, 31, 6, 23);
+		posShoot.x += 4;
+	}
 	else if (sprite->animation() == BOSSHIT || sprite->animation() == BOSSHITHARD) {
 		if (sprite->lastAnimation()) {
 			disapear();
@@ -108,6 +125,7 @@ void Shoot::calculateCollisions()
 		posShoot.x += 4;
 	}
 	else {
+		setCollisionBox(10, 23, 8, 18);
 		posShoot.x = posPlayer.x + 22;
 		posShoot.y = posPlayer.y + 5;
 	}
@@ -248,11 +266,17 @@ bool Shoot::getBossHitted()
 
 int Shoot::getDamage()
 {
-	if (sprite->animation() == BOSSHIT || sprite->animation() == NORMAL) {
+	if (sprite->animation() == BOSSHIT || sprite->animation() == NORMAL || sprite->animation() == ENEMY) {
 		return 1;
 	}
-	else if (sprite->animation() == BOSSHITHARD || sprite->animation() == POWER) {
+	else if (sprite->animation() == BOSSHITHARD || sprite->animation() == POWER ) {
 		return 2;
+	}
+	else if (sprite->animation() == WAVESHOOT1 || sprite->animation() == WAVESHOOT2) {
+		return 3;
+	}
+	else {
+		return 1;
 	}
 }
 
@@ -277,6 +301,19 @@ void Shoot::force(int type)
 	else{
 		sprite->changeAnimation(FORCE3);
 	}
+}
+
+void Shoot::waveShoot()
+{
+	sprite->changeAnimation(WAVESHOOT1);
+}
+
+bool Shoot::mapCollisions()
+{
+	if (map->shootMapCollision(xMin, xMax, yMin, yMax) != 0) {
+		return true;
+	}
+	return false;
 }
 
 void Shoot::setPosition(const glm::vec2& pos)

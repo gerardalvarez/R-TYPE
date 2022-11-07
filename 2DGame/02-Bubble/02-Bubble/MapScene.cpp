@@ -90,6 +90,7 @@ void MapScene::godMode()
 
 void MapScene::initlevel(int level)
 {
+	clear();
 	left = 0;
 	right = (SCREEN_WIDTH - 1);
 	godModeActive = false;
@@ -108,6 +109,7 @@ void MapScene::initlevel(int level)
 	force->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	force->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize() + 70));
 	forceCounter = 0;
+	forceCounter2 = 0;
 
 	//SHOOT
 	shoot = NULL;
@@ -257,8 +259,6 @@ void MapScene::update(int deltaTime)
 
 		updateShoots(deltaTime);
 
-
-
 		if (int(right) == 3030) {
 			Music::instance().stop();
 			Music::instance().bm();
@@ -294,8 +294,7 @@ void MapScene::render()
 	texQuad[0]->render(texs[0]);
 
 	//map->render();
-	
-	
+
 	renderEnemies();
 	
 	boss->render();
@@ -320,7 +319,9 @@ void MapScene::render()
 	else if (player->getlives() == 2) {
 		vida1->render();
 		vida2->render();
-	} else vida1->render();
+	} 
+	else 
+		vida1->render();
 
 	if (gameover) {
 		background->render();
@@ -473,7 +474,6 @@ void MapScene::renderEnemies()
 			}
 		}
 	}
-
 }
 
 void MapScene::renderBossShoots()
@@ -506,14 +506,19 @@ void MapScene::calculateShootCollisions()
 		int xmax = shoot->getxMax();
 		int ymin = shoot->getyMin();
 		int ymax = shoot->getyMax();
+		
+		//CHECK IF SHOOT DOESNT HIT GORUND
+		if (shoot->mapCollisions()) {
+			shoot->disapear();
+		}
 		//CALCULATE IF ENEMIES SHOOTS HIT FORCE
-		if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax) && shoot->isEnemy()) {
+		else if (force->inScreen() && force->calculateCollisions(xmin, xmax, ymin, ymax) && shoot->isEnemy()) {
 			shoot->disapear();
 		}
 		//CALCULATE IF ENEMIES SHOOTS HIT THE PLAYER
-		else if (shoot->calculatePlayerCollisions(xMin, xMax, yMin, yMax)) {
-				player->setBoom();
-				shoot->disapear();
+		else if (shoot->calculatePlayerCollisions(xMin, xMax, yMin, yMax) && shoot->isEnemy()) {
+			player->setBoom();
+			shoot->disapear();
 		}
 		//CALCULATE IF PLAYER SHOOTS HIT ENEMIES
 		for (int i = 0; i < visibleEnemies.size(); i++) {
@@ -598,6 +603,17 @@ void MapScene::eliminateChargeShoot()
 	}
 }
 
+void MapScene::forceWaveShoot()
+{
+	shoot = new Shoot();
+	glm::vec2 posPlayer = player->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+	shoot->setTileMap(map);
+	shoot->waveShoot();
+	shoots.push_back(shoot);
+}
+
 void MapScene::enemyShoot()
 {
 	shoot = new Shoot();
@@ -614,18 +630,27 @@ void MapScene::enemyShoot()
 
 void MapScene::clear()
 {
-	if (!enemies.empty())
-		enemies.clear();
+	//vectors
+	visibleEnemies.clear();
+	enemies.clear();
+	shoots.clear();
+	bshoots.clear();
 
-	if (!shoots.empty())
-		shoots.clear();
+	//pointers
+	player = NULL;
+	enemy = NULL;
+	shoot = NULL;
+	boss = NULL;
+	bshoot = NULL;
+	force = NULL;
+	map = NULL;
 }
 
 void MapScene::initEnemiesOnMap()
 {
 	//1a orde
 	createEnemy(1, glm::vec2(83, 14), 1, false);
-	createEnemy(1, glm::vec2(86, 10), 2, true);
+	//createEnemy(1, glm::vec2(86, 10), 2, true);
 	createEnemy(1, glm::vec2(89, 15), 3, false);
 	createEnemy(1, glm::vec2(92, 11), 4, false);
 	
@@ -858,15 +883,18 @@ void MapScene::doForce()
 	}
 	if (force->getType() == 2) {
 		forceCounter++;
-		if (forceCounter % 100 == 0) {
+		if (forceCounter % 80 == 0) {
 			for (int i = 0; i < 3; i++) {
 				normalShootForce(i);
 			}
 		}	
 	}
-	//else if (force->getType() == 3) {
-	//	//shootwave
-	//}
+	else if (force->getType() == 3) {
+		forceCounter2++;
+		if (forceCounter2 % 80 == 0 || forceCounter2 % 90 == 0) {
+			forceWaveShoot();
+		}
+	}
 }
 
 void MapScene::doGameOver()
@@ -989,9 +1017,9 @@ void MapScene::updateShoots(int deltaTime)
 				if (int(right) >= 3030 && int(shoot->getPos()) >= 2975) {
 					if (!shoot->getBossHitted()) {
 						shoot->hitBoss();
-						if (boss->getlife() == 14 || boss->getlife() == 15) {
-							//Music::instance().grito();
-						}	
+						/*if (boss->getlife() == 14 || boss->getlife() == 15) {
+							Music::instance().grito();
+						}*/
 						boss->hitted(shoot->getDamage());
 					}
 				}
@@ -1072,9 +1100,9 @@ float MapScene::getLeft()
 
 
 void MapScene::putforce() {
-	if (force->istaken())force->upgrade();
+	if (force->istaken()) {
+		force->upgrade();
+	}
 	force->setinscreen(!force->inScreen());
 	force->setTaken(!force->istaken());
-	
-	
 }

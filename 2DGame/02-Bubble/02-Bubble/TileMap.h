@@ -34,6 +34,8 @@ public:
 	int collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size1, const glm::ivec2& size2) const;
 	int collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const;
 	int collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+
+	int shootMapCollision(int xmin, int xmax, int ymin, int ymax);
 	
 private:
 	bool loadLevel(const string &levelFile);

@@ -234,6 +234,40 @@ int TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size) co
 	return 0;
 }
 
+int TileMap::shootMapCollision(int xmin, int xmax, int ymin, int ymax)
+{
+	int x0, x1, y0, y1;
+
+	x0 = (xmin - 1) / tileSize;
+	x1 = (xmax - 1) / tileSize;
+	y0 = (ymin - 1) / tileSize;
+	y1 = (ymax - 1) / tileSize;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y0 * mapSize.x + x] != 0)
+		{
+			return map[y0 * mapSize.x + x];
+		}
+		if (map[y1 * mapSize.x + x] != 0)
+		{
+			return map[y1 * mapSize.x + x];
+		}
+
+	}
+	for (int y = y0; y <= y1; y++)
+	{
+		if (map[y * mapSize.x + x0] != 0)
+			return map[y * mapSize.x + x0];
+
+		if (map[y * mapSize.x + x1] != 0)
+			return map[y * mapSize.x + x1];
+	}
+
+	return 0;
+}
+
+
+
 
 
 

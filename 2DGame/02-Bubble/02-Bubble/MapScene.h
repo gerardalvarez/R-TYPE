@@ -68,6 +68,7 @@ private:
 	void eliminateFromVisible(int id);
 	void calculatePlayerHitBox();
 	void eliminateChargeShoot();
+	void forceWaveShoot();
 
 private:
 	TileMap* map;
@@ -75,21 +76,20 @@ private:
 	Enemy* enemy;
 	Boss* boss;
 	Force* force;
+	BossShoot* bshoot;
 	Shoot* shoot;
 	Object* object;
 	Object* vida1;
 	Object* vida2;
 	Object* vida3;
 	Object* object2;
+	
 
 	vector<Shoot*> shoots;
 	vector<Enemy*> enemies;
 	vector<Enemy*> visibleEnemies;
-
-	BossShoot* bshoot;
 	vector<BossShoot*> bshoots;
-	vector<glm::vec2> plastpos;
-
+	
 	Texture texs[1];
 	TexturedQuad* texQuad[3];
 	float left;
@@ -102,4 +102,5 @@ private:
 	int num;
 	int xMin, xMax, yMin, yMax;
 	int forceCounter;
+	int forceCounter2;
 };

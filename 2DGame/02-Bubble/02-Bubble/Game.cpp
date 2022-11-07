@@ -91,7 +91,7 @@ void Game::keyPressed(int key)
 			Music::instance().musicaMenu();
 			Menuscene.init(0);
 			Music::instance().efectoMenuAtras();
-			mapScene.clear();
+			//mapScene.clear();
         }
 		if (key == 49) {		//tecla 1
 			mapScene.skip(1);
@@ -161,16 +161,16 @@ void Game::keyReleased(int key)
 	switch (state.getState()) {
 	case State::State_enum::GAME:
 		if (key == 122 || key == 90) {		//tecla z o Z
-				if (!charging) {
-					mapScene.normalShoot();
-					timer = 0;
-					if (!mapScene.getGameOver())Music::instance().disparo();
-				}
-				else {
-					mapScene.powerShoot();
-					charging = false;
-					timer = 0;
-				}
+			if (!charging) {
+				mapScene.normalShoot();
+				timer = 0;
+				if (!mapScene.getGameOver())Music::instance().disparo();
+			}
+			else {
+				mapScene.powerShoot();
+				charging = false;
+				timer = 0;
+			}
 			
 		}
 		break;
