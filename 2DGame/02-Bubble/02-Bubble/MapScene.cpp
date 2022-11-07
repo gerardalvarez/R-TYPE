@@ -52,7 +52,6 @@ void MapScene::init()
 	right = SCREEN_WIDTH - 1;
 	initlevel(1);
 
-
 }
 
 void MapScene::skip(int part)
@@ -219,9 +218,8 @@ void MapScene::update(int deltaTime)
 	}
 	else if (player != NULL) {
 		player->sendcamera(left, right);
-		
-		if (playerReachedForce()) 
 
+		if (playerReachedForce())
 		{
 			if (force->inScreen()) {
 				force->upgrade();
@@ -234,17 +232,14 @@ void MapScene::update(int deltaTime)
 			object = NULL;
 		}
 
-		
-		}
-
 		player->update(deltaTime);
 
-		if (force != NULL){
+		if (force != NULL) {
 			if (force->inScreen()) {
 				doForce();
 			}
-		force->update(deltaTime);
-	}
+			force->update(deltaTime);
+		}
 
 
 		updateEnemies(deltaTime);
@@ -256,8 +251,8 @@ void MapScene::update(int deltaTime)
 			bossAI();
 			updateBossShoots(deltaTime);
 		}
-		
-		
+
+
 		if (object != NULL) object->update(deltaTime);
 
 		updateShoots(deltaTime);
@@ -270,16 +265,17 @@ void MapScene::update(int deltaTime)
 		}
 
 		if (!player->getIsDead() && int(right) <= 3070) {
-		
-		left += 0.4;
-		right += 0.4;
-		if (vida1 != NULL && vida2 != NULL && vida3 != NULL) {
-			vida1->setPosition(glm::vec2(right - 15 + 0.4, vida1->getPos().y));
-			vida2->setPosition(glm::vec2(right - 30 + 0.4, vida2->getPos().y));
-			vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
+
+			left += 0.4;
+			right += 0.4;
+			if (vida1 != NULL && vida2 != NULL && vida3 != NULL) {
+				vida1->setPosition(glm::vec2(right - 15 + 0.4, vida1->getPos().y));
+				vida2->setPosition(glm::vec2(right - 30 + 0.4, vida2->getPos().y));
+				vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
+			}
 		}
-	}
 		projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
+	}
 }
 
 void MapScene::render()
@@ -334,14 +330,13 @@ void MapScene::render()
 
 void MapScene::normalShoot()
 {
-		shoot = new Shoot();
+	shoot = new Shoot();
 
-		glm::vec2 posPlayer = player->getPos();
-		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
-		shoot->setTileMap(map);
-		shoots.push_back(shoot);
-
+	glm::vec2 posPlayer = player->getPos();
+	shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
+	shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
+	shoot->setTileMap(map);
+	shoots.push_back(shoot);
 }
 
 
@@ -957,7 +952,7 @@ void MapScene::updateEnemies(int deltaTime)
 								enemies[i] = NULL;
 							}
 							
-							if (enemy->getCanShoot() && !enemy->getisShooting()) {
+							if (enemy->getCanShoot() && !enemy->getisShooting() && (right - 40) >= enemy->getPos().x) {
 								enemyShoot();
 								enemy->setisShooting(true);
 							}

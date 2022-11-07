@@ -31,8 +31,9 @@ void Boss::update(int deltaTime)
 {
 	if (sprite != NULL) {
 		sprite->update(deltaTime);
+
 		if(!dead)
-		sprite->changeAnimation(NORMAL);
+			sprite->changeAnimation(NORMAL);
 	}
 }
 
