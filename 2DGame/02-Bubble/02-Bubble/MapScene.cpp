@@ -140,6 +140,10 @@ void MapScene::initlevel(int level)
 	vida3->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 40, INIT_PLAYER_Y_TILES * map->getTileSize() + 1));
 	vida3->setvida();
 
+	estrellas = new Estrellas();
+	estrellas->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	estrellas->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 10, INIT_PLAYER_Y_TILES * map->getTileSize()+15));
+
 
 	//BACKGROUND QUAD CREATION
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(3072, 192) };						//ALERTA!!! AIXO DIU QUE TANT GRAN SERA EL QUAD
@@ -274,6 +278,8 @@ void MapScene::update(int deltaTime)
 				vida3->setPosition(glm::vec2(right - 45 + 0.4, vida3->getPos().y));
 			}
 		}
+		estrellas->setPosition(glm::vec2(estrellas->getPos().x - 0.3, estrellas->getPos().y));
+
 		projection = glm::ortho(left, right, float(SCREEN_HEIGHT - 1), 0.f);
 	}
 }
@@ -293,6 +299,7 @@ void MapScene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texQuad[0]->render(texs[0]);
 
+	estrellas->render();
 	//map->render();
 
 	renderEnemies();

@@ -22,6 +22,7 @@
     <ClCompile Include="BossShoot.cpp" />
     <ClCompile Include="Force.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Estrellas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
@@ -45,5 +46,6 @@
     <ClInclude Include="BossShoot.h" />
     <ClInclude Include="Force.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Estrellas.h" />
   </ItemGroup>
 </Project>

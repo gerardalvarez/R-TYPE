@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "boss.h"
 #include "TexturedQuad.h"
+#include "Estrellas.h"
 
 #include "Text.h"
 #include "Force.h"
@@ -73,6 +74,7 @@ private:
 private:
 	TileMap* map;
 	Player* player;
+	Estrellas* estrellas;
 	Enemy* enemy;
 	Boss* boss;
 	Force* force;

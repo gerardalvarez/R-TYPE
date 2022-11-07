@@ -23,6 +23,7 @@
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BossShoot.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Estrellas.h" />
     <ClInclude Include="Force.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="BaseScene.h" />
@@ -46,6 +47,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossShoot.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Estrellas.cpp" />
     <ClCompile Include="Force.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
