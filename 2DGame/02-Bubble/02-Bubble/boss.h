@@ -25,7 +25,7 @@ public:
 	bool isnormal();
 	bool ispower();
 	int dispara(int deltaTime);
-	bool normal, power;
+	bool normal, power,dead;
 
 
 private:

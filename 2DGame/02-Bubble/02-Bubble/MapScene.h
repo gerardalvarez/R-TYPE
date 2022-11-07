@@ -41,6 +41,7 @@ public:
 	void powerBossShoot();
 	void charge();
 	void clear();
+	bool getGameOver();
 	
 
 private:
@@ -75,15 +76,13 @@ private:
 	Boss* boss;
 	Force* force;
 	Shoot* shoot;
-	Shoot* shoot2;
-	
 	Object* object;
 	Object* vida1;
 	Object* vida2;
 	Object* vida3;
 	Object* object2;
-	vector<Shoot*> shoots;
 
+	vector<Shoot*> shoots;
 	vector<Enemy*> enemies;
 	vector<Enemy*> visibleEnemies;
 

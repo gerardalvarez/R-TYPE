@@ -200,17 +200,22 @@ void MapScene::update(int deltaTime)
 	else if (gameover) {
 		++counter;
 
-		if (counter == 1) {
-			Music::instance().ultimaex();
-			for (int i = 0; i < bshoots.size(); i++) bshoots[i] = NULL;
-		}
-		else if (counter == 2) {
+		if (counter == 60) {
 			Music::instance().stop();
+			Music::instance().grito();
+			boss->dead = true;
+			boss->hitted(0);
 		}
-		else if (counter == 5) {
-			Game::instance().state.goCREDITS();	//canviar per pantalla de win + score
+		///si se quiere alguna animacion
+		if (counter == 170) {
+			Music::instance().stop();
+			Music::instance().ultimaex();
+		}
+		if (counter == 350) {
+			Game::instance().state.goCREDITS();
 			Music::instance().win();
 		}
+
 	}
 	else if (player != NULL) {
 		player->sendcamera(left, right);
@@ -298,9 +303,10 @@ void MapScene::render()
 	renderEnemies();
 	
 	boss->render();
-	renderBossShoots();
-	renderShoots();
-
+	if (!gameover) {
+		renderBossShoots();
+		renderShoots();
+	}
 
 	if (force->inScreen()) 
 		force->render();
@@ -328,24 +334,6 @@ void MapScene::render()
 
 void MapScene::normalShoot()
 {
-	if (force->istaken() && force->getType()==2) {
-
-		shoot = new Shoot();
-
-		glm::vec2 posPlayer = player->getPos();
-		shoot->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 10)));
-		shoot->setTileMap(map);
-
-		shoots.push_back(shoot);
-
-		shoot2 = new Shoot();
-		shoot2->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, posPlayer);
-		shoot2->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y - 1)));
-		shoot2->setTileMap(map);
-		shoots.push_back(shoot2);
-	}
-	else {
 		shoot = new Shoot();
 
 		glm::vec2 posPlayer = player->getPos();
@@ -353,7 +341,7 @@ void MapScene::normalShoot()
 		shoot->setPosition(glm::vec2((posPlayer.x + 18), (posPlayer.y + 2)));
 		shoot->setTileMap(map);
 		shoots.push_back(shoot);
-	}
+
 }
 
 
@@ -398,7 +386,6 @@ void MapScene::powerShoot()
 	relocateShoots();
 	normalShoot();
 	shoot->powerShoot();
-	if (force->istaken() && force->getType()==2) shoot2->powerShoot();
 }
 
 void MapScene::powerBossShoot()
@@ -874,7 +861,7 @@ void MapScene::doForce()
 			break;
 		}
 	}
-	if (force->getType() == 3) {
+	if (force->getType() == 2) {
 		forceCounter++;
 		if (forceCounter % 100 == 0) {
 			for (int i = 0; i < 3; i++) {
@@ -911,6 +898,11 @@ void MapScene::doGameOver()
 		Music::instance().musicaGame();
 		this->init();
 	}
+}
+
+bool MapScene::getGameOver()
+{
+	return gameover;
 }
 
 bool MapScene::playerReachedForce()
@@ -1003,7 +995,7 @@ void MapScene::updateShoots(int deltaTime)
 					if (!shoot->getBossHitted()) {
 						shoot->hitBoss();
 						if (boss->getlife() == 14 || boss->getlife() == 15) {
-							Music::instance().grito();
+							//Music::instance().grito();
 						}	
 						boss->hitted(shoot->getDamage());
 					}

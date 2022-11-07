@@ -19,18 +19,19 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(NORMAL, 8);
 	sprite->addKeyframe(NORMAL, glm::vec2(12 / 908.f, 231 / 231.f));
 
-	bossHealth = bossMaxHealth = 130;
+	bossHealth = bossMaxHealth = 50;
 	
 	tileMapDispl = tileMapPos;
 	sprite->changeAnimation(0);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy.x), float(tileMapDispl.y + posEnemy.y)));
-	normal = power = false;
+	normal = power = dead = false;
 }
 
 void Boss::update(int deltaTime)
 {
 	if (sprite != NULL) {
 		sprite->update(deltaTime);
+		if(!dead)
 		sprite->changeAnimation(NORMAL);
 	}
 }

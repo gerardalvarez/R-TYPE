@@ -161,16 +161,17 @@ void Game::keyReleased(int key)
 	switch (state.getState()) {
 	case State::State_enum::GAME:
 		if (key == 122 || key == 90) {		//tecla z o Z
-			if (!charging) {
-				mapScene.normalShoot();
-				timer = 0;
-				Music::instance().disparo();
-			}
-			else {
-				mapScene.powerShoot();
- 				charging = false;
-				timer = 0;
-			}
+				if (!charging) {
+					mapScene.normalShoot();
+					timer = 0;
+					if (!mapScene.getGameOver())Music::instance().disparo();
+				}
+				else {
+					mapScene.powerShoot();
+					charging = false;
+					timer = 0;
+				}
+			
 		}
 		break;
 	default:
