@@ -513,7 +513,7 @@ void MapScene::calculateShootCollisions()
 		int ymax = shoot->getyMax();
 		
 		//CHECK IF SHOOT DOESNT HIT GORUND
-		if (shoot->mapCollisions()) {
+		if (shoot->mapCollisions() && right < 3030) {
 			shoot->disapear();
 		}
 		//CALCULATE IF ENEMIES SHOOTS HIT FORCE
