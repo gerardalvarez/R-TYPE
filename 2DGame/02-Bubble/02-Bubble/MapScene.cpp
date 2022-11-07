@@ -883,7 +883,7 @@ void MapScene::doForce()
 	}
 	if (force->getType() == 2) {
 		forceCounter++;
-		if (forceCounter % 80 == 0) {
+		if (forceCounter % 60 == 0) {
 			for (int i = 0; i < 3; i++) {
 				normalShootForce(i);
 			}
@@ -1101,8 +1101,14 @@ float MapScene::getLeft()
 
 void MapScene::putforce() {
 	if (force->istaken()) {
-		force->upgrade();
+		if (!force->upgrade()) {
+			force->setinscreen(!force->inScreen());
+			force->setTaken(!force->istaken());
+		}
 	}
-	force->setinscreen(!force->inScreen());
-	force->setTaken(!force->istaken());
+	else {
+		force->setinscreen(!force->inScreen());
+		force->setTaken(!force->istaken());
+	}
+	
 }
