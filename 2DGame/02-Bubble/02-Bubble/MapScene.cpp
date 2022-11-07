@@ -189,6 +189,11 @@ void MapScene::update(int deltaTime)
 		else {
 			if (player->animationFinished()) {
 				Music::instance().explosion_player();
+				left = left - 50;
+				right = right - 50;
+				shoot = NULL;
+				shoots.clear();
+				player->sendcamera(left, right);
 				player->revive();
 			}
 			else {
